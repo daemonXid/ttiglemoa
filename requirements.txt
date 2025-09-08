@@ -15,11 +15,13 @@ click-default-group==1.2.4
 colorama==0.4.6
 coloredlogs==15.0.1
 ConfigArgParse==1.7
+crispy-bootstrap5==2025.6
 cryptography==44.0.2
 deepl==1.21.1
 Deprecated==1.2.18
 distro==1.9.0
 Django==5.2.6
+django-crispy-forms==2.4
 docformatter==1.7.5
 fastapi==0.115.11
 ffmpy==0.5.0

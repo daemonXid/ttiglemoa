@@ -1,0 +1,26 @@
+{% extends 'common/base.html' %} {% block title %}My Profile{% endblock %} {%
+block content %}
+<div class="container mt-5">
+  <h2>My Profile</h2>
+  <hr />
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Welcome, {{ user.nickname }}!</h5>
+      <p class="card-text">
+        <strong>Username:</strong> {{ user.username }}<br />
+        <strong>Email:</strong> {{ user.email }}
+      </p>
+      <hr />
+      <a href="{% url 'tm_account:profile_edit' %}" class="btn btn-primary"
+        >Edit Profile</a
+      >
+      <a href="{% url 'tm_account:password_change' %}" class="btn btn-secondary"
+        >Change Password</a
+      >
+      <a href="{% url 'tm_account:account_delete' %}" class="btn btn-danger"
+        >Delete Account</a
+      >
+    </div>
+  </div>
+</div>
+{% endblock %}

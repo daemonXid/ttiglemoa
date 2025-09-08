@@ -16,3 +16,13 @@ class CustomUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.fields['nickname'].label = "닉네임"
         self.fields['email'].label = "이메일"
+
+class ProfileChangeForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('nickname', 'email')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['nickname'].label = "닉네임"
+        self.fields['email'].label = "이메일"

@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
@@ -10,3 +11,8 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
         # Specify the fields to display in the form
         fields = UserCreationForm.Meta.fields + ('nickname', 'email',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['nickname'].label = "닉네임"
+        self.fields['email'].label = "이메일"

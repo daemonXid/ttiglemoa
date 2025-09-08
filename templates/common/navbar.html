@@ -1,36 +1,68 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'tm_begin:index' %}">Ttiglemoa</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                {% if user.is_authenticated %}
-                    <!-- Links for logged-in users -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tm_account:mypage' %}">My Page</a>
-                    </li>
-                    <li class="nav-item">
-                        <form action="{% url 'tm_account:logout' %}" method="post" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link nav-link">Logout</button>
-                        </form>
-                    </li>
-                {% else %}
-                    <!-- Links for logged-out users -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tm_account:login' %}">
-                            <button class="btn btn-primary btn-sm">Login</button>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tm_account:signup' %}">
-                            <button class="btn btn-secondary btn-sm">Sign Up</button>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'tm_begin:index' %}">Ttiglemoa</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="{% url 'tm_begin:index' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About Us</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            내 포트폴리오
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="#">주식</a></li>
+            <li><a class="dropdown-item" href="#">채권</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">주식현황</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">뉴스</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">커뮤니티</a>
+        </li>
+      </ul>
+
+      <form class="d-flex me-3" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'tm_account:mypage' %}">My Page ({{ user.username }})</a>
+          </li>
+          <li class="nav-item">
+            <form action="{% url 'tm_account:logout' %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-outline-secondary btn-sm">Logout</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item me-2">
+            <a href="{% url 'tm_account:login' %}">
+              <button class="btn btn-outline-primary btn-sm">로그인</button>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{% url 'tm_account:signup' %}">
+              <button class="btn btn-primary btn-sm">회원가입</button>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
+  </div>
 </nav>

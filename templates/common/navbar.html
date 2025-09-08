@@ -37,19 +37,19 @@
           <a class="nav-link" href="#">주식현황</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">뉴스</a>
+          <a class="nav-link" href="{% url 'tm_begin:stock_news' %}">뉴스</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">커뮤니티</a>
         </li>
 
         <!-- { else %} -->
-        <li class="nav-item">
-          <a class="nav-link" href="#">로그인</a>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#" id="login_nav">로그인</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">회원가입</a>
-        </li>
+        </li> -->
         <!-- { endif %} -->
 
  
@@ -58,12 +58,12 @@
       </ul>
 
       <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <input class="form-control me-2" name="q" value="{{ query }}" type="search" placeholder="검색어 입력 (예: 삼성전자 주식)" aria-label="Search"/>
+        <button class="btn btn-outline-primary" type="submit">Search</button>
       </form>
 
-      <button class="btn btn-outline-success" type="submit">로그인</button>
-      <button class="btn btn-outline-success" type="submit">회원가입</button>
+      <button class="btn btn-outline-primary" type="submit" id="login_nav">로그인</button>
+      <button class="btn btn-outline-primary" type="submit">회원가입</button>
     </div>
   </div>
 </nav>

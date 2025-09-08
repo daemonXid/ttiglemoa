@@ -137,11 +137,11 @@ STATICFILES_DIRS = [
 ]
 
 # Default primary key fieldAUTH_USER_MODEL = 'tm_account.User'  # 커스텀 유저 모델 사용
-ettings/#default-auto-field
-
+# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-AUTH_User_MODEL = 'tm_account.User'  # 커스텀 유저 모델 사용
+# AUTH_User_MODEL = 'tm_account.User'  # 커스텀 유저 모델 사용
+AUTH_USER_MODEL = 'tm_account.User'
 
 # Crispy Forms Settings
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

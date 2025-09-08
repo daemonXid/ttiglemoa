@@ -146,3 +146,6 @@ AUTH_USER_MODEL = 'tm_account.User'  # 커스텀 유저 모델 사용
 # Crispy Forms Settings
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Email settings for password reset
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

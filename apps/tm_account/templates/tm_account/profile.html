@@ -1,26 +1,46 @@
-{% extends 'common/base.html' %} {% block title %}My Profile{% endblock %} {%
-block content %}
-<div class="container mt-5">
-  <h2>My Profile</h2>
-  <hr />
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">Welcome, {{ user.nickname }}!</h5>
-      <p class="card-text">
-        <strong>Username:</strong> {{ user.username }}<br />
-        <strong>Email:</strong> {{ user.email }}
-      </p>
-      <hr />
-      <a href="{% url 'tm_account:profile_edit' %}" class="btn btn-primary"
-        >Edit Profile</a
-      >
-      <a href="{% url 'tm_account:password_change' %}" class="btn btn-secondary"
-        >Change Password</a
-      >
-      <a href="{% url 'tm_account:account_delete' %}" class="btn btn-danger"
-        >Delete Account</a
-      >
+{% extends 'common/base.html' %}
+
+{% block title %}내 프로필{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-5 shadow-sm">
+            <div class="card-header bg-light">
+                <h3 class="mb-0">내 프로필</h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <h4 class="card-title">{{ user.nickname }}님, 환영합니다!</h4>
+                    <p class="text-muted">계정 정보를 확인하고 관리할 수 있습니다.</p>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <dl class="row mb-0">
+                            <dt class="col-sm-3">아이디</dt>
+                            <dd class="col-sm-9">{{ user.username }}</dd>
+
+                            <dt class="col-sm-3">이메일</dt>
+                            <dd class="col-sm-9">{{ user.email }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <h5 class="mt-4">계정 관리</h5>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a href="{% url 'tm_account:profile_edit' %}" class="btn btn-primary">
+                        <i class="bi bi-pencil-square me-1"></i> 프로필 수정
+                    </a>
+                    <a href="{% url 'tm_account:password_change' %}" class="btn btn-secondary">
+                        <i class="bi bi-key-fill me-1"></i> 비밀번호 변경
+                    </a>
+                    <a href="{% url 'tm_account:account_delete' %}" class="btn btn-danger">
+                        <i class="bi bi-trash-fill me-1"></i> 회원 탈퇴
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}

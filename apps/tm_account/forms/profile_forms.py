@@ -2,14 +2,18 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
-# get_user_model() will retrieve the User model specified in AUTH_USER_MODEL
 User = get_user_model()
+
+# Choices for default avatars
+DEFAULT_AVATAR_CHOICES = [
+    ('static/images/avatars/avatar1.svg', '빨간원'),
+    ('static/images/avatars/avatar2.svg', '파란원'),
+    ('static/images/avatars/avatar3.svg', '초록원'),
+]
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
-        # Point to the custom User model
         model = User
-        # Specify the fields to display in the form
         fields = UserCreationForm.Meta.fields + ('nickname', 'email',)
 
     def __init__(self, *args, **kwargs):
@@ -18,11 +22,24 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['email'].label = "이메일"
 
 class ProfileChangeForm(forms.ModelForm):
+    # Field for selecting a default avatar
+    default_avatar = forms.ChoiceField(
+        choices=[('', '--------- (기본 아바타 선택)')] + DEFAULT_AVATAR_CHOICES,
+        required=False,
+        widget=forms.RadioSelect,
+        label="기본 아바타 선택"
+    )
+
     class Meta:
         model = User
-        fields = ('nickname', 'email')
+        fields = ('nickname', 'email', 'profile_image')
+        widgets = {
+            'profile_image': forms.FileInput(),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['nickname'].label = "닉네임"
         self.fields['email'].label = "이메일"
+        self.fields['profile_image'].label = "새 프로필 사진 업로드"
+        self.fields['profile_image'].required = False

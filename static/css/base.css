@@ -282,3 +282,14 @@ body{
   min-height: 420px;
 }
 
+/* --- Form Input Style --- */
+.form-control {
+    background-color: #f0f0f0; /* A light gray */
+    border: 1px solid #007bff; /* A standard blue */
+}
+
+.form-control:focus {
+    background-color: #ffffff; /* White background on focus */
+    border-color: #0056b3; /* A darker blue on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Bootstrap's default focus shadow */
+}

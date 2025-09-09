@@ -17,6 +17,12 @@ class User(AbstractUser):
             'unique': "A user with that nickname already exists.",
         },
     )
+    profile_image = models.ImageField(
+        upload_to='profile_pics', 
+        blank=True, 
+        null=True,
+        help_text="User profile picture"
+    )
 
     def __str__(self):
         return self.username

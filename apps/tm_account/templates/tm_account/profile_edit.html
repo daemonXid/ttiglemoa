@@ -1,0 +1,78 @@
+{% extends 'common/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}프로필 수정{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3 class="card-title">프로필 수정</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <div class="text-center mb-4">
+                        <h5>현재 프로필 사진</h5>
+                        {% if user.profile_image %}
+                            <img id="image-preview" src="{{ user.profile_image.url }}" alt="User Profile Image" class="rounded-circle" width="150" height="150" style="object-fit: cover;">
+                        {% else %}
+                            <img id="image-preview" src="{% static 'images/avatars/avatar2.svg' %}" alt="Default Avatar" class="rounded-circle" width="150" height="150">
+                        {% endif %}
+                    </div>
+
+                    {{ form|crispy }}
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{% url 'tm_account:profile' %}" class="btn btn-secondary">취소</a>
+                        <button type="submit" class="btn btn-primary">변경사항 저장</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const imagePreview = document.getElementById('image-preview');
+        const fileInput = document.getElementById('id_profile_image');
+        const defaultAvatarRadios = document.querySelectorAll('input[name="default_avatar"]');
+
+        // Listener for default avatar selection
+        defaultAvatarRadios.forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                if (this.checked) {
+                    // When a default avatar is selected, update the preview
+                    // The value of the radio button is the static path to the avatar
+                    imagePreview.src = "/{% get_static_prefix %}../" + this.value.replace(/^static\//, '');
+                    // Clear the file input so the default selection takes precedence
+                    if(fileInput) {
+                        fileInput.value = '';
+                    }
+                }
+            });
+        });
+
+        // Listener for file upload input
+        if(fileInput) {
+            fileInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    // Create a temporary URL for the selected file and update the preview
+                    imagePreview.src = URL.createObjectURL(file);
+                    // Uncheck all radio buttons so the file upload takes precedence
+                    defaultAvatarRadios.forEach(function(radio) {
+                        radio.checked = false;
+                    });
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

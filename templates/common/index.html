@@ -7,13 +7,115 @@
     </div>
 
     <div class="stock_status">
-        <h2>📈 현재 주식 현황</h2>
-        <ul>
+        <!-- <iframe height="480" width="650" src="https://ssltvc.investing.com/?pair_ID=650&height=480&width=650&interval=300&plotStyle=area&domain_ID=18&lang_ID=18&timezone_ID=26"></iframe>
+        <h2>📈 현재 주식 현황</h2> -->
+
+
+        <div class="tv-wrap">
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/?exchange=NASDAQ" rel="noopener nofollow" target="_blank"><span class="blue-text">AAPL chart by TradingView</span></a></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                {
+                "allow_symbol_change": true,
+                "calendar": false,
+                "details": false,
+                "hide_side_toolbar": true,
+                "hide_top_toolbar": false,
+                "hide_legend": false,
+                "hide_volume": false,
+                "hotlist": false,
+                "interval": "D",
+                "locale": "kr",
+                "save_image": true,
+                "style": "1",
+                "symbol": "NASDAQ:AAPL",
+                "theme": "dark",
+                "timezone": "Etc/UTC",
+                "backgroundColor": "#0F0F0F",
+                "gridColor": "rgba(242, 242, 242, 0.06)",
+                "watchlist": [],
+                "withdateranges": false,
+                "compareSymbols": [],
+                "studies": [],
+                "width": 980,
+                "height": 610
+                }
+                </script>
+            </div>
+            <!-- TradingView Widget END -->
+
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Stock heatmap by TradingView</span></a></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+                {
+                "dataSource": "SPX500",
+                "blockSize": "market_cap_basic",
+                "blockColor": "change",
+                "grouping": "sector",
+                "locale": "kr",
+                "symbolUrl": "",
+                "colorTheme": "dark",
+                "exchanges": [],
+                "hasTopBar": false,
+                "isDataSetEnabled": false,
+                "isZoomEnabled": true,
+                "hasSymbolTooltip": true,
+                "isMonoSize": false,
+                "width": 980,
+                "height": 500
+                }
+                </script>
+            </div>
+            <!-- TradingView Widget END -->
+        </div>
+
+
+
+
+<!-- 
+
+        <div class="tv-wrap">
+            <div class="tradingview-widget-container" id="tv-overview">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+                <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+                <span class="blue-text">Apple, Google, Microsoft, Samsung, Tesla quotes by TradingView</span>
+                </a>
+            </div>
+            <script type="text/javascript"
+                    src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+            {
+                "autosize": true,
+                "symbols": [
+                ["Apple","AAPL|1D"],
+                ["Google","GOOGL|1D"],
+                ["Microsoft","MSFT|1D"],
+                ["SAMSUNG","KRX:005930|1D"],
+                ["TESLA","NASDAQ:TSLA|1D"],
+                ],
+                "width": "100%",
+                "height": "540px",
+                "chartType": "area",
+                "colorTheme": "dark",
+                "dateRanges": ["1d|1","1m|30","3m|60","12m|1D","60m|1W","all|1M"],
+                "lineWidth": 2,
+                "locale": "en",
+                "backgroundColor": "#0F0F0F"
+            }
+            </script>
+            </div>
+        </div> -->
+<!-- 
+        <ul class="mt-3">
             <li>KOSPI: 2,650.30 (+0.8%)</li>
             <li>KOSDAQ: 850.25 (+1.2%)</li>
             <li>NASDAQ: 15,200.50 (-0.5%)</li>
             <li>환율(USD/KRW): 1,320.50</li>
-        </ul>
+        </ul> -->
     </div>
 
     <div class="stock_news">

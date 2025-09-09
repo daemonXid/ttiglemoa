@@ -81,53 +81,8 @@ def investing_news(request):
 
 
 
-
-# ## 2. 지금도 만족 
-# def _get_investing_news(limit=24):
-#     now = timezone.now()
-#     must_refresh = (
-#         _CACHE["at"] is None
-#         or (now - _CACHE["at"]).total_seconds() > _CACHE_TTL
-#     )
-#     if must_refresh:
-#         items = fetch_rss_many(
-#             INVESTING_FEEDS,
-#             limit_per_feed=80,
-#             try_scrape_og_image=True,
-#             scrape_limit=6,
-#         )
-#         _CACHE["items"] = items
-#         _CACHE["at"] = now
-#     return _CACHE["items"][:limit], _CACHE["at"]
-
-# # ---- 기본 페이지 ----
-# def index(request):
-#     news_list, updated_at = _get_investing_news()
-#     return render(request, "common/index.html", {
-#         "news_list": news_list,
-#         "updated_at": updated_at,
-#         "count": len(news_list),
-#     })
-
-
-
-# def investing_news(request):
-#     news_list, updated_at = _get_investing_news(limit=24)  # 24, 36 등으로 늘리기
-#     return render(request, "common/for_tm_begin/stock_news.html", {
-#         "news_list": news_list, "updated_at": updated_at, "count": len(news_list),
-#     })
-
-
-
-#1 번 
-# ---- Investing.com RSS 뉴스 ----
-# def investing_news(request):
-#     news_list, updated_at = _get_investing_news()
-#     return render(request, "common/for_tm_begin/stock_news.html", {
-#         "news_list": news_list,
-#         "updated_at": updated_at,
-#         "count": len(news_list),
-#     })
+def about(request):
+    return render(request, "common/for_tm_begin/about.html")
 
 
 

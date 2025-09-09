@@ -1,4 +1,9 @@
 /* --- News Section (container) --- */
+
+body{
+  margin-inline: auto;
+}
+
 .stock_news {
   border: none;
   width: 90%;
@@ -250,3 +255,30 @@
 .inv-page:hover { filter:brightness(1.1); }
 .inv-page.active { background:#c40000; color:#fff; border-color:#d4af37; cursor:default; }
 .inv-page.disabled { opacity:.45; pointer-events:none; }
+
+
+
+
+.stock_status {
+  display: flex;
+  justify-content: center;
+}
+
+
+/* 트레이딩 뷰  */
+/* 차트 위젯 높이 보장 */
+/* 부모 안에서 꽉 차게 + 좌우 5px */
+/* 차트 위젯 높이 보장 */
+.tradingview-widget-container,
+.tradingview-widget-container__widget {
+  padding: 10px;
+  width: 100%;
+  height: 540px;        /* 원하시는 높이로 변경 가능 */
+  min-height: 360px;    /* 안전장치 */
+}
+
+/* 만약 .stock_status 섹션이 flex/그리드라면 높이 수축 방지 */
+.stock_status {
+  min-height: 420px;
+}
+

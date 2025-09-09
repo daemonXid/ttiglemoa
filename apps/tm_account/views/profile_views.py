@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from ..forms.profile_forms import ProfileChangeForm
@@ -41,7 +42,7 @@ def profile_edit(request):
 
             user.save()
             messages.success(request, '프로필이 성공적으로 업데이트되었습니다.')
-            return redirect(reverse_lazy('tm_account:profile'))
+            return HttpResponseRedirect(reverse_lazy('tm_account:profile'))
         else:
             messages.error(request, '오류가 발생했습니다. 입력 내용을 확인해주세요.')
     else:
@@ -56,7 +57,7 @@ def password_change(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important! Keeps the user logged in
             messages.success(request, 'Your password was successfully updated!')
-            return redirect(reverse_lazy('tm_account:profile'))
+            return HttpResponseRedirect(reverse_lazy('tm_account:profile'))
         else:
             messages.error(request, 'Please correct the error below.')
     else:
@@ -75,7 +76,7 @@ def account_delete(request):
                 user.delete()
                 logout(request) # Log out the user after deletion
                 messages.success(request, 'Your account has been successfully deleted.')
-                return redirect(reverse_lazy('tm_begin:index')) # Redirect to main page
+                return HttpResponseRedirect(reverse_lazy('tm_begin:index')) # Redirect to main page
             else:
                 messages.error(request, 'Incorrect password. Please try again.')
         else:

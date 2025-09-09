@@ -8,8 +8,8 @@ from django.core.paginator import Paginator
 INVESTING_FEEDS = [
     "https://kr.investing.com/rss/news.rss",
     # 필요시 카테고리 추가:
-    # "https://www.investing.com/rss/news_14.rss",
-    # "https://www.investing.com/rss/news_301.rss",
+    # "https://www.investing.com/rss/news_14.rss", # 경제 지표 뉴스
+    # "https://www.investing.com/rss/news_301.rss",# 외환 뉴스
 ]
 
 # ---- 초간단 메모리 캐시 ----
@@ -38,7 +38,7 @@ def _get_investing_news(limit=200):  # 페이지네이션용 여유 있게 가�
     return _CACHE["items"][:limit], _CACHE["at"]
 
 def index(request):
-    news_list, updated_at = _get_investing_news(limit=13)  # 인덱스는 1페이지 느낌으로 13개만
+    news_list, updated_at = _get_investing_news(limit=20)  # 인덱스는 1페이지 느낌으로 13개만
     return render(request, "common/index.html", {
         "news_list": news_list,
         "updated_at": updated_at,
@@ -51,16 +51,16 @@ def investing_news(request):
     
     # Paginator를 사용하여 페이지네이션 처리
     paginator = Paginator(items, 9)  # 한 페이지에 9개씩
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    selected_page_num = request.GET.get("page")
+    page_obj = paginator.get_page(selected_page_num)
 
     hero_item = page_obj.object_list[0] if page_obj.object_list else None
     grid_items = page_obj.object_list[1:] if len(page_obj.object_list) > 1 else []
 
     # 페이지 번호(현재±2)
-    window = 2
-    start_num = max(1, page_obj.number - window)
-    end_num   = min(paginator.num_pages, page_obj.number + window)
+    page_group = 2
+    start_num = max(1, page_obj.number - page_group)
+    end_num   = min(paginator.num_pages, page_obj.number + page_group)
     page_numbers = list(range(start_num, end_num + 1))
 
     ctx = {

@@ -12,7 +12,7 @@
                 <h3 class="card-title">로그인</h3>
             </div>
             <div class="card-body">
-                <form method="post" action="{% url 'account_login' %}">
+                <form method="post" action="{% url 'tm_account:login' %}">
                     {% csrf_token %}
                     {{ form|crispy }}
                     {% if redirect_field_value %}

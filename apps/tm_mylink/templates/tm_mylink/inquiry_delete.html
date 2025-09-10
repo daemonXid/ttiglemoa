@@ -1,0 +1,12 @@
+{% extends 'tm_mylink/base.html' %}
+
+{% block content %}
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        <p>정말삭제할까요?</p>
+        <button type="submit">삭제</button>
+        <a href="{% url 'tm_mylink:inquiry_list' %}">목록</a>
+    </form>
+
+{% endblock content %}

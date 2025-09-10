@@ -1,4 +1,4 @@
-{% extends 'common/base.html' %}
+{% extends 'tm_account/base_account.html' %}
 {% load crispy_forms_tags %}
 {% load socialaccount %}
 
@@ -12,7 +12,7 @@
                 <h3 class="card-title">로그인</h3>
             </div>
             <div class="card-body">
-                                <form method="post" action="{% url 'tm_account:login' %}">
+                <form method="post" action="{% url 'account_login' %}">
                     {% csrf_token %}
                     {{ form|crispy }}
                     {% if redirect_field_value %}
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="card-footer text-center">
-                <small>계정이 없으신가요? <a href="{% url 'tm_account:signup' %}">회원가입</a></small>
+                <small>계정이 없으신가요? <a href="{% url 'account_signup' %}">회원가입</a></small>
             </div>
         </div>
     </div>

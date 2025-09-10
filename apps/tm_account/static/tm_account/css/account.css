@@ -1,0 +1,13 @@
+/* Styles specific to tm_account app */
+
+.card {
+    border-width: 2px !important;
+}
+
+.grid-row {
+    height: 70vh;
+    margin-bottom: 2vh;
+}
+.h-100-card {
+    height: 100%;
+}

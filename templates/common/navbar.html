@@ -18,10 +18,15 @@
             내 포트폴리오
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">주식</a></li>
-            <li><a class="dropdown-item" href="#">채권</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:allocation' %}">자산비율</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:deposits_list' %}">예적금</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:stocks_list' %}">주식</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:bonds_list' %}">채권</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:create_deposit' %}">예적금 추가</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:create_stock' %}">주식 추가</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:create_bond' %}">채권 추가</a></li>
+            <li><a class="dropdown-item" href="{% url 'tm_assets:refresh_prices' %}">가격 새로고침</a></li>
           </ul>
         </li>
         <li class="nav-item">

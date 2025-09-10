@@ -3,4 +3,4 @@ from django.apps import AppConfig
 
 class TmAssetsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "tm_assets"
+    name = "apps.tm_assets"

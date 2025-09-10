@@ -1,30 +1,48 @@
 from django.urls import path, reverse_lazy
 from .views import registration, auth_views, profile_views
+from django.contrib.auth import views as auth_views_builtin
 
 app_name = 'tm_account'
 
 urlpatterns = [
-    # ex: /my-account/signup/
+    # ex: /accounts/signup/
     path('signup/', registration.signup, name='signup'),
     
-    # ex: /my-account/login/
+    # ex: /accounts/login/
     path('login/', auth_views.CustomLoginView.as_view(), name='login'),
 
-    # ex: /my-account/logout/
+    # ex: /accounts/logout/
     path('logout/', auth_views.CustomLogoutView.as_view(), name='logout'),
 
-    # ex: /my-account/profile/
+    # ex: /accounts/profile/
     path('profile/', profile_views.profile, name='profile'),
 
-    # ex: /my-account/profile/edit/
+    # ex: /accounts/profile/edit/
     path('profile/edit/', profile_views.profile_edit, name='profile_edit'),
 
-    # ex: /my-account/password_change/
+    # ex: /accounts/password_change/
     path('password_change/', profile_views.password_change, name='password_change'),
 
-    # ex: /my-account/delete/
+    # ex: /accounts/delete/
     path('delete/', profile_views.account_delete, name='account_delete'),
 
-    # Custom Password Reset URL
-    path('custom_password_reset/', auth_views.custom_password_reset, name='custom_password_reset'),
+    # Password Reset URLs
+    path('password_reset/', auth_views_builtin.PasswordResetView.as_view(
+        template_name='tm_account/password_reset_form.html',
+        email_template_name='tm_account/password_reset_email.html',
+        success_url=reverse_lazy('tm_account:password_reset_done')
+    ), name='password_reset'),
+
+    path('password_reset/done/', auth_views_builtin.PasswordResetDoneView.as_view(
+        template_name='tm_account/password_reset_done.html'
+    ), name='password_reset_done'),
+
+    path('reset/<uidb64>/<token>/', auth_views_builtin.PasswordResetConfirmView.as_view(
+        template_name='tm_account/password_reset_confirm.html',
+        success_url=reverse_lazy('tm_account:password_reset_complete')
+    ), name='password_reset_confirm'),
+
+    path('reset/done/', auth_views_builtin.PasswordResetCompleteView.as_view(
+        template_name='tm_account/password_reset_complete.html'
+    ), name='password_reset_complete'),
 ]

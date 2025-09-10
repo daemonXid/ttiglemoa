@@ -1,4 +1,5 @@
 from django import forms
+from decimal import Decimal, InvalidOperation
 
 from .models import DepositSaving, StockHolding, BondHolding
 
@@ -39,6 +40,19 @@ class DepositSavingForm(forms.ModelForm):
             "maturity_date": forms.DateInput(attrs={"type": "date"}),
             "current_value_manual": forms.NumberInput(attrs={"placeholder": "선택 입력"}),
         }
+
+    def clean_principal_amount(self):
+        value = self.cleaned_data.get("principal_amount")
+        if value is None:
+            return value
+        if value <= 0:
+            raise forms.ValidationError("금액은 0보다 큰 값이어야 합니다.")
+        try:
+            if value != Decimal(value).quantize(Decimal("1")):
+                raise forms.ValidationError("금액은 소수점 없는 정수로 입력하세요.")
+        except (InvalidOperation, TypeError):
+            raise forms.ValidationError("유효한 정수 금액을 입력하세요.")
+        return value
 
 
 class StockHoldingForm(forms.ModelForm):

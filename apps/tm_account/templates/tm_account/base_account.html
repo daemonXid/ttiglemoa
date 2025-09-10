@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block extra_head %}
+    <!-- DEBUG: base_account extra_head loaded -->
+    <link rel="stylesheet" href="{% static 'tm_account/css/account.css' %}">
+    {{ block.super }}
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script src="{% static 'tm_account/js/account.js' %}"></script>
+{% endblock %}

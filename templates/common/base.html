@@ -23,11 +23,12 @@
         <title>Document</title>
     </head>
     <body>
+
         <!-- Navbar -->
-        {% include 'common/navbar.html' %}
+        <nav>{% include 'common/navbar.html' %}</nav>
 
         <!-- Page Content -->
-            <main class="container my-4">
+        <main class="container my-4">
             {% if messages %}
                 <div class="messages">
                     {% for message in messages %}
@@ -40,10 +41,12 @@
             {% endif %}
             {% block content %} {% endblock %}
 
+        </main>
+
 
         <!-- Footer can be added here -->
         <!-- <footer></footer> -->
-        {% include 'common/footer.html' %}
+        <footer>{% include 'common/footer.html' %}</footer>
 
         <!-- Bootstrap JS -->
         <script

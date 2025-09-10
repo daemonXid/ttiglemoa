@@ -263,29 +263,59 @@ body{
 
 
 
-
+/* 
 .stock_status {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-}
+} */
 
 
 /* 트레이딩 뷰  */
 /* 차트 위젯 높이 보장 */
 /* 부모 안에서 꽉 차게 + 좌우 5px */
 /* 차트 위젯 높이 보장 */
+/* 공통 */
 .tradingview-widget-container,
-.tradingview-widget-container__widget {
-  padding: 10px;
-  width: 100%;
-  height: 540px;        /* 원하시는 높이로 변경 가능 */
-  min-height: 360px;    /* 안전장치 */
+.tradingview-widget-container__widget,
+.tradingview-widget-container iframe {
+  width: 100% !important;
+  height: 540px !important;   /* 기본 고정 */
+  min-height: 360px;
 }
 
-/* 만약 .stock_status 섹션이 flex/그리드라면 높이 수축 방지 */
-.stock_status {
-  min-height: 420px;
+/* 모바일에서만 높이를 늘려주거나 줄이기 */
+@media (max-width: 768px) {
+  .tradingview-widget-container,
+  .tradingview-widget-container__widget,
+  .tradingview-widget-container iframe {
+    height: 400px !important;  /* 모바일용 */
+  }
 }
+
+@media (max-width: 576px) {
+  .tradingview-widget-container,
+  .tradingview-widget-container__widget,
+  .tradingview-widget-container iframe {
+    height: 320px !important;  /* 더 작은 화면 */
+  }
+}
+
+
+.tv-wrap {
+  width: 75%; 
+  margin-inline: auto;
+  padding: 10px;
+}
+
+/* 비율 기반 → 브라우저 폭이 커져도 높이는 540px 안 넘음 */
+.ratio-16x9 {
+  --bs-aspect-ratio: calc(540 / 960 * 100%); /* 대략 16:9인데 높이 540 맞춤 */
+  max-height: 540px;
+}
+
+
+
 
 /* --- Form Input Style --- */
 .form-control {

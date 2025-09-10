@@ -20,12 +20,12 @@
         <!-- Project CSS -->
         <link rel="stylesheet" href="{% static 'css/base.css' %}" />
 
-        <title>Document</title>
-    </head>
-    <body>
-
-        <!-- Navbar -->
-        <nav>{% include 'common/navbar.html' %}</nav>
+    <title>Document</title>
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    <!-- Navbar -->
+    {% include 'common/navbar.html' %}
 
         <!-- Page Content -->
         <main class="container my-4">

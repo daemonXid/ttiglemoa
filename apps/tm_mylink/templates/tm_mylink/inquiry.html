@@ -1,0 +1,16 @@
+{% extends 'tm_mylink/base.html' %}
+
+{% block page_tit %}티끌모아 온라인문의 페이지입니다.{% endblock page_tit %}
+
+{% block content %}
+
+
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">저장</button>
+    </form>
+
+{% endblock content %}
+
+ 

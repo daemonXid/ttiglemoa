@@ -1,0 +1,15 @@
+{% extends 'tm_mylink/base.html' %}
+
+{% block content %}
+
+<h5 class="card-title">{{ inquiry_dbs.user_title }}</h5>
+<p class="card-text text-muted">{{ inquiry_dbs.user_content }}</p>
+<p class="card-text">{{ inquiry_dbs.userinquiry_at }}</p>
+
+<a href="{% url 'tm_mylink:inquiry_list' %}" class="btn btn-primary mt-2">목록</a>
+<a href="{% url 'tm_mylink:inquiry_edit' inquiry_dbs.pk %}" class="btn btn-primary mt-2">수정</a>
+<form action="{% url 'tm_mylink:inquiry_delete' inquiry_dbs.pk %}" method="POST" style="display:inline;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger mt-2">삭제</button>
+</form>
+{% endblock content %}

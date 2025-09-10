@@ -24,6 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('apps.tm_account.urls')),
     path('', include('apps.tm_begin.urls')),
+    path('inquiry/', include('apps.tm_mylink.urls')),
 ]
 
 if settings.DEBUG:

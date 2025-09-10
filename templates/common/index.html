@@ -1,0 +1,190 @@
+{% extends 'common/base.html'%}
+{% load static %}
+
+{% block content %}
+    <div class="main_about">
+        <img src="{% static 'images/main_page/ChatGPT.png' %}" alt="" class="main_about_img">
+    </div>
+
+    <div class="stock_status">
+        <!-- <iframe height="480" width="650" src="https://ssltvc.investing.com/?pair_ID=650&height=480&width=650&interval=300&plotStyle=area&domain_ID=18&lang_ID=18&timezone_ID=26"></iframe>
+        <h2>📈 현재 주식 현황</h2> -->
+
+
+        <div class="tv-wrap">
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/symbols/NASDAQ-AAPL/?exchange=NASDAQ" rel="noopener nofollow" target="_blank"><span class="blue-text">AAPL chart by TradingView</span></a></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+                {
+                "allow_symbol_change": true,
+                "calendar": false,
+                "details": false,
+                "hide_side_toolbar": true,
+                "hide_top_toolbar": false,
+                "hide_legend": false,
+                "hide_volume": false,
+                "hotlist": false,
+                "interval": "D",
+                "locale": "kr",
+                "save_image": true,
+                "style": "1",
+                "symbol": "NASDAQ:AAPL",
+                "theme": "dark",
+                "timezone": "Etc/UTC",
+                "backgroundColor": "#0F0F0F",
+                "gridColor": "rgba(242, 242, 242, 0.06)",
+                "watchlist": [],
+                "withdateranges": false,
+                "compareSymbols": [],
+                "studies": [],
+                "width": 980,
+                "height": 610
+                }
+                </script>
+            </div>
+            <!-- TradingView Widget END -->
+
+            <!-- TradingView Widget BEGIN -->
+            <div class="tradingview-widget-container">
+                <div class="tradingview-widget-container__widget"></div>
+                <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Stock heatmap by TradingView</span></a></div>
+                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+                {
+                "dataSource": "SPX500",
+                "blockSize": "market_cap_basic",
+                "blockColor": "change",
+                "grouping": "sector",
+                "locale": "kr",
+                "symbolUrl": "",
+                "colorTheme": "dark",
+                "exchanges": [],
+                "hasTopBar": false,
+                "isDataSetEnabled": false,
+                "isZoomEnabled": true,
+                "hasSymbolTooltip": true,
+                "isMonoSize": false,
+                "width": 980,
+                "height": 500
+                }
+                </script>
+            </div>
+            <!-- TradingView Widget END -->
+        </div>
+
+
+
+
+<!-- 
+
+        <div class="tv-wrap">
+            <div class="tradingview-widget-container" id="tv-overview">
+            <div class="tradingview-widget-container__widget"></div>
+            <div class="tradingview-widget-copyright">
+                <a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank">
+                <span class="blue-text">Apple, Google, Microsoft, Samsung, Tesla quotes by TradingView</span>
+                </a>
+            </div>
+            <script type="text/javascript"
+                    src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+            {
+                "autosize": true,
+                "symbols": [
+                ["Apple","AAPL|1D"],
+                ["Google","GOOGL|1D"],
+                ["Microsoft","MSFT|1D"],
+                ["SAMSUNG","KRX:005930|1D"],
+                ["TESLA","NASDAQ:TSLA|1D"],
+                ],
+                "width": "100%",
+                "height": "540px",
+                "chartType": "area",
+                "colorTheme": "dark",
+                "dateRanges": ["1d|1","1m|30","3m|60","12m|1D","60m|1W","all|1M"],
+                "lineWidth": 2,
+                "locale": "en",
+                "backgroundColor": "#0F0F0F"
+            }
+            </script>
+            </div>
+        </div> -->
+<!-- 
+        <ul class="mt-3">
+            <li>KOSPI: 2,650.30 (+0.8%)</li>
+            <li>KOSDAQ: 850.25 (+1.2%)</li>
+            <li>NASDAQ: 15,200.50 (-0.5%)</li>
+            <li>환율(USD/KRW): 1,320.50</li>
+        </ul> -->
+    </div>
+
+    <div class="stock_news">
+        <h2>📰 주식 관련 뉴스</h2>
+        {% if updated_at %}<p class="inv-sub">업데이트: {{ updated_at|date:"Y-m-d H:i" }} ({{ count }}건)</p>{% endif %}
+
+        {% if news_list %}
+            <!-- 메인 히어로 뉴스 (상단 큰 카드) -->
+            {% with item=news_list.0 %}
+            <div class="inv-hero">
+                <div class="inv-hero-img">
+                    <a href="{{ item.link }}" target="_blank" rel="noopener">
+                        {% if item.img %}
+                            <img src="{{ item.img }}" alt="{{ item.title|striptags }}" />
+                        {% else %}
+                            <div class="no-image">
+                                <span>📈</span>
+                            </div>
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="inv-hero-content">
+                    <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-title-lg">
+                        {{ item.title|striptags }}
+                    </a>
+                    {% if item.summary %}
+                    <p class="inv-desc inv-line-5">{{ item.summary|striptags }}</p>
+                    {% endif %}
+                    <div class="inv-meta">
+                        <time>{{ item.published }}</time>
+                        <span>{{ item.source }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+
+            <!-- 하단 4개 뉴스 그리드 -->
+            <div class="inv-row">
+                {% for item in news_list|slice:"1:5" %}
+                <div class="inv-card">
+                    <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-thumb">
+                        {% if item.img %}
+                            <img src="{{ item.img }}" alt="{{ item.title|striptags }}" />
+                        {% else %}
+                            <div class="no-image-small">
+                                <span>📰</span>
+                            </div>
+                        {% endif %}
+                    </a>
+                    <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-title inv-line-2">
+                        {{ item.title|striptags }}
+                    </a>
+                    <div class="inv-meta">
+                        <time>{{ item.published }}</time>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>표시할 뉴스가 없어요. 잠시 후 다시 시도해 주세요.</p>
+        {% endif %}
+
+        <div class="mt-2 text-end">
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_begin:stock_news' %}">
+            더보기 →
+            </a>
+        </div>
+    </div>
+
+
+
+{% endblock %}

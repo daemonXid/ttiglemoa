@@ -1,0 +1,194 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}포트폴리오 | Ttiglemoa{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">내 포트폴리오</h2>
+  <div class="btn-group">
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:create_deposit' %}">예적금 추가</a>
+    <a class="btn btn-sm btn-outline-success" href="{% url 'tm_assets:create_stock' %}">주식 추가</a>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_assets:create_bond' %}">채권 추가</a>
+    <a class="btn btn-sm btn-outline-dark" href="{% url 'tm_assets:refresh_prices' %}">가격 새로고침</a>
+  </div>
+  
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header">자산군 합계</div>
+      <div class="card-body">
+        <ul class="list-group">
+          <li class="list-group-item d-flex justify-content-between">
+            <span>현금성(예적금)</span>
+            <strong>{{ class_totals.CASH|floatformat:0 }}</strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span>주식</span>
+            <strong>{{ class_totals.STOCK|floatformat:0 }}</strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span>채권</span>
+            <strong>{{ class_totals.BOND|floatformat:0 }}</strong>
+          </li>
+        </ul>
+        <small class="text-muted d-block mt-2">참고: 통화가 섞인 경우 통화별 합계를 아래에서 확인하세요.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header">통화별 합계</div>
+      <div class="card-body">
+        {% if totals_by_currency %}
+          <ul class="list-group">
+            {% for currency, total in totals_by_currency.items %}
+              <li class="list-group-item d-flex justify-content-between">
+                <span>{{ currency }}</span>
+                <strong>{{ total|floatformat:0 }}</strong>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted mb-0">등록된 자산이 없습니다.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>예적금</span>
+        <a class="btn btn-sm btn-primary" href="{% url 'tm_assets:create_deposit' %}">추가</a>
+      </div>
+      <div class="card-body">
+        {% if deposits %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>은행</th>
+                  <th>상품</th>
+                  <th>원금</th>
+                  <th>이율(%)</th>
+                  <th>평가</th>
+                  <th>통화</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for d in deposits %}
+                  <tr>
+                    <td>{{ d.bank_name }}</td>
+                    <td>{{ d.product_name }} ({{ d.get_product_type_display }})</td>
+                    <td>{{ d.principal_amount }}</td>
+                    <td>{{ d.annual_rate }}</td>
+                    <td>{{ d.estimated_value|floatformat:0 }}</td>
+                    <td>{{ d.currency }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">등록된 예적금이 없습니다.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>주식</span>
+        <a class="btn btn-sm btn-success" href="{% url 'tm_assets:create_stock' %}">추가</a>
+      </div>
+      <div class="card-body">
+        {% if stocks %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>시장</th>
+                  <th>티커</th>
+                  <th>수량</th>
+                  <th>단가</th>
+                  <th>현재가</th>
+                  <th>평가</th>
+                  <th>통화</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in stocks %}
+                  <tr>
+                    <td>{{ s.get_market_display }}</td>
+                    <td>{{ s.ticker }}</td>
+                    <td>{{ s.quantity }}</td>
+                    <td>{{ s.average_price }}</td>
+                    <td>{{ s.current_price|default:"-" }}</td>
+                    <td>{{ s.estimated_value|floatformat:0 }}</td>
+                    <td>{{ s.currency }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">등록된 주식이 없습니다.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>채권</span>
+        <a class="btn btn-sm btn-secondary" href="{% url 'tm_assets:create_bond' %}">추가</a>
+      </div>
+      <div class="card-body">
+        {% if bonds %}
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr>
+                  <th>명칭</th>
+                  <th>발행처</th>
+                  <th>액면총액</th>
+                  <th>매수가(%)</th>
+                  <th>현재가(%)</th>
+                  <th>만기</th>
+                  <th>평가</th>
+                  <th>통화</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for b in bonds %}
+                  <tr>
+                    <td>{{ b.name }}</td>
+                    <td>{{ b.issuer|default:"-" }}</td>
+                    <td>{{ b.face_amount }}</td>
+                    <td>{{ b.purchase_price_pct }}</td>
+                    <td>{{ b.current_price_pct|default:"-" }}</td>
+                    <td>{{ b.maturity_date }}</td>
+                    <td>{{ b.estimated_value|floatformat:0 }}</td>
+                    <td>{{ b.currency }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">등록된 채권이 없습니다.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

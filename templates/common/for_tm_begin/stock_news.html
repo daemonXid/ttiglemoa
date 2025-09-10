@@ -1,0 +1,86 @@
+{# templates/common/for_tm_begin/stock_news.html #}
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="stock_news news-page">
+  <h2>📰 Investing.com 최신 뉴스</h2>
+  {% if updated_at %}
+    <p class="inv-sub">업데이트: {{ updated_at|date:"Y-m-d H:i" }} (이 페이지 {{ count }}건 / 총 {{ total }}건)</p>
+  {% endif %}
+
+  {% if hero_item %}
+    <!-- 히어로 (상단 1개) -->
+    <article class="inv-hero">
+      <div class="inv-hero-img">
+        <a href="{{ hero_item.link }}" target="_blank" rel="noopener">
+          {% if hero_item.img %}
+            <img src="{{ hero_item.img }}" alt="{{ hero_item.title|striptags }}">
+          {% else %}
+            <div class="no-image"><span>📈</span></div>
+          {% endif %}
+        </a>
+      </div>
+      <div class="inv-hero-content">
+        <a href="{{ hero_item.link }}" target="_blank" rel="noopener" class="inv-title-lg">
+          {{ hero_item.title|striptags }}
+        </a>
+        {% if hero_item.summary %}
+          <p class="inv-desc inv-line-5">{{ hero_item.summary|striptags }}</p>
+        {% endif %}
+        <div class="inv-meta">
+          <time>{{ hero_item.published }}</time>
+          <span>{{ hero_item.source }}</span>
+        </div>
+      </div>
+    </article>
+  {% endif %}
+
+  <!-- 하단 그리드(12개) -->
+  <div class="inv-row">
+    {% for item in grid_items %}
+    <article class="inv-card">
+      <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-thumb">
+        {% if item.img %}
+          <img src="{{ item.img }}" alt="{{ item.title|striptags }}">
+        {% else %}
+          <div class="no-image-small"><span>📰</span></div>
+        {% endif %}
+      </a>
+
+      <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-title inv-line-2">
+        {{ item.title|striptags }}
+      </a>
+
+      {% if item.summary %}
+        <p class="inv-desc inv-line-3">{{ item.summary|striptags }}</p>
+      {% endif %}
+
+      <div class="inv-meta">
+        <time>{{ item.published }}</time>
+        <span>{{ item.source }}</span>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <!-- 페이지네이션 -->
+  {% if total_pages > 1 %}
+  <nav class="inv-pagination" aria-label="뉴스 페이지">
+    <a class="inv-page {% if not has_prev %}disabled{% endif %}" href="?page=1" aria-label="첫 페이지">«</a>
+    <a class="inv-page {% if not has_prev %}disabled{% endif %}" href="?page={{ prev_page }}" aria-label="이전 페이지">‹</a>
+
+    {% for n in page_numbers %}
+      {% if n == page %}
+        <span class="inv-page active">{{ n }}</span>
+      {% else %}
+        <a class="inv-page" href="?page={{ n }}">{{ n }}</a>
+      {% endif %}
+    {% endfor %}
+
+    <a class="inv-page {% if not has_next %}disabled{% endif %}" href="?page={{ next_page }}" aria-label="다음 페이지">›</a>
+    <a class="inv-page {% if not has_next %}disabled{% endif %}" href="?page={{ total_pages }}" aria-label="마지막 페이지">»</a>
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

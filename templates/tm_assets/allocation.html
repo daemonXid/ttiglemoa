@@ -1,0 +1,93 @@
+{% extends 'common/base.html' %}
+
+{% block title %}자산비율 | Ttiglemoa{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">전체 자산비율</h2>
+  <div class="btn-group">
+    <a class="btn btn-sm btn-outline-dark" href="{% url 'tm_assets:refresh_prices' %}">가격 새로고침</a>
+  </div>
+</div>
+
+{% if total_sum > 0 %}
+<div class="row g-4">
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header">자산군 비중</div>
+      <div class="card-body">
+        <canvas id="classChart" height="220"></canvas>
+        {% if class_change_sums %}
+        <div class="mt-2 small text-muted">
+          변동합계: 
+          예적금 {{ class_change_sums.CASH|default:0|floatformat:0 }} /
+          주식 {{ class_change_sums.STOCK|default:0|floatformat:0 }} /
+          채권 {{ class_change_sums.BOND|default:0|floatformat:0 }}
+        </div>
+        {% endif %}
+        <ul class="list-group mt-3">
+          {% for item in class_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ item.label }}
+              <span><strong>{{ item.ratio }}%</strong> ({{ item.total|floatformat:0 }})</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card">
+      <div class="card-header">통화별 비중</div>
+      <div class="card-body">
+        <canvas id="currencyChart" height="220"></canvas>
+        <ul class="list-group mt-3">
+          {% for item in currency_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ item.label }}
+              <span><strong>{{ item.ratio }}%</strong> ({{ item.total|floatformat:0 }})</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+  <div class="alert alert-info">등록된 자산이 없습니다. 자산을 추가해 주세요.</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // 자산군 데이터
+  const classLabels = {{ class_json_labels|safe }};
+  const classData = {{ class_json_data|safe }};
+  // 통화 데이터
+  const currencyLabels = {{ currency_json_labels|safe }};
+  const currencyData = {{ currency_json_data|safe }};
+
+  const colors = ['#0d6efd','#198754','#6c757d','#dc3545','#ffc107','#20c997'];
+
+  const ctx1 = document.getElementById('classChart');
+  if (ctx1) {
+    new Chart(ctx1, {
+      type: 'doughnut',
+      data: { labels: classLabels, datasets: [{ data: classData, backgroundColor: colors }] },
+      options: { plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+
+  const ctx2 = document.getElementById('currencyChart');
+  if (ctx2) {
+    new Chart(ctx2, {
+      type: 'doughnut',
+      data: { labels: currencyLabels, datasets: [{ data: currencyData, backgroundColor: colors }] },
+      options: { plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+</script>
+{% endblock %}

@@ -58,6 +58,11 @@ def portfolio_index(request):
 
 @login_required
 def create_deposit(request):
+    """예적금 항목 생성 뷰.
+
+    - POST: 유효성 검증 후 현재 사용자로 저장, 완료 메시지 후 포트폴리오로 이동
+    - GET: 비어있는 폼 렌더링
+    """
     if request.method == "POST":
         form = DepositSavingForm(request.POST)
         if form.is_valid():
@@ -73,6 +78,12 @@ def create_deposit(request):
 
 @login_required
 def edit_deposit(request, pk):
+    """예적금 항목 수정 뷰.
+
+    - 접근 제어: 현재 사용자 소유의 객체만 수정 가능
+    - POST: 바인딩 폼 검증 후 저장, 성공 메시지 후 포트폴리오로 이동
+    - GET: 기존 값이 채워진 폼 렌더링
+    """
     try:
         obj = DepositSaving.objects.get(pk=pk, user=request.user)
     except DepositSaving.DoesNotExist:
@@ -91,6 +102,11 @@ def edit_deposit(request, pk):
 
 @login_required
 def delete_deposit(request, pk):
+    """예적금 항목 삭제 뷰 (POST 전용).
+
+    - 접근 제어: 현재 사용자 소유의 객체만 삭제 가능
+    - 안전 장치: GET 삭제 방지(405 반환)
+    """
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"]) 
     try:
@@ -104,6 +120,7 @@ def delete_deposit(request, pk):
 
 @login_required
 def create_stock(request):
+    """주식 보유내역 생성 뷰."""
     if request.method == "POST":
         form = StockHoldingForm(request.POST)
         if form.is_valid():
@@ -119,6 +136,10 @@ def create_stock(request):
 
 @login_required
 def edit_stock(request, pk):
+    """주식 보유내역 수정 뷰.
+
+    - 접근 제어 및 저장/리다이렉트 플로우는 예적금과 동일
+    """
     try:
         obj = StockHolding.objects.get(pk=pk, user=request.user)
     except StockHolding.DoesNotExist:
@@ -137,6 +158,7 @@ def edit_stock(request, pk):
 
 @login_required
 def delete_stock(request, pk):
+    """주식 보유내역 삭제 뷰 (POST 전용)."""
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"]) 
     try:
@@ -150,6 +172,7 @@ def delete_stock(request, pk):
 
 @login_required
 def create_bond(request):
+    """채권 보유내역 생성 뷰."""
     if request.method == "POST":
         form = BondHoldingForm(request.POST)
         if form.is_valid():
@@ -165,6 +188,7 @@ def create_bond(request):
 
 @login_required
 def edit_bond(request, pk):
+    """채권 보유내역 수정 뷰."""
     try:
         obj = BondHolding.objects.get(pk=pk, user=request.user)
     except BondHolding.DoesNotExist:
@@ -183,6 +207,7 @@ def edit_bond(request, pk):
 
 @login_required
 def delete_bond(request, pk):
+    """채권 보유내역 삭제 뷰 (POST 전용)."""
     if request.method != "POST":
         return HttpResponseNotAllowed(["POST"]) 
     try:

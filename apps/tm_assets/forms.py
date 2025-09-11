@@ -5,6 +5,15 @@ from .models import DepositSaving, StockHolding, BondHolding
 
 
 class DepositSavingForm(forms.ModelForm):
+    """
+    예적금(DepositSaving) 입력 폼.
+
+    - 금액(principal_amount)은 서버에서 엄격히 검증:
+      · 양수만 허용(0 또는 음수 불가)
+      · 소수점 없는 정수만 허용
+    - 템플릿/브라우저 단 제약은 환경별/브라우저별 편차가 있어,
+      최종 보장은 반드시 서버 검증으로 처리합니다.
+    """
     class Meta:
         model = DepositSaving
         fields = [
@@ -42,16 +51,30 @@ class DepositSavingForm(forms.ModelForm):
         }
 
     def clean_principal_amount(self):
+        """원금 금액을 양수 정수로만 허용.
+
+        - None(미입력)은 Model 필드 설정에 따라 처리되므로 그대로 반환
+        - 0 또는 음수는 거부
+        - 소수점(소수부)이 있는 값은 거부
+        """
         value = self.cleaned_data.get("principal_amount")
+
+        # 미입력(None)은 상위 레이어(필수 여부)에서 처리
         if value is None:
             return value
+
+        # 값은 반드시 0보다 커야 함
         if value <= 0:
             raise forms.ValidationError("금액은 0보다 큰 값이어야 합니다.")
+
+        # 소수점 없는 정수인지 확인 (Decimal 정수화 비교)
         try:
             if value != Decimal(value).quantize(Decimal("1")):
                 raise forms.ValidationError("금액은 소수점 없는 정수로 입력하세요.")
         except (InvalidOperation, TypeError):
+            # 숫자 변환 실패 등 비정상 입력
             raise forms.ValidationError("유효한 정수 금액을 입력하세요.")
+
         return value
 
 

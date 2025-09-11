@@ -79,6 +79,7 @@
                   <th>?´ìœ¨(%)</th>
                   <th>?‰ê?</th>
                   <th>?µí™”</th>
+<!-- Actions ¿­: Æ÷Æ®Æú¸®¿À¿¡¼­ °¢ ÀÚ»êÀ» ¹Ù·Î ¼öÁ¤/»èÁ¦ÇÒ ¼ö ÀÖ´Â µ¿ÀÛ ¹öÆ°À» Á¦°øÇÕ´Ï´Ù. -->
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -92,8 +93,8 @@
                     <td>{{ d.estimated_value|floatformat:0 }}</td>
                     <td>{{ d.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_deposit' d.pk %}">Edit</a>
-                      <form method="post" action="{% url 'tm_assets:delete_deposit' d.pk %}" class="d-inline">
+                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}¿¹Àû±Ý ¼öÁ¤ ¹öÆ°{% endcomment %}{% url 'tm_assets:edit_deposit' d.pk %}">Edit</a>
+                      <form method="post" {% comment %}¿¹Àû±Ý »èÁ¦ Æû(POST){% endcomment %} action="{% url 'tm_assets:delete_deposit' d.pk %}" class="d-inline">
                         {% csrf_token %}
                         <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?' );">Delete</button>
                       </form>
@@ -128,6 +129,7 @@
                   <th>?„ìž¬ê°€</th>
                   <th>?‰ê?</th>
                   <th>?µí™”</th>
+<!-- Actions ¿­: Æ÷Æ®Æú¸®¿À¿¡¼­ °¢ ÀÚ»êÀ» ¹Ù·Î ¼öÁ¤/»èÁ¦ÇÒ ¼ö ÀÖ´Â µ¿ÀÛ ¹öÆ°À» Á¦°øÇÕ´Ï´Ù. -->
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -142,8 +144,8 @@
                     <td>{{ s.estimated_value|floatformat:0 }}</td>
                     <td>{{ s.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_stock' s.pk %}">Edit</a>
-                      <form method="post" action="{% url 'tm_assets:delete_stock' s.pk %}" class="d-inline">
+                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}ÁÖ½Ä ¼öÁ¤ ¹öÆ°{% endcomment %}{% url 'tm_assets:edit_stock' s.pk %}">Edit</a>
+                      <form method="post" {% comment %}ÁÖ½Ä »èÁ¦ Æû(POST){% endcomment %} action="{% url 'tm_assets:delete_stock' s.pk %}" class="d-inline">
                         {% csrf_token %}
                         <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?' );">Delete</button>
                       </form>
@@ -179,6 +181,7 @@
                   <th>ë§Œê¸°</th>
                   <th>?‰ê?</th>
                   <th>?µí™”</th>
+<!-- Actions ¿­: Æ÷Æ®Æú¸®¿À¿¡¼­ °¢ ÀÚ»êÀ» ¹Ù·Î ¼öÁ¤/»èÁ¦ÇÒ ¼ö ÀÖ´Â µ¿ÀÛ ¹öÆ°À» Á¦°øÇÕ´Ï´Ù. -->
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -194,8 +197,8 @@
                     <td>{{ b.estimated_value|floatformat:0 }}</td>
                     <td>{{ b.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_bond' b.pk %}">Edit</a>
-                      <form method="post" action="{% url 'tm_assets:delete_bond' b.pk %}" class="d-inline">
+                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}Ã¤±Ç ¼öÁ¤ ¹öÆ°{% endcomment %}{% url 'tm_assets:edit_bond' b.pk %}">Edit</a>
+                      <form method="post" {% comment %}Ã¤±Ç »èÁ¦ Æû(POST){% endcomment %} action="{% url 'tm_assets:delete_bond' b.pk %}" class="d-inline">
                         {% csrf_token %}
                         <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?' );">Delete</button>
                       </form>
@@ -213,6 +216,7 @@
 </div>
 
 {% endblock %}
+
 
 
 

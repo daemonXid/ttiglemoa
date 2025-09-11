@@ -11,9 +11,9 @@ class DepositSavingForm(forms.ModelForm):
     - 금액(principal_amount)은 서버에서 엄격히 검증:
       · 양수만 허용(0 또는 음수 불가)
       · 소수점 없는 정수만 허용
-    - 템플릿/브라우저 단 제약은 환경별/브라우저별 편차가 있어,
-      최종 보장은 반드시 서버 검증으로 처리합니다.
+    - 브라우저 입력 제약은 편의를 위한 힌트이며 최종 보장은 서버 검증으로 처리합니다.
     """
+
     class Meta:
         model = DepositSaving
         fields = [
@@ -38,7 +38,7 @@ class DepositSavingForm(forms.ModelForm):
             "start_date": "시작일",
             "maturity_date": "만기일",
             "currency": "통화",
-            "current_value_manual": "평가액(직접입력)",
+            "current_value_manual": "현재가(직접입력)",
         }
         widgets = {
             "bank_name": forms.TextInput(attrs={"placeholder": "예: 국민은행"}),
@@ -65,30 +65,17 @@ class DepositSavingForm(forms.ModelForm):
             w.attrs = attrs
 
     def clean_principal_amount(self):
-        """원금 금액을 양수 정수로만 허용.
-
-        - None(미입력)은 Model 필드 설정에 따라 처리되므로 그대로 반환
-        - 0 또는 음수는 거부
-        - 소수점(소수부)이 있는 값은 거부
-        """
+        """원금 금액을 양수 정수로만 허용."""
         value = self.cleaned_data.get("principal_amount")
-
-        # 미입력(None)은 상위 레이어(필수 여부)에서 처리
         if value is None:
             return value
-
-        # 값은 반드시 0보다 커야 함
         if value <= 0:
             raise forms.ValidationError("금액은 0보다 큰 값이어야 합니다.")
-
-        # 소수점 없는 정수인지 확인 (Decimal 정수화 비교)
         try:
             if value != Decimal(value).quantize(Decimal("1")):
                 raise forms.ValidationError("금액은 소수점 없는 정수로 입력하세요.")
         except (InvalidOperation, TypeError):
-            # 숫자 변환 실패 등 비정상 입력
             raise forms.ValidationError("유효한 정수 금액을 입력하세요.")
-
         return value
 
 
@@ -138,10 +125,10 @@ class BondHoldingForm(forms.ModelForm):
         ]
         labels = {
             "name": "채권명",
-            "issuer": "발행처",
+            "issuer": "발행사",
             "currency": "통화",
             "face_amount": "액면총액",
-            "coupon_rate": "표면금리(%)",
+            "coupon_rate": "액면금리(%)",
             "purchase_price_pct": "매수가(%)",
             "current_price_pct": "현재가(%)",
             "maturity_date": "만기일",
@@ -149,7 +136,7 @@ class BondHoldingForm(forms.ModelForm):
         }
         widgets = {
             "maturity_date": forms.DateInput(attrs={"type": "date"}),
-            "name": forms.TextInput(attrs={"placeholder": "예: 국고채 3년"}),
+            "name": forms.TextInput(attrs={"placeholder": "예: 국채 3년"}),
             "issuer": forms.TextInput(attrs={"placeholder": "예: 대한민국"}),
             "face_amount": forms.NumberInput(attrs={"placeholder": "예: 10000000"}),
             "coupon_rate": forms.NumberInput(attrs={"step": "0.01", "placeholder": "예: 3.2"}),
@@ -157,3 +144,4 @@ class BondHoldingForm(forms.ModelForm):
             "current_price_pct": forms.NumberInput(attrs={"step": "0.001", "placeholder": "선택 입력"}),
             "bond_code": forms.TextInput(attrs={"placeholder": "pykrx 조회용 KRX/ISIN 코드"}),
         }
+

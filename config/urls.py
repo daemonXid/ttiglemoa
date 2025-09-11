@@ -26,8 +26,6 @@ urlpatterns = [
     path('my-account/', include('apps.tm_account.urls')), # Remaining tm_account URLs
     path('', include('apps.tm_begin.urls')),
     path('inquiry/', include('apps.tm_mylink.urls')),
-    # tm_assets: 포트폴리오/예적금/주식/채권 등 자산 관련 URL 네임스페이스
-    path('assets/', include(('apps.tm_assets.urls', 'tm_assets'), namespace='tm_assets')),
 ]
 
 if settings.DEBUG:

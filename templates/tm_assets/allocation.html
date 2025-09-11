@@ -14,12 +14,12 @@
 <div class="row g-4">
   <div class="col-12 col-lg-6">
     <div class="card">
-      <div class="card-header">자산군 비중</div>
+      <div class="card-header">자산별 비중</div>
       <div class="card-body">
         <canvas id="classChart" height="220"></canvas>
         {% if class_change_sums %}
         <div class="mt-2 small text-muted">
-          변동합계: 
+          변동합계 
           예적금 {{ class_change_sums.CASH|default:0|floatformat:0 }} /
           주식 {{ class_change_sums.STOCK|default:0|floatformat:0 }} /
           채권 {{ class_change_sums.BOND|default:0|floatformat:0 }}
@@ -63,10 +63,8 @@
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // 자산군 데이터
   const classLabels = {{ class_json_labels|safe }};
   const classData = {{ class_json_data|safe }};
-  // 통화 데이터
   const currencyLabels = {{ currency_json_labels|safe }};
   const currencyData = {{ currency_json_data|safe }};
 
@@ -91,3 +89,4 @@
   }
 </script>
 {% endblock %}
+

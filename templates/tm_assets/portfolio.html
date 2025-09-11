@@ -1,16 +1,16 @@
-{% extends 'common/base.html' %}
+﻿{% extends 'common/base.html' %}
 {% load static %}
 
-{% block title %}?�트?�리??| Ttiglemoa{% endblock %}
+{% block title %}포트폴리오 | Ttiglemoa{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h2 class="mb-0">???�트?�리??/h2>
+  <h2 class="mb-0">포트폴리오</h2>
   <div class="btn-group">
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:create_deposit' %}">?�적�?추�?</a>
-    <a class="btn btn-sm btn-outline-success" href="{% url 'tm_assets:create_stock' %}">주식 추�?</a>
-    <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_assets:create_bond' %}">채권 추�?</a>
-    <a class="btn btn-sm btn-outline-dark" href="{% url 'tm_assets:refresh_prices' %}">가�??�로고침</a>
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:create_deposit' %}">예적금 추가</a>
+    <a class="btn btn-sm btn-outline-success" href="{% url 'tm_assets:create_stock' %}">주식 추가</a>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_assets:create_bond' %}">채권 추가</a>
+    <a class="btn btn-sm btn-outline-dark" href="{% url 'tm_assets:refresh_prices' %}">가격 새로고침</a>
   </div>
   
 </div>
@@ -18,11 +18,11 @@
 <div class="row g-3 mb-4">
   <div class="col-12 col-lg-6">
     <div class="card">
-      <div class="card-header">?�산�??�계</div>
+      <div class="card-header">자산 합계</div>
       <div class="card-body">
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between">
-            <span>?�금???�적�?</span>
+            <span>예금/적금</span>
             <strong>{{ class_totals.CASH|floatformat:0 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
@@ -34,14 +34,14 @@
             <strong>{{ class_totals.BOND|floatformat:0 }}</strong>
           </li>
         </ul>
-        <small class="text-muted d-block mt-2">참고: ?�화가 ?�인 경우 ?�화�??�계�??�래?�서 ?�인?�세??</small>
+        <small class="text-muted d-block mt-2">통화가 다르면 합계가 왜곡될 수 있습니다.</small>
       </div>
     </div>
   </div>
 
   <div class="col-12 col-lg-6">
     <div class="card">
-      <div class="card-header">?�화�??�계</div>
+      <div class="card-header">통화별 합계</div>
       <div class="card-body">
         {% if totals_by_currency %}
           <ul class="list-group">
@@ -53,7 +53,7 @@
             {% endfor %}
           </ul>
         {% else %}
-          <p class="text-muted mb-0">?�록???�산???�습?�다.</p>
+          <p class="text-muted mb-0">등록된 자산이 없습니다.</p>
         {% endif %}
       </div>
     </div>
@@ -64,8 +64,8 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <span>?�적�?/span>
-        <a class="btn btn-sm btn-primary" href="{% url 'tm_assets:create_deposit' %}">추�?</a>
+        <span>예적금</span>
+        <a class="btn btn-sm btn-primary" href="{% url 'tm_assets:create_deposit' %}">추가</a>
       </div>
       <div class="card-body">
         {% if deposits %}
@@ -73,13 +73,13 @@
             <table class="table table-sm align-middle">
               <thead>
                 <tr>
-                  <th>?�??/th>
-                  <th>?�품</th>
-                  <th>?�금</th>
-                  <th>?�율(%)</th>
-                  <th>?��?</th>
-                  <th>?�화</th>
-                  <th>Actions</th>
+                  <th>은행</th>
+                  <th>상품</th>
+                  <th>원금</th>
+                  <th>연이율(%)</th>
+                  <th>평가액</th>
+                  <th>통화</th>
+                  <th>동작</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,18 +92,19 @@
                     <td>{{ d.estimated_value|floatformat:0 }}</td>
                     <td>{{ d.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_deposit' d.pk %}">Edit</a>
+                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_deposit' d.pk %}">수정</a>
                       <form method="post" action="{% url 'tm_assets:delete_deposit' d.pk %}" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('�����Ͻðڽ��ϱ�?' );">Delete</button>
+                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('삭제하시겠습니까?');">삭제</button>
                       </form>
-                    </td></tr>
+                    </td>
+                  </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         {% else %}
-          <p class="text-muted mb-0">?�록???�적금이 ?�습?�다.</p>
+          <p class="text-muted mb-0">등록된 예적금이 없습니다.</p>
         {% endif %}
       </div>
     </div>
@@ -113,7 +114,7 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>주식</span>
-        <a class="btn btn-sm btn-success" href="{% url 'tm_assets:create_stock' %}">추�?</a>
+        <a class="btn btn-sm btn-success" href="{% url 'tm_assets:create_stock' %}">추가</a>
       </div>
       <div class="card-body">
         {% if stocks %}
@@ -121,14 +122,14 @@
             <table class="table table-sm align-middle">
               <thead>
                 <tr>
-                  <th>?�장</th>
-                  <th>?�커</th>
-                  <th>?�량</th>
-                  <th>?��?</th>
-                  <th>?�재가</th>
-                  <th>?��?</th>
-                  <th>?�화</th>
-                  <th>Actions</th>
+                  <th>시장</th>
+                  <th>티커</th>
+                  <th>수량</th>
+                  <th>평단가</th>
+                  <th>현재가</th>
+                  <th>평가액</th>
+                  <th>통화</th>
+                  <th>동작</th>
                 </tr>
               </thead>
               <tbody>
@@ -142,18 +143,19 @@
                     <td>{{ s.estimated_value|floatformat:0 }}</td>
                     <td>{{ s.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_stock' s.pk %}">Edit</a>
+                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_stock' s.pk %}">수정</a>
                       <form method="post" action="{% url 'tm_assets:delete_stock' s.pk %}" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('�����Ͻðڽ��ϱ�?' );">Delete</button>
+                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('삭제하시겠습니까?');">삭제</button>
                       </form>
-                    </td></tr>
+                    </td>
+                  </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         {% else %}
-          <p class="text-muted mb-0">?�록??주식???�습?�다.</p>
+          <p class="text-muted mb-0">등록된 주식이 없습니다.</p>
         {% endif %}
       </div>
     </div>
@@ -163,7 +165,7 @@
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <span>채권</span>
-        <a class="btn btn-sm btn-secondary" href="{% url 'tm_assets:create_bond' %}">추�?</a>
+        <a class="btn btn-sm btn-secondary" href="{% url 'tm_assets:create_bond' %}">추가</a>
       </div>
       <div class="card-body">
         {% if bonds %}
@@ -172,14 +174,14 @@
               <thead>
                 <tr>
                   <th>명칭</th>
-                  <th>발행�?/th>
-                  <th>?�면총액</th>
+                  <th>발행사</th>
+                  <th>액면총액</th>
                   <th>매수가(%)</th>
-                  <th>?�재가(%)</th>
+                  <th>현재가(%)</th>
                   <th>만기</th>
-                  <th>?��?</th>
-                  <th>?�화</th>
-                  <th>Actions</th>
+                  <th>평가액</th>
+                  <th>통화</th>
+                  <th>동작</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,18 +196,19 @@
                     <td>{{ b.estimated_value|floatformat:0 }}</td>
                     <td>{{ b.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_bond' b.pk %}">Edit</a>
+                      <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_bond' b.pk %}">수정</a>
                       <form method="post" action="{% url 'tm_assets:delete_bond' b.pk %}" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('�����Ͻðڽ��ϱ�?' );">Delete</button>
+                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('삭제하시겠습니까?');">삭제</button>
                       </form>
-                    </td></tr>
+                    </td>
+                  </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
         {% else %}
-          <p class="text-muted mb-0">?�록??채권???�습?�다.</p>
+          <p class="text-muted mb-0">등록된 채권이 없습니다.</p>
         {% endif %}
       </div>
     </div>
@@ -213,8 +216,3 @@
 </div>
 
 {% endblock %}
-
-
-
-
-

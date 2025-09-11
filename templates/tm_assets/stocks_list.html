@@ -1,0 +1,71 @@
+{% extends 'common/base.html' %}
+
+{% block title %}주식 상세 | Ttiglemoa{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">주식 상세</h2>
+  <div class="btn-group">
+    <a class="btn btn-sm btn-outline-success" href="{% url 'tm_assets:create_stock' %}">주식 추가</a>
+    <a class="btn btn-sm btn-outline-dark" href="{% url 'tm_assets:refresh_prices' %}">가격 새로고침</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div><strong>총합:</strong> {{ total|floatformat:0 }}</div>
+      <div><strong>변동합계:</strong> {{ change_sum|floatformat:0 }}</div>
+    </div>
+    {% if stocks %}
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>시장</th>
+              <th>티커</th>
+              <th>종목명</th>
+              <th>수량</th>
+              <th>평단가</th>
+              <th>현재가</th>
+              <th>변동</th>
+              <th>평가액</th>
+              <th>통화</th>
+              <th>가격갱신</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in stocks %}
+              <tr>
+                <td>{{ s.get_market_display }}</td>
+                <td>{{ s.ticker }}</td>
+                <td>{{ s.name|default:'-' }}</td>
+                <td>{{ s.quantity }}</td>
+                <td>{{ s.average_price }}</td>
+                <td>{{ s.current_price|default:'-' }}</td>
+                <td>
+                  {% with lc=s.get_last_change %}
+                    {% if lc.0 is not None %}
+                      <span class="{% if lc.0 > 0 %}text-danger{% elif lc.0 < 0 %}text-primary{% else %}text-muted{% endif %}">
+                        {{ lc.0|floatformat:2 }} ({{ lc.1|default:'-' }}%)
+                      </span>
+                    {% else %}
+                      -
+                    {% endif %}
+                  {% endwith %}
+                </td>
+                <td>{{ s.estimated_value|floatformat:0 }}</td>
+                <td>{{ s.currency }}</td>
+                <td>{{ s.last_price_updated_at|date:'Y-m-d H:i'|default:'-' }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted mb-0">등록된 주식이 없습니다.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

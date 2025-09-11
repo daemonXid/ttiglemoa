@@ -1,22 +1,25 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from apps.tm_mylink.models import inquiry_db
 from .forms import MemoModelForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def inquiry_list(request) :
-    inquiry_dbs = inquiry_db.objects.all()
+    inquiry_dbs = inquiry_db.objects.filter(author=request.user)
     context = {
         'inquiry_dbs':inquiry_dbs
     }
     return render(request, 'tm_mylink/inquiry_list.html', context)
 
 
-
+@login_required
 def inquiry_write(request) :
     if request.method=='POST' :
         form = MemoModelForm(request.POST)
         if form.is_valid() :
-            inquiry_db=form.save()
+            inquiry_db=form.save(commit=False)
+            inquiry_db.author = request.user
+            inquiry_db.save()            
             return redirect('tm_mylink:inquiry_list')
             
     else :
@@ -55,5 +58,5 @@ def inquiry_delete(request, pk) :
     if request.method=='POST' :
         inquiry_dbs.delete()
         return redirect('tm_mylink:inquiry_list')
-    else :
+    else : 
         return redirect('tm_mylink:inquiry_detail',pk=pk)

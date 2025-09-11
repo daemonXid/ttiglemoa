@@ -1,4 +1,4 @@
-{% extends 'tm_mylink/base.html' %}
+{% extends 'common/base.html' %}
 
 {% block page_tit %}티끌모아 온라인문의 페이지입니다.{% endblock page_tit %}
 
@@ -10,6 +10,8 @@
         {{form.as_p}}
         <button type="submit">저장</button>
     </form>
+
+    <a class="nav-link" href="{% url 'tm_mylink:inquiry_list' %}">취소</a>
 
 {% endblock content %}
 

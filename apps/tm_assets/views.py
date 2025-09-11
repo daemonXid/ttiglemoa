@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 
 import json
 
@@ -71,6 +72,37 @@ def create_deposit(request):
 
 
 @login_required
+def edit_deposit(request, pk):
+    try:
+        obj = DepositSaving.objects.get(pk=pk, user=request.user)
+    except DepositSaving.DoesNotExist:
+        return HttpResponseForbidden()
+
+    if request.method == "POST":
+        form = DepositSavingForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "예적금 항목이 수정되었습니다.")
+            return redirect(reverse("tm_assets:portfolio"))
+    else:
+        form = DepositSavingForm(instance=obj)
+    return render(request, "tm_assets/deposit_form.html", {"form": form})
+
+
+@login_required
+def delete_deposit(request, pk):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"]) 
+    try:
+        obj = DepositSaving.objects.get(pk=pk, user=request.user)
+    except DepositSaving.DoesNotExist:
+        return HttpResponseForbidden()
+    obj.delete()
+    messages.success(request, "예적금 항목이 삭제되었습니다.")
+    return redirect(reverse("tm_assets:portfolio"))
+
+
+@login_required
 def create_stock(request):
     if request.method == "POST":
         form = StockHoldingForm(request.POST)
@@ -86,6 +118,37 @@ def create_stock(request):
 
 
 @login_required
+def edit_stock(request, pk):
+    try:
+        obj = StockHolding.objects.get(pk=pk, user=request.user)
+    except StockHolding.DoesNotExist:
+        return HttpResponseForbidden()
+
+    if request.method == "POST":
+        form = StockHoldingForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "주식 보유내역이 수정되었습니다.")
+            return redirect(reverse("tm_assets:portfolio"))
+    else:
+        form = StockHoldingForm(instance=obj)
+    return render(request, "tm_assets/stock_form.html", {"form": form})
+
+
+@login_required
+def delete_stock(request, pk):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"]) 
+    try:
+        obj = StockHolding.objects.get(pk=pk, user=request.user)
+    except StockHolding.DoesNotExist:
+        return HttpResponseForbidden()
+    obj.delete()
+    messages.success(request, "주식 보유내역이 삭제되었습니다.")
+    return redirect(reverse("tm_assets:portfolio"))
+
+
+@login_required
 def create_bond(request):
     if request.method == "POST":
         form = BondHoldingForm(request.POST)
@@ -98,6 +161,37 @@ def create_bond(request):
     else:
         form = BondHoldingForm()
     return render(request, "tm_assets/bond_form.html", {"form": form})
+
+
+@login_required
+def edit_bond(request, pk):
+    try:
+        obj = BondHolding.objects.get(pk=pk, user=request.user)
+    except BondHolding.DoesNotExist:
+        return HttpResponseForbidden()
+
+    if request.method == "POST":
+        form = BondHoldingForm(request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "채권 보유내역이 수정되었습니다.")
+            return redirect(reverse("tm_assets:portfolio"))
+    else:
+        form = BondHoldingForm(instance=obj)
+    return render(request, "tm_assets/bond_form.html", {"form": form})
+
+
+@login_required
+def delete_bond(request, pk):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"]) 
+    try:
+        obj = BondHolding.objects.get(pk=pk, user=request.user)
+    except BondHolding.DoesNotExist:
+        return HttpResponseForbidden()
+    obj.delete()
+    messages.success(request, "채권 보유내역이 삭제되었습니다.")
+    return redirect(reverse("tm_assets:portfolio"))
 
 
 @login_required

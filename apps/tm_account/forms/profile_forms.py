@@ -6,9 +6,9 @@ User = get_user_model()
 
 # Choices for default avatars
 DEFAULT_AVATAR_CHOICES = [
-    ('static/images/avatars/avatar1.svg', '빨강'),
-    ('static/images/avatars/avatar2.svg', '파랑'),
-    ('static/images/avatars/avatar3.svg', '초록'),
+    ('tm_acount/images/avatars/avatar1.svg', '빨강'),
+    ('tm_acount/images/avatars/avatar2.svg', '파랑'),
+    ('tm_acount/images/avatars/avatar3.svg', '초록'),
 ]
 
 class CustomUserCreationForm(UserCreationForm):

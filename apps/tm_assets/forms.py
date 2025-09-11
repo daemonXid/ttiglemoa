@@ -50,6 +50,20 @@ class DepositSavingForm(forms.ModelForm):
             "current_value_manual": forms.NumberInput(attrs={"placeholder": "선택 입력"}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 브라우저 입력 UX 제약: 예적금 원금은 양수 정수만 입력 유도
+        if "principal_amount" in self.fields:
+            w = self.fields["principal_amount"].widget
+            attrs = getattr(w, "attrs", {}) or {}
+            attrs.update({
+                "min": "1",
+                "step": "1",
+                "inputmode": "numeric",
+                "pattern": "[0-9]*",
+            })
+            w.attrs = attrs
+
     def clean_principal_amount(self):
         """원금 금액을 양수 정수로만 허용.
 

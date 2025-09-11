@@ -1,4 +1,4 @@
-from django.conf import settings
+﻿from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
@@ -12,61 +12,50 @@ class TimeStampedModel(models.Model):
 
 
 class Currency(models.TextChoices):
-    KRW = "KRW", "��ȭ(KRW)"
-    USD = "USD", "�޷�(USD)"
-    JPY = "JPY", "��(JPY)"
-    EUR = "EUR", "����(EUR)"
+    KRW = "KRW", "원화(KRW)"
+    USD = "USD", "달러(USD)"
+    JPY = "JPY", "엔(JPY)"
+    EUR = "EUR", "유로(EUR)"
 
 
 class Compounding(models.TextChoices):
-    NONE = "NONE", "�ܸ�"
-    MONTHLY = "MONTHLY", "?�복�?
-    QUARTERLY = "QUARTERLY", "분기복리"
-    ANNUALLY = "ANNUALLY", "?�복�?
-
-
-class Market(models.TextChoices):
-    KR = "KR", "����"
-    US = "US", "�ؿ�(�̱�)"
+    NONE = "NONE", "단리"
+    MONTHLY = "MONTHLY", "월복리"QUARTERLY", "분기복리"
+    ANNUALLY = "ANNUALLY", "연복리"KR", "국내"
+    US = "US", "해외(미국)"
 
 
 class DepositSaving(TimeStampedModel):
     class ProductType(models.TextChoices):
-        DEPOSIT = "DEPOSIT", "����"
-        SAVING = "SAVING", "����"
+        DEPOSIT = "DEPOSIT", "예금"
+        SAVING = "SAVING", "적금"
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="deposit_savings",
-        verbose_name="?�용??,
+        verbose_name="사용자"?좏삎"
     )
-    product_type = models.CharField(
-        max_length=16, choices=ProductType.choices, verbose_name="?�형"
-    )
-    bank_name = models.CharField(max_length=100, verbose_name="?�?�명")
-    product_name = models.CharField(max_length=150, verbose_name="?�품�?)
-    principal_amount = models.DecimalField(
-        max_digits=18, decimal_places=2, verbose_name="?�금"
+    bank_name = models.CharField(max_length=100, verbose_name="채권명")
+    product_name = models.CharField(max_length=150, verbose_name="채권명"?먭툑"
     )
     annual_rate = models.DecimalField(
         max_digits=5,
         decimal_places=2,
-        help_text="?�이??%) ?? 3.50",
-        verbose_name="?�이??%)",
+        help_text="연이율(%) 예: 3.50",
+        verbose_name="?곗씠??%)",
     )
     compounding = models.CharField(
-        max_length=16, choices=Compounding.choices, default=Compounding.NONE, verbose_name="복리 주기"
+        max_length=16, choices=Compounding.choices, default=Compounding.NONE, verbose_name="蹂듬━ 二쇨린"
     )
-    start_date = models.DateField(verbose_name="?�작??)
-    maturity_date = models.DateField(null=True, blank=True, verbose_name="만기??)
+    start_date = models.DateField(verbose_name="시작일"留뚭린??)
     currency = models.CharField(
-        max_length=3, choices=Currency.choices, default=Currency.KRW, verbose_name="?�화"
+        max_length=3, choices=Currency.choices, default=Currency.KRW, verbose_name="통화"
     )
 
-    # ?�용?��? 직접 ?�력?�는 ?�재 ?��????�택)
+    # ?ъ슜?먭? 吏곸젒 ?낅젰?섎뒗 ?꾩옱 ?됯????좏깮)
     current_value_manual = models.DecimalField(
-        max_digits=18, decimal_places=2, null=True, blank=True, verbose_name="?��???직접?�력)"
+        max_digits=18, decimal_places=2, null=True, blank=True, verbose_name="현재가(직접입력)"
     )
 
     def __str__(self):
@@ -74,8 +63,8 @@ class DepositSaving(TimeStampedModel):
 
     def estimated_value(self, as_of=None):
         """
-        간단 계산: ?�리 ?�는 ?�순 복리 근사�??�재 ?��???추정.
-        current_value_manual ???�으�??�선 ?�용.
+        媛꾨떒 怨꾩궛: ?⑤━ ?먮뒗 ?⑥닚 蹂듬━ 洹쇱궗濡??꾩옱 ?됯???異붿젙.
+        current_value_manual ???덉쑝硫??곗꽑 ?ъ슜.
         """
         if self.current_value_manual is not None:
             return self.current_value_manual
@@ -87,12 +76,12 @@ class DepositSaving(TimeStampedModel):
             return self.principal_amount
 
         rate = float(self.annual_rate) / 100.0
-        # ?�리
+        # ?⑤━
         if self.compounding == Compounding.NONE:
             years = days / 365.0
             return self.principal_amount * (1 + rate * years)
 
-        # 복리 근사
+        # 蹂듬━ 洹쇱궗
         if self.compounding == Compounding.MONTHLY:
             periods = max(0, int(days // 30))
             period_rate = rate / 12.0
@@ -117,20 +106,17 @@ class StockHolding(TimeStampedModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="stock_holdings",
-        verbose_name="?�용??,
-    )
-    market = models.CharField(max_length=8, choices=Market.choices, verbose_name="?�장")
-    ticker = models.CharField(max_length=20, verbose_name="?�커/종목코드")
-    name = models.CharField(max_length=150, blank=True, verbose_name="종목�?)
-    quantity = models.DecimalField(max_digits=18, decimal_places=4, verbose_name="?�량")
+        verbose_name="사용자"?쒖옣")
+    ticker = models.CharField(max_length=20, verbose_name="티커/종목코드")
+    name = models.CharField(max_length=150, blank=True, verbose_name="채권명"?섎웾")
     average_price = models.DecimalField(
-        max_digits=18, decimal_places=4, help_text="매수?�균?��? (거래?�화)", verbose_name="?�단가"
+        max_digits=18, decimal_places=4, help_text="매수 평균단가 (거래통화)", verbose_name="?됰떒媛"
     )
     currency = models.CharField(
-        max_length=3, choices=Currency.choices, default=Currency.KRW, verbose_name="?�화"
+        max_length=3, choices=Currency.choices, default=Currency.KRW, verbose_name="통화"
     )
     current_price = models.DecimalField(
-        max_digits=18, decimal_places=4, null=True, blank=True, help_text="?�재가 (?�택)", verbose_name="?�재가"
+        max_digits=18, decimal_places=4, null=True, blank=True, help_text="현재가 (선택)", verbose_name="?꾩옱媛"
     )
     last_price_updated_at = models.DateTimeField(null=True, blank=True)
 
@@ -142,9 +128,9 @@ class StockHolding(TimeStampedModel):
         return price * self.quantity
 
     def update_price_via_fdr(self):
-        """FinanceDataReader�?최신 종�? 조회 ??current_price ?�데?�트.
-        ?�장 구분?� 보조?�보�??�용?�며, FDR?� KR/US�?모두 지??
-        반환: ?�공 ?��?(bool)
+        """FinanceDataReader濡?理쒖떊 醫낃? 議고쉶 ??current_price ?낅뜲?댄듃.
+        ?쒖옣 援щ텇? 蹂댁“?뺣낫濡??ъ슜?섎ŉ, FDR? KR/US瑜?紐⑤몢 吏??
+        諛섑솚: ?깃났 ?щ?(bool)
         """
         try:
             import FinanceDataReader as fdr
@@ -160,7 +146,7 @@ class StockHolding(TimeStampedModel):
             df = fdr.DataReader(self.ticker)
             if df is None or df.empty:
                 return False
-            # 종�? 컬럼 ?�선
+            # 醫낃? 而щ읆 ?곗꽑
             close = df["Close"].iloc[-1]
             prev_price = self.current_price
             self.current_price = close
@@ -185,27 +171,22 @@ class BondHolding(TimeStampedModel):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="bond_holdings",
-        verbose_name="?�용??,
-    )
-    name = models.CharField(max_length=150, verbose_name="채권�?)
-    issuer = models.CharField(max_length=150, blank=True, verbose_name="발행�?)
-    currency = models.CharField(
-        max_length=3, choices=Currency.choices, default=Currency.KRW, verbose_name="?�화"
+        verbose_name="사용자"梨꾧텒紐?)
+    issuer = models.CharField(max_length=150, blank=True, verbose_name="발행사"통화"
     )
     face_amount = models.DecimalField(
-        max_digits=18, decimal_places=2, help_text="?�면총액", verbose_name="?�면총액"
+        max_digits=18, decimal_places=2, help_text="액면총액", verbose_name="액면총액"
     )
     coupon_rate = models.DecimalField(
-        max_digits=5, decimal_places=2, help_text="?�면금리(%)", verbose_name="?�면금리(%)"
+        max_digits=5, decimal_places=2, help_text="액면금리(%)", verbose_name="?쒕㈃湲덈━(%)"
     )
     purchase_price_pct = models.DecimalField(
-        max_digits=6, decimal_places=3, help_text="매수가(?�면가=100 기�?)", verbose_name="매수가(%)"
+        max_digits=6, decimal_places=3, help_text="매수가(액면가=100 기준)", verbose_name="留ㅼ닔媛(%)"
     )
     current_price_pct = models.DecimalField(
-        max_digits=6, decimal_places=3, null=True, blank=True, help_text="?�재가(?�택)", verbose_name="?�재가(%)"
+        max_digits=6, decimal_places=3, null=True, blank=True, help_text="현재가(선택)", verbose_name="?꾩옱媛(%)"
     )
-    maturity_date = models.DateField(verbose_name="만기??)
-    bond_code = models.CharField(max_length=32, blank=True, help_text="KRX 채권 코드/ISIN (pykrx 조회??", verbose_name="채권코드")
+    maturity_date = models.DateField(verbose_name="만기일"KRX 梨꾧텒 肄붾뱶/ISIN (pykrx 議고쉶??", verbose_name="만기일")
     last_price_updated_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
@@ -218,9 +199,9 @@ class BondHolding(TimeStampedModel):
         return self.face_amount * (price_pct / 100)
 
     def update_price_via_pykrx(self):
-        """pykrx�?채권 ?�재가(%)�??�데?�트. KRX 코드가 ?�요?????�음.
-        구현?� 가???�드?�인?�에 ?�라 ?�순??
-        반환: ?�공 ?��?(bool)
+        """pykrx濡?梨꾧텒 ?꾩옱媛(%)瑜??낅뜲?댄듃. KRX 肄붾뱶媛 ?꾩슂?????덉쓬.
+        援ы쁽? 媛???붾뱶?ъ씤?몄뿉 ?곕씪 ?⑥닚??
+        諛섑솚: ?깃났 ?щ?(bool)
         """
         try:
             from pykrx import bond
@@ -237,9 +218,9 @@ class BondHolding(TimeStampedModel):
             return False
 
         try:
-            # ?�시: ?�별 ?�세 DataFrame??받아 마�?�?�??�용 (?�드?�인?�는 ?�경??맞게 조정)
-            # ?�제 ?�용 가?�한 API??pykrx 버전???�라 ?��? ???�습?�다.
-            # 존재?��? ?�으�?False 반환
+            # ?덉떆: ?쇰퀎 ?쒖꽭 DataFrame??諛쏆븘 留덉?留?媛??ъ슜 (?붾뱶?ъ씤?몃뒗 ?섍꼍??留욊쾶 議곗젙)
+            # ?ㅼ젣 ?ъ슜 媛?ν븳 API??pykrx 踰꾩쟾???곕씪 ?ㅻ? ???덉뒿?덈떎.
+            # 議댁옱?섏? ?딆쑝硫?False 諛섑솚
             today = timezone.localdate().strftime("%Y%m%d")
             try:
                 df = bond.get_bond_ohlcv_by_date(today, today, code)
@@ -249,11 +230,11 @@ class BondHolding(TimeStampedModel):
             if df is None or df.empty:
                 return False
 
-            # 종�? ?�는 ?��?가격에 ?�당?�는 컬럼 추정
-            for col in ["종�?", "Close", "close", "?�익�?, "Price"]:
+            # 醫낃? ?먮뒗 ?됯?媛寃⑹뿉 ?대떦?섎뒗 而щ읆 異붿젙
+            for col in ["醫낃?", "Close", "close", "?섏씡瑜?, "Price"]:
                 if col in df.columns:
                     val = float(df[col].iloc[-1])
-                    # % 기�? 가격으�?가??
+                    # % 湲곗? 媛寃⑹쑝濡?媛??
                     self.current_price_pct = val
                     self.last_price_updated_at = timezone.now()
                     self.save(update_fields=["current_price_pct", "last_price_updated_at", "updated_at"])
@@ -330,4 +311,6 @@ def bond_last_change(bond: "BondHolding"):
 def deposit_last_change(deposit: "DepositSaving"):
     vals = _get_two_prices_qs(deposit.value_history, "value")
     return _last_change_from_history(vals)
+
+
 

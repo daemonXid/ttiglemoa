@@ -1,7 +1,9 @@
 // test 
 
-const login_button = document.getElementById('login_nav')
-login_button.addEventListener('click', () => console.log('로그인 버튼 '))
+const login_button = document.getElementById('login_nav');
+if (login_button) {
+    login_button.addEventListener('click', () => console.log('로그인 버튼 '));
+}
 
 
 console.log("✅ main.js loaded!");

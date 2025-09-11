@@ -22,9 +22,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('accounts/', include('apps.tm_account.urls')),
+    path('accounts/', include('allauth.urls')), # Allauth URLs
+    path('my-account/', include('apps.tm_account.urls')), # Remaining tm_account URLs
     path('', include('apps.tm_begin.urls')),
-    path('assets/', include('apps.tm_assets.urls')),
+    path('inquiry/', include('apps.tm_mylink.urls')),
 ]
 
 if settings.DEBUG:

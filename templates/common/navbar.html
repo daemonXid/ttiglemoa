@@ -8,25 +8,20 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="{% url 'tm_begin:index' %}">홈</a>
+          <a class="nav-link active" aria-current="page" href="{% url 'tm_begin:index' %}">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'tm_begin:about' %}">소개</a>
+          <a class="nav-link" href="{% url 'tm_begin:about' %}">About Us</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            포트폴리오
+            내 포트폴리오
           </a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'tm_assets:allocation' %}">자산비율</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:deposits_list' %}">예적금</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:stocks_list' %}">주식</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:bonds_list' %}">채권</a></li>
+            <li><a class="dropdown-item" href="#">주식</a></li>
+            <li><a class="dropdown-item" href="#">채권</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:create_deposit' %}">예적금 추가</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:create_stock' %}">주식 추가</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:create_bond' %}">채권 추가</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:portfolio' %}">내 포트폴리오</a></li>
+            <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
         </li>
         <li class="nav-item">
@@ -41,8 +36,8 @@
       </ul>
 
       <form class="d-flex me-3" role="search">
-        <input class="form-control me-2" type="search" placeholder="검색" aria-label="검색"/>
-        <button class="btn btn-outline-success" type="submit">검색</button>
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
       </form>
 
       <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
@@ -54,7 +49,7 @@
                   {% else %}
                       <img src="{% static 'images/avatars/avatar2.svg' %}" alt="Default Avatar" class="rounded-circle me-2" width="30" height="30">
                   {% endif %}
-                  프로필({{ user.nickname }})
+                  내 프로필 ({{ user.nickname }})
               </a>
           </li>
           <li class="nav-item ms-2">

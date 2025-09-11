@@ -1,16 +1,16 @@
-{% extends 'common/base.html' %}
+ï»¿{% extends 'common/base.html' %}
 {% load static %}
 
-{% block title %}?¬íŠ¸?´ë¦¬??| Ttiglemoa{% endblock %}
+{% block title %}?Ñ‹ë“ƒ?ëŒ€â”??| Ttiglemoa{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-  <h2 class="mb-0">???¬íŠ¸?´ë¦¬??/h2>
+  <h2 class="mb-0">???Ñ‹ë“ƒ?ëŒ€â”??/h2>
   <div class="btn-group">
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:create_deposit' %}">?ˆì ê¸?ì¶”ê?</a>
-    <a class="btn btn-sm btn-outline-success" href="{% url 'tm_assets:create_stock' %}">ì£¼ì‹ ì¶”ê?</a>
-    <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_assets:create_bond' %}">ì±„ê¶Œ ì¶”ê?</a>
-    <a class="btn btn-sm btn-outline-dark" href="{% url 'tm_assets:refresh_prices' %}">ê°€ê²??ˆë¡œê³ ì¹¨</a>
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:create_deposit' %}">?ë‰ìŸ»æ¹²?ç•°ë¶½?</a>
+    <a class="btn btn-sm btn-outline-success" href="{% url 'tm_assets:create_stock' %}">äºŒì‡±ë–‡ ç•°ë¶½?</a>
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_assets:create_bond' %}">ï§¢ê¾§í…’ ç•°ë¶½?</a>
+    <a class="btn btn-sm btn-outline-dark" href="{% url 'tm_assets:refresh_prices' %}">åª›Â€å¯ƒ??ëˆì¤ˆæ€¨ì¢ë¬ </a>
   </div>
   
 </div>
@@ -18,30 +18,30 @@
 <div class="row g-3 mb-4">
   <div class="col-12 col-lg-6">
     <div class="card">
-      <div class="card-header">?ì‚°êµ??©ê³„</div>
+      <div class="card-header">?ë¨¯ê¶›æ´??â‘·í€</div>
       <div class="card-body">
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between">
-            <span>?„ê¸ˆ???ˆì ê¸?</span>
+            <span>?ê¾§íˆ‘???ë‰ìŸ»æ¹²?</span>
             <strong>{{ class_totals.CASH|floatformat:0 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
-            <span>ì£¼ì‹</span>
+            <span>äºŒì‡±ë–‡</span>
             <strong>{{ class_totals.STOCK|floatformat:0 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
-            <span>ì±„ê¶Œ</span>
+            <span>ï§¢ê¾§í…’</span>
             <strong>{{ class_totals.BOND|floatformat:0 }}</strong>
           </li>
         </ul>
-        <small class="text-muted d-block mt-2">ì°¸ê³ : ?µí™”ê°€ ?ì¸ ê²½ìš° ?µí™”ë³??©ê³„ë¥??„ë˜?ì„œ ?•ì¸?˜ì„¸??</small>
+        <small class="text-muted d-block mt-2">ï§¡ë©¸í€¬: ?ë“¯ì†•åª›Â€ ?ìšì”¤ å¯ƒìŒìŠ¦ ?ë“¯ì†•è¹‚??â‘·í€ç‘œ??ê¾¨ì˜’?ë¨¯ê½Œ ?ëº¤ì”¤?ì„ê½­??</small>
       </div>
     </div>
   </div>
 
   <div class="col-12 col-lg-6">
     <div class="card">
-      <div class="card-header">?µí™”ë³??©ê³„</div>
+      <div class="card-header">?ë“¯ì†•è¹‚??â‘·í€</div>
       <div class="card-body">
         {% if totals_by_currency %}
           <ul class="list-group">
@@ -53,7 +53,7 @@
             {% endfor %}
           </ul>
         {% else %}
-          <p class="text-muted mb-0">?±ë¡???ì‚°???†ìŠµ?ˆë‹¤.</p>
+          <p class="text-muted mb-0">?ê¹…ì¤‰???ë¨¯ê¶›???ë†ë’¿?ëˆë–.</p>
         {% endif %}
       </div>
     </div>
@@ -64,8 +64,8 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <span>?ˆì ê¸?/span>
-        <a class="btn btn-sm btn-primary" href="{% url 'tm_assets:create_deposit' %}">ì¶”ê?</a>
+        <span>?ë‰ìŸ»æ¹²?/span>
+        <a class="btn btn-sm btn-primary" href="{% url 'tm_assets:create_deposit' %}">ç•°ë¶½?</a>
       </div>
       <div class="card-body">
         {% if deposits %}
@@ -73,13 +73,13 @@
             <table class="table table-sm align-middle">
               <thead>
                 <tr>
-                  <th>?€??/th>
-                  <th>?í’ˆ</th>
-                  <th>?ê¸ˆ</th>
-                  <th>?´ìœ¨(%)</th>
-                  <th>?‰ê?</th>
-                  <th>?µí™”</th>
-<!-- Actions ¿­: Æ÷Æ®Æú¸®¿À¿¡¼­ °¢ ÀÚ»êÀ» ¹Ù·Î ¼öÁ¤/»èÁ¦ÇÒ ¼ö ÀÖ´Â µ¿ÀÛ ¹öÆ°À» Á¦°øÇÕ´Ï´Ù. -->
+                  <th>?Â€??/th>
+                  <th>?ê³¹ë­¹</th>
+                  <th>?ë¨­íˆ‘</th>
+                  <th>?ëŒì‘‰(%)</th>
+                  <th>?ë¯?</th>
+                  <th>?ë“¯ì†•</th>
+<!-- Actions ì—´: í¬íŠ¸í´ë¦¬ì˜¤ì—ì„œ ê° ìì‚°ì„ ë°”ë¡œ ìˆ˜ì •/ì‚­ì œí•  ìˆ˜ ìˆëŠ” ë™ì‘ ë²„íŠ¼ì„ ì œê³µí•©ë‹ˆë‹¤. -->
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -93,10 +93,10 @@
                     <td>{{ d.estimated_value|floatformat:0 }}</td>
                     <td>{{ d.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}¿¹Àû±İ ¼öÁ¤ ¹öÆ°{% endcomment %}{% url 'tm_assets:edit_deposit' d.pk %}">Edit</a>
-                      <form method="post" {% comment %}¿¹Àû±İ »èÁ¦ Æû(POST){% endcomment %} action="{% url 'tm_assets:delete_deposit' d.pk %}" class="d-inline">
+                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}ì˜ˆì ê¸ˆ ìˆ˜ì • ë²„íŠ¼{% endcomment %}{% url 'tm_assets:edit_deposit' d.pk %}">Edit</a>
+                      <form method="post" {% comment %}ì˜ˆì ê¸ˆ ì‚­ì œ í¼(POST){% endcomment %} action="{% url 'tm_assets:delete_deposit' d.pk %}" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?' );">Delete</button>
+                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?' );">Delete</button>
                       </form>
                     </td></tr>
                 {% endfor %}
@@ -104,7 +104,7 @@
             </table>
           </div>
         {% else %}
-          <p class="text-muted mb-0">?±ë¡???ˆì ê¸ˆì´ ?†ìŠµ?ˆë‹¤.</p>
+          <p class="text-muted mb-0">?ê¹…ì¤‰???ë‰ìŸ»æ¹²ë‰ì”  ?ë†ë’¿?ëˆë–.</p>
         {% endif %}
       </div>
     </div>
@@ -113,8 +113,8 @@
   <div class="col-12 col-lg-6">
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <span>ì£¼ì‹</span>
-        <a class="btn btn-sm btn-success" href="{% url 'tm_assets:create_stock' %}">ì¶”ê?</a>
+        <span>äºŒì‡±ë–‡</span>
+        <a class="btn btn-sm btn-success" href="{% url 'tm_assets:create_stock' %}">ç•°ë¶½?</a>
       </div>
       <div class="card-body">
         {% if stocks %}
@@ -122,14 +122,14 @@
             <table class="table table-sm align-middle">
               <thead>
                 <tr>
-                  <th>?œì¥</th>
-                  <th>?°ì»¤</th>
-                  <th>?˜ëŸ‰</th>
-                  <th>?¨ê?</th>
-                  <th>?„ì¬ê°€</th>
-                  <th>?‰ê?</th>
-                  <th>?µí™”</th>
-<!-- Actions ¿­: Æ÷Æ®Æú¸®¿À¿¡¼­ °¢ ÀÚ»êÀ» ¹Ù·Î ¼öÁ¤/»èÁ¦ÇÒ ¼ö ÀÖ´Â µ¿ÀÛ ¹öÆ°À» Á¦°øÇÕ´Ï´Ù. -->
+                  <th>?ì’–ì˜£</th>
+                  <th>?ê³—ë¹±</th>
+                  <th>?ì„ì›¾</th>
+                  <th>?â‘£?</th>
+                  <th>?ê¾©ì˜±åª›Â€</th>
+                  <th>?ë¯?</th>
+                  <th>?ë“¯ì†•</th>
+<!-- Actions ì—´: í¬íŠ¸í´ë¦¬ì˜¤ì—ì„œ ê° ìì‚°ì„ ë°”ë¡œ ìˆ˜ì •/ì‚­ì œí•  ìˆ˜ ìˆëŠ” ë™ì‘ ë²„íŠ¼ì„ ì œê³µí•©ë‹ˆë‹¤. -->
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -144,10 +144,10 @@
                     <td>{{ s.estimated_value|floatformat:0 }}</td>
                     <td>{{ s.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}ÁÖ½Ä ¼öÁ¤ ¹öÆ°{% endcomment %}{% url 'tm_assets:edit_stock' s.pk %}">Edit</a>
-                      <form method="post" {% comment %}ÁÖ½Ä »èÁ¦ Æû(POST){% endcomment %} action="{% url 'tm_assets:delete_stock' s.pk %}" class="d-inline">
+                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}ì£¼ì‹ ìˆ˜ì • ë²„íŠ¼{% endcomment %}{% url 'tm_assets:edit_stock' s.pk %}">Edit</a>
+                      <form method="post" {% comment %}ì£¼ì‹ ì‚­ì œ í¼(POST){% endcomment %} action="{% url 'tm_assets:delete_stock' s.pk %}" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?' );">Delete</button>
+                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?' );">Delete</button>
                       </form>
                     </td></tr>
                 {% endfor %}
@@ -155,7 +155,7 @@
             </table>
           </div>
         {% else %}
-          <p class="text-muted mb-0">?±ë¡??ì£¼ì‹???†ìŠµ?ˆë‹¤.</p>
+          <p class="text-muted mb-0">?ê¹…ì¤‰??äºŒì‡±ë–‡???ë†ë’¿?ëˆë–.</p>
         {% endif %}
       </div>
     </div>
@@ -164,8 +164,8 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <span>ì±„ê¶Œ</span>
-        <a class="btn btn-sm btn-secondary" href="{% url 'tm_assets:create_bond' %}">ì¶”ê?</a>
+        <span>ï§¢ê¾§í…’</span>
+        <a class="btn btn-sm btn-secondary" href="{% url 'tm_assets:create_bond' %}">ç•°ë¶½?</a>
       </div>
       <div class="card-body">
         {% if bonds %}
@@ -173,15 +173,15 @@
             <table class="table table-sm align-middle">
               <thead>
                 <tr>
-                  <th>ëª…ì¹­</th>
-                  <th>ë°œí–‰ì²?/th>
-                  <th>?¡ë©´ì´ì•¡</th>
-                  <th>ë§¤ìˆ˜ê°€(%)</th>
-                  <th>?„ì¬ê°€(%)</th>
-                  <th>ë§Œê¸°</th>
-                  <th>?‰ê?</th>
-                  <th>?µí™”</th>
-<!-- Actions ¿­: Æ÷Æ®Æú¸®¿À¿¡¼­ °¢ ÀÚ»êÀ» ¹Ù·Î ¼öÁ¤/»èÁ¦ÇÒ ¼ö ÀÖ´Â µ¿ÀÛ ¹öÆ°À» Á¦°øÇÕ´Ï´Ù. -->
+                  <th>ï§ë‚†ë¬¶</th>
+                  <th>è«›ì’—ë»¾ï§£?/th>
+                  <th>?ã€“ãˆƒç¥ì•¹ë¸¸</th>
+                  <th>ï§ã…¼ë‹”åª›Â€(%)</th>
+                  <th>?ê¾©ì˜±åª›Â€(%)</th>
+                  <th>ï§ëš­ë¦°</th>
+                  <th>?ë¯?</th>
+                  <th>?ë“¯ì†•</th>
+<!-- Actions ì—´: í¬íŠ¸í´ë¦¬ì˜¤ì—ì„œ ê° ìì‚°ì„ ë°”ë¡œ ìˆ˜ì •/ì‚­ì œí•  ìˆ˜ ìˆëŠ” ë™ì‘ ë²„íŠ¼ì„ ì œê³µí•©ë‹ˆë‹¤. -->
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -197,10 +197,10 @@
                     <td>{{ b.estimated_value|floatformat:0 }}</td>
                     <td>{{ b.currency }}</td>
                     <td>
-                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}Ã¤±Ç ¼öÁ¤ ¹öÆ°{% endcomment %}{% url 'tm_assets:edit_bond' b.pk %}">Edit</a>
-                      <form method="post" {% comment %}Ã¤±Ç »èÁ¦ Æû(POST){% endcomment %} action="{% url 'tm_assets:delete_bond' b.pk %}" class="d-inline">
+                      <a class="btn btn-sm btn-outline-primary" href="{% comment %}ì±„ê¶Œ ìˆ˜ì • ë²„íŠ¼{% endcomment %}{% url 'tm_assets:edit_bond' b.pk %}">Edit</a>
+                      <form method="post" {% comment %}ì±„ê¶Œ ì‚­ì œ í¼(POST){% endcomment %} action="{% url 'tm_assets:delete_bond' b.pk %}" class="d-inline">
                         {% csrf_token %}
-                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?' );">Delete</button>
+                        <button class="btn btn-sm btn-outline-danger" type="submit" onclick="return confirm('ì‚­ì œí•˜ì‹œê² ìŠµë‹ˆê¹Œ?' );">Delete</button>
                       </form>
                     </td></tr>
                 {% endfor %}
@@ -208,7 +208,7 @@
             </table>
           </div>
         {% else %}
-          <p class="text-muted mb-0">?±ë¡??ì±„ê¶Œ???†ìŠµ?ˆë‹¤.</p>
+          <p class="text-muted mb-0">?ê¹…ì¤‰??ï§¢ê¾§í…’???ë†ë’¿?ëˆë–.</p>
         {% endif %}
       </div>
     </div>
@@ -216,6 +216,7 @@
 </div>
 
 {% endblock %}
+
 
 
 

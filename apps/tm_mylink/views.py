@@ -4,6 +4,14 @@ from .forms import MemoModelForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+def inquiry_list_all(request) :
+    inquiry_dbs = inquiry_db.objects.all()
+    context = {
+        'inquiry_dbs':inquiry_dbs
+    }
+    return render (request,'tm_mylink/inquiry_list.html',context )
+
+@login_required
 def inquiry_list(request) :
     inquiry_dbs = inquiry_db.objects.filter(author=request.user)
     context = {

@@ -9,12 +9,14 @@ body {
   display: flex;
   flex-direction: column;   /* footer를 아래로 밀기 */
   height: 100vh;
+
 }
 main { flex: 1; }           /*본문이 빈 공간을 채움*/
 
 main {
   margin-top: 3rem;
 }
+
 
 
 footer {

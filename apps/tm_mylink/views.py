@@ -4,6 +4,14 @@ from .forms import MemoModelForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
+def inquiry_list_all(request) :
+    inquiry_dbs = inquiry_db.objects.all()
+    context = {
+        'inquiry_dbs':inquiry_dbs
+    }
+    return render (request,'tm_mylink/inquiry_list_all.html',context )
+
+@login_required
 def inquiry_list(request) :
     inquiry_dbs = inquiry_db.objects.filter(author=request.user)
     context = {
@@ -27,10 +35,10 @@ def inquiry_write(request) :
         context ={
             'form':form
         }
-        return render(request, 'tm_mylink/inquiry.html', context)
+    return render(request, 'tm_mylink/inquiry.html', context)
     
 
-
+@login_required
 def inquiry_detail(request, pk) :
     inquiry_dbs = get_object_or_404(inquiry_db, pk=pk)
     context ={
@@ -38,6 +46,7 @@ def inquiry_detail(request, pk) :
     }
     return render(request, 'tm_mylink/inquiry_detail.html', context)
 
+@login_required
 def inquiry_edit(request, pk) :    
     inquiry_dbs = get_object_or_404(inquiry_db, pk=pk)
     
@@ -53,6 +62,7 @@ def inquiry_edit(request, pk) :
         }
         return render(request, 'tm_mylink/inquiry_edit.html', context)
 
+@login_required
 def inquiry_delete(request, pk) :
     inquiry_dbs = get_object_or_404(inquiry_db, pk=pk)
     if request.method=='POST' :

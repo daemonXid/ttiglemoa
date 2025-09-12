@@ -1,12 +1,133 @@
-<footer class="py-4 bg-light mt-auto">
-    <div class="container-fluid px-4">
-        <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">Copyright &copy; Ttiglemoa 2025</div>
-            <div>
-                <a href="#">개인정보처리방침</a>
-                &middot;
-                <a href="#">이용약관</a>
-            </div>
-        </div>
+{# templates/common/footer.html #}
+{% load static %}
+
+<footer class="site-footer">
+  <div class="d-flex align-items-center mb-2">
+    <img src="{% static 'images/logo_mark.svg' %}" alt="Ttiglemoa" height="28" class="me-2">
+    <strong class="brand">TTIGLEMOA</strong>
+  </div>
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-12 col-lg-3">
+        
+        
+        
+        <h6 class="footer-title">팀 멤버</h6>
+        <ul class="footer-links">
+
+            <li>
+                <a href="#">송원섭</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin-in"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-x-twitter"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-github"></i></a>
+                
+            </li>
+
+
+            <li>
+                <a href="#">우승백</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin-in"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-x-twitter"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-github"></i></a>
+            </li>
+
+
+            <li>
+                <a href="#">임규현</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-x-twitter"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-github"></i></i></a>
+            </li>
+
+            <li>
+                <a href="#">김기섭</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-x-twitter"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-github"></i></i></a>
+            </li>
+
+
+            <li>
+                <a href="#">이기진</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-x-twitter"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-github"></i></a>
+            </li>
+
+        </ul>
+        <!-- <div class="social d-flex gap-3 fs-5">
+          <a href="#" class="link-light opacity-75 hover-opacity">in</a>
+          <a href="#" class="link-light opacity-75 hover-opacity">▶</a>
+          <a href="#" class="link-light opacity-75 hover-opacity">𝕏</a>
+        </div> -->
+
+        <!-- <div class="store-badges mt-3 d-flex flex-wrap gap-2">
+          <a class="badge-img" href="#"><img src="{ static 'images/appstore_badge.png' %}" alt="App Store"></a>
+          <a class="badge-img" href="#"><img src="{ static 'images/googleplay_badge.png' %}" alt="Google Play"></a>
+          <a class="badge-img" href="#"><img src="{ static 'images/chrome_badge.png' %}" alt="Chrome Web Store"></a>
+        </div> -->
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="footer-title">Popular Markets</h6>
+        <ul class="footer-links">
+          <li><a href="#">US: NYSE & NASDAQ</a></li>
+          <li><a href="#">UK: FTSE</a></li>
+          <li><a href="#">South Korea: KOSPI</a></li>
+          <li><a href="#">Germany: DAX</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="footer-title">Investing Ideas</h6>
+        <ul class="footer-links">
+          <li><a href="#">Undervalued Companies</a></li>
+          <li><a href="#">Dividend Powerhouses</a></li>
+          <li><a href="#">Insider Buying</a></li>
+          <li><a href="#">All Ideas</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="footer-title">Features & Tools</h6>
+        <ul class="footer-links">
+          <li><a href="#">Portfolio Tracker</a></li>
+          <li><a href="#">Screener</a></li>
+          <li><a href="#">Dividend Calculator</a></li>
+          <li><a href="#">Compare Platforms</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <h6 class="footer-title">Team : Ttiglemoa</h6>
+        <ul class="footer-links">
+          <li><a href="#">Plans & Pricing</a></li>
+          <li><a href="{% url 'tm_begin:about' %}">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="{% url 'tm_mylink:inquiry_write' %}">Contact Us</a></li>
+        </ul>
+      </div>
     </div>
+
+    <hr class="footer-divider my-4">
+
+    <div class="row gy-3 small">
+      <div class="col-12 col-lg-8">
+        <div class="text-secondary">
+          Financial Data provided by S&P Global Market Intelligence LLC. © 2025 Ttiglemoa Pty Ltd. All rights reserved.
+          <a href="#" class="link-underline">View Data Sources</a>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4 text-lg-end">
+        <a href="#" class="me-3">Financial Services Guide</a>
+        <a href="#" class="me-3">Terms & Conditions</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
 </footer>

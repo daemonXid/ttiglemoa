@@ -77,12 +77,12 @@ def investing_news(request):
         "hero_item": hero_item,
         "grid_items": grid_items,
     }
-    return render(request, "common/for_tm_begin/stock_news.html", ctx)
+    return render(request, "tm_begin/each_pages/stock_news.html", ctx)
 
 
 
 def about(request):
-    return render(request, "common/for_tm_begin/about.html")
+    return render(request, "tm_begin/each_pages/about.html")
 
 
 

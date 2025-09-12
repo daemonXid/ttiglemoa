@@ -1,0 +1,46 @@
+
+
+/* === 푸터 === */
+.site-footer {
+  background: #0a0d12;         /* 아주 진한 남색/검정톤 */
+  color: #bfc6d1;              /* 중간 회색 */
+  border-top: 1px solid rgba(255,255,255,.06);
+  margin-top: auto;            /* 핵심: 푸터를 아래로 밀기 */
+  font-size: 0.95rem;
+}
+
+.site-footer .brand { letter-spacing: .5px; }
+
+.site-footer .footer-title {
+  color: #e8edf6;
+  font-weight: 700;
+  font-size: .95rem;
+  margin-bottom: .75rem;
+}
+
+.site-footer .footer-links {
+  list-style: none;
+  padding: 0; margin: 0;
+}
+.site-footer .footer-links li { margin: .35rem 0; }
+.site-footer .footer-links a {
+  color: #bfc6d1;
+  text-decoration: none;
+}
+.site-footer .footer-links a:hover { color: #ffffff; }
+
+.site-footer .footer-divider {
+  border-color: rgba(255,255,255,.08);
+}
+
+/* 소셜/스토어 배지 */
+.site-footer .hover-opacity:hover { opacity: 1 !important; }
+.site-footer .badge-img img {
+  display: block; height: 40px; width: auto;
+  border-radius: 8px;
+}
+
+/* 작은 화면에서 컬럼 간격 */
+@media (max-width: 991.98px) {
+  .site-footer .footer-title { margin-top: .75rem; }
+}

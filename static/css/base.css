@@ -1,177 +1,145 @@
-/* Reset default browser spacing at the very top */
+/* ========== Base Reset & Layout ========== */
+html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
 
-html, body { margin: 0 !important; padding: 0 !important; }
-
-/* 원인을 알 수 없는 이유로 네브바 위에 공간이 있고 그걸 fixed-top 으로 해결후 바디를 아래로 내렸다  */
 body {
-  margin-top: 4.5rem;
+  display: flex;
+  flex-direction: column;   /* footer를 아래로 밀기 */
+  height: 100vh;
+}
+main { flex: 1; }           /*본문이 빈 공간을 채움*/
+
+main {
+  margin-top: 3rem;
+}
+
+
+footer {
+  background: #111;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* (옵션) 네브바가 fixed-top일 때만 본문을 아래로 밀기 */
+/* body.has-fixed-nav { 
+  margin-top: 6.5rem;
   transition: margin-top 0.3s ease-in-out;
-}   
-
-/* --- News Section (container) --- */
-
-/* body{
-  margin-inline: auto;
 } */
 
-
-/* === 레이아웃: 푸터 항상 아래 === */
-/* html, body { height: 100%; } */
-
-body.layout {
-  min-height: 100vh;           /* = 100dvh 써도 OK */
-  display: flex;
-  flex-direction: column;
-  background: #0f1217;         /* 사이트 전체 다크 기반 원하면 유지 */
-  color: #e6e6e6;
-  margin-inline: auto;
-}
-
-
-/* 데스크톱(≥992px): fixed-top 유지 → 본문 여백 필요 */
-@media (min-width: 992px) {
-  body { margin-top: 4.5rem; }
-}
-
-/* 모바일(<992px): fixed 해제 → 본문을 자연스럽게 아래로 밀기 */
+/* 모바일에서는 네브바 고정 해제 + 여백 제거 */
 @media (max-width: 991.98px) {
-  .navbar.fixed-top { position: static; } /* 고정 해제 */
-  body { margin-top: 0; }                 /* 여백 제거 */
+  .navbar.fixed-top { position: static; }
+  body.has-fixed-nav { margin-top: 0; }
 }
 
-
-
-
-
-/* 네브바 검색 인풋, 버튼 균일화  */
+/* ========== Navbar / Auth Buttons ========== */
 .navbar .btn-search {
-  min-width: 70px;   /* 로그인 버튼과 동일하게 맞춤 */
+  min-width: 70px;
   text-align: center;
   padding-left: 0;
   padding-right: 0;
 }
 
 
-
-
-/* 모바일에서 로그인/회원가입 사이 간격 */
 @media (max-width: 991px) {
-  .navbar .nav-login { margin-top: 10px !important; }
+  .navbar .nav-login,
   .navbar .nav-signup { margin-top: 10px !important; }
 
-  /* 로그인 li에 붙어있는 ms-2 때문에 모바일에서 삐져나오면 0으로 */
+  /* 모바일에서 좌우 여백 꼬임 방지 */
   .navbar .navbar-nav.align-items-center .nav-item { margin-left: 0 !important; }
 }
 
-.body-menu-open {
-  margin-top: 24rem;
-}
+/* (옵션) 모바일 메뉴 펼침 시 여백 필요하면 사용 */
+.body-menu-open { margin-top: 24rem; }
 
-
-
+/* ========== Sections ========== */
 .stock_news {
   border: none;
-  width:75%;
-  max-width: 1200px;  
+  width: 75%;
+  max-width: 1200px;
   margin-inline: auto;
   padding: 8px 12px 16px;
-  margin-top: 5rem;
 }
 
-/* (선택) 상단 섹션 공통 테두리 제거 */
-.main_about { 
-  border: none; 
+.main_about {
+  border: none;
   display: flex;
   justify-content: center;
   padding: 10px;
+  color: #000;
 }
 .main_about_img { width: 75%; height: 15rem; }
 
-
-
-
-
-
-/* --- Pagination --- */
+/* ========== Pagination ========== */
 .inv-pagination {
-  display:flex; justify-content:center; align-items:center;
-  gap:8px; margin-top:16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
 }
 .inv-page {
-  background:#000; color:#fff; border:1px solid #d4af37; /* gold */
-  border-radius:25px; padding:6px 12px; min-width:36px; text-align:center;
-  text-decoration:none; display:inline-block; line-height:1.2;
+  background: #000;
+  color: #fff;
+  border: 1px solid #d4af37;   /* gold */
+  border-radius: 25px;
+  padding: 6px 12px;
+  min-width: 36px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.2;
 }
-.inv-page:hover { filter:brightness(1.1); }
-.inv-page.active { background:#c40000; color:#fff; border-color:#d4af37; cursor:default; }
-.inv-page.disabled { opacity:.45; pointer-events:none; }
+.inv-page:hover { filter: brightness(1.1); }
+.inv-page.active { background: #c40000; color: #fff; border-color: #d4af37; cursor: default; }
+.inv-page.disabled { opacity: .45; pointer-events: none; }
 
-
-
-/* 
-.stock_status {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-} */
-
-
-/* 트레이딩 뷰  */
-/* 차트 위젯 높이 보장 */
-/* 부모 안에서 꽉 차게 + 좌우 5px */
-/* 차트 위젯 높이 보장 */
-/* 공통 */
+/* ========== TradingView Widget ========== */
 .tradingview-widget-container,
 .tradingview-widget-container__widget,
 .tradingview-widget-container iframe {
   width: 100% !important;
-  height: 540px !important;   /* 기본 고정 */
+  height: 540px !important;
   min-height: 360px;
 }
-
-/* 모바일에서만 높이를 늘려주거나 줄이기 */
 @media (max-width: 768px) {
   .tradingview-widget-container,
   .tradingview-widget-container__widget,
   .tradingview-widget-container iframe {
-    height: 400px !important;  /* 모바일용 */
+    height: 400px !important;
   }
 }
-
 @media (max-width: 576px) {
   .tradingview-widget-container,
   .tradingview-widget-container__widget,
   .tradingview-widget-container iframe {
-    height: 320px !important;  /* 더 작은 화면 */
+    height: 320px !important;
   }
 }
-
-
 .tv-wrap {
-  width: 75%; 
+  width: 75%;
   margin-inline: auto;
   padding: 10px;
 }
 
-/* 비율 기반 → 브라우저 폭이 커져도 높이는 540px 안 넘음 */
+/* 16:9 비율 유지하면서 최대 높이 제한 (필요시에만) */
 .ratio-16x9 {
-  --bs-aspect-ratio: calc(540 / 960 * 100%); /* 대략 16:9인데 높이 540 맞춤 */
+  --bs-aspect-ratio: calc(540 / 960 * 100%);
   max-height: 540px;
 }
 
-
-
-
-/* --- Form Input Style --- */
+/* ========== Form Inputs ========== */
 .form-control {
-    background-color: #f0f0f0; /* A light gray */
-    border: 1px solid #007bff; /* A standard blue */
+  background-color: #f0f0f0;
+  border: 1px solid #007bff;
 }
-
 .form-control:focus {
-    background-color: #ffffff; /* White background on focus */
-    border-color: #0056b3; /* A darker blue on focus */
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Bootstrap's default focus shadow */
+  background-color: #ffffff;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
-
-

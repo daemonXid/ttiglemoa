@@ -53,9 +53,9 @@
         {% endif %}
       </ul>
 
-      <form class="d-flex me-3" role="search">
-        <input class="form-control me-2" type="search" placeholder="검색" aria-label="검색"/>
-        <button class="btn btn-outline-success" type="submit">검색</button>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="검색" aria-label="Search"/>
+        <button class="btn btn-outline-success btn-sm btn-search me-2" type="submit">검색</button>
       </form>
 
       <ul class="navbar-nav mb-2 mb-lg-0 align-items-center">
@@ -70,21 +70,21 @@
                   프로필({{ user.nickname }})
               </a>
           </li>
-          <li class="nav-item ms-2">
+          <li class="nav-item me-2">
             <form action="{% url 'tm_account:logout' %}" method="post" class="d-inline">
               {% csrf_token %}
-              <button type="submit" class="btn btn-outline-secondary btn-sm">로그아웃</button>
+              <button type="submit" class="btn btn-outline-secondary btn-sm nav_btn_signup">로그아웃</button>
             </form>
           </li>
         {% else %}
-          <li class="nav-item me-2">
+          <li class="nav-item me-2 nav-login">
             <a href="{% url 'tm_account:login' %}">
-              <button class="btn btn-outline-primary btn-sm">로그인</button>
+              <button class="btn btn-outline-primary nav_btn_signup ">로그인</button>
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item me-2 nav-signup">
             <a href="{% url 'tm_account:signup' %}">
-              <button class="btn btn-primary btn-sm">회원가입</button>
+              <button class="btn btn-primary nav_btn_signup ">회원가입</button>
             </a>
           </li>
         {% endif %}

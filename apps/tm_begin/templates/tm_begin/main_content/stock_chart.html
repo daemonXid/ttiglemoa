@@ -1,8 +1,6 @@
-{% extends 'common/base.html' %}
 
-{% block content %}
 
-    <div class="stock_status">
+<div class="stock_status">
         <!-- <iframe height="480" width="650" src="https://ssltvc.investing.com/?pair_ID=650&height=480&width=650&interval=300&plotStyle=area&domain_ID=18&lang_ID=18&timezone_ID=26"></iframe>
         <h2>📈 현재 주식 현황</h2> -->
 
@@ -43,7 +41,7 @@
             <!-- TradingView Widget END -->
 
             <!-- TradingView Widget BEGIN -->
-            <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container mt-5">
                 <div class="tradingview-widget-container__widget"></div>
                 <div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Stock heatmap by TradingView</span></a></div>
                 <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
@@ -114,5 +112,3 @@
         </ul> -->
     </div>
 
-
-{% endblock %}

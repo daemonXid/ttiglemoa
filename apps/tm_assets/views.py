@@ -330,3 +330,12 @@ def bonds_list(request):
         "tm_assets/bonds_list.html",
         {"bonds": bonds, "total": total, "change_sum": change_sum},
     )
+
+
+@login_required
+def test_view(request):
+    context = {
+        "test_variable": "Hello from test_view!",
+        "number_variable": 12345,
+    }
+    return render(request, "tm_assets/test_template.html", context)

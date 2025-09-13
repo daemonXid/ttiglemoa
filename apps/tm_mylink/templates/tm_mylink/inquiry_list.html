@@ -4,6 +4,7 @@
 
 {% block content %}     
         
+    <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
     <div class="container my-5">
         <h1 class="text-center mb-4">온라인문의</h1>
         <a href="{% url 'tm_mylink:inquiry_write' %}" class="btn btn-outline-primary">글쓰기</a>
@@ -11,7 +12,7 @@
 
         {% if inquiry_dbs %}
             {% for inquiry_db in inquiry_dbs %}
-            <div class="col-md-6 col-lg-4 mb-4 mt-5">
+            <div class="col-md-12 col-lg-6 mb-4 mt-5">
                 <div class="card h-100 list-item-card">
                     <div class="card-body">
                         <h5 class="card-title">{{ inquiry_db.user_title }}</h5>
@@ -27,7 +28,7 @@
             {% endfor %}
             
             {% else %}
-            <div class="col-md-6 col-lg-4 mb-4">
+            <div class="col-md-12 col-lg-6 mb-4">
                 <div class="card h-100 list-item-card">
                     <div class="card-body">
                         <h5 class="card-title">없습니다.</h5>
@@ -41,6 +42,7 @@
 
             </div>
     </div>
+</div>
         
 
 {% endblock content %}

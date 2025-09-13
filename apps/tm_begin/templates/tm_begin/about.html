@@ -1,0 +1,170 @@
+{% extends 'common/base.html' %} {% load static %} {% block content %}
+<div class="container about-page">
+  <div class="text-center mb-5">
+    <h1 class="about-title">Meet the Team</h1>
+    <p class="about-subtitle">The minds behind the Ttigle Moa project.</p>
+  </div>
+
+  <div class="row gy-5 justify-content-center">
+    <!-- Team Member 1 -->
+    <div class="col-lg-4 col-md-6">
+      <div class="team-card">
+        <div class="team-card-img">
+          <!-- <img src="{ static 'tm_account/images/avatars/avatar1.svg' %}" alt="Team Member 1"> -->
+          <img
+            src="{% static 'images/members/member_1.jpg' %}"
+            alt="Team Member 1"
+          />
+        </div>
+        <div class="team-card-body">
+          <h4 class="team-member-name">송원섭</h4>
+          <p class="team-member-role">Developer & Quant Analyst</p>
+          <p class="team-member-bio">
+            송원섭 is the architect of the Ttigle Moa platform, with a passion
+            for clean code and algorithmic trading.
+          </p>
+          <div class="team-member-skills">
+            <span class="skill-badge">Python</span>
+            <span class="skill-badge">Django</span>
+            <span class="skill-badge">Data Analysis</span>
+            <span class="skill-badge">Machine Learning</span>
+          </div>
+        </div>
+        <div class="team-card-footer">
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fas fa-globe"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Member 2 -->
+    <div class="col-lg-4 col-md-6">
+      <div class="team-card">
+        <div class="team-card-img">
+          <img
+            src="{% static 'images/members/member_2.jpg' %}"
+            alt="Team Member 3"
+          />
+        </div>
+        <div class="team-card-body">
+          <h4 class="team-member-name">우승백</h4>
+          <p class="team-member-role">Data Scientist & Market Analyst</p>
+          <p class="team-member-bio">
+            우승백 uncovers market trends and insights from vast datasets,
+            fueling our predictive models.
+          </p>
+          <div class="team-member-skills">
+            <span class="skill-badge">R</span>
+            <span class="skill-badge">SQL</span>
+            <span class="skill-badge">Statistics</span>
+            <span class="skill-badge">Economics</span>
+          </div>
+        </div>
+        <div class="team-card-footer">
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fas fa-chart-line"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Member 3 -->
+    <div class="col-lg-4 col-md-6">
+      <div class="team-card">
+        <div class="team-card-img">
+          <img
+            src="{% static 'images/members/member_3.jpg' %}"
+            alt="Team Member 3"
+          />
+        </div>
+        <div class="team-card-body">
+          <h4 class="team-member-name">임규현</h4>
+          <p class="team-member-role">Data Scientist & Market Analyst</p>
+          <p class="team-member-bio">
+            임규현 uncovers market trends and insights from vast datasets,
+            fueling our predictive models.
+          </p>
+          <div class="team-member-skills">
+            <span class="skill-badge">R</span>
+            <span class="skill-badge">SQL</span>
+            <span class="skill-badge">Statistics</span>
+            <span class="skill-badge">Economics</span>
+          </div>
+        </div>
+        <div class="team-card-footer">
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fas fa-chart-line"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Member 4 -->
+    <div class="col-lg-4 col-md-6">
+      <div class="team-card">
+        <div class="team-card-img">
+          <img
+            src="{% static 'images/members/member_4.jpg' %}"
+            alt="Team Member 2"
+          />
+        </div>
+
+        <div class="team-card-body">
+          <h4 class="team-member-name">김기섭</h4>
+          <p class="team-member-role">Frontend Specialist & UI/UX Designer</p>
+          <p class="team-member-bio">
+            김기섭 crafts the user experience, turning complex data into
+            intuitive and beautiful interfaces.
+          </p>
+          <div class="team-member-skills">
+            <span class="skill-badge">HTML/CSS</span>
+            <span class="skill-badge">JavaScript</span>
+            <span class="skill-badge">UI/UX Design</span>
+            <span class="skill-badge">React</span>
+          </div>
+        </div>
+
+        <div class="team-card-footer">
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Member 2 -->
+    <div class="col-lg-4 col-md-6">
+      <div class="team-card">
+        <div class="team-card-img">
+          <img
+            src="{% static 'images/members/member_5.jpg' %}"
+            alt="Team Member 2"
+          />
+        </div>
+
+        <div class="team-card-body">
+          <h4 class="team-member-name">이기진</h4>
+          <p class="team-member-role">Frontend Specialist & UI/UX Designer</p>
+          <p class="team-member-bio">
+            이기진 crafts the user experience, turning complex data into
+            intuitive and beautiful interfaces.
+          </p>
+          <div class="team-member-skills">
+            <span class="skill-badge">HTML/CSS</span>
+            <span class="skill-badge">JavaScript</span>
+            <span class="skill-badge">UI/UX Design</span>
+            <span class="skill-badge">React</span>
+          </div>
+        </div>
+
+        <div class="team-card-footer">
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

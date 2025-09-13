@@ -75,7 +75,10 @@ footer {
   padding: 10px;
   color: #000;
 }
-.main_about_img { width: 75%; height: 15rem; }
+.main_about_img {
+  width: 75%;
+  height: 15rem;
+}
 
 /* ========== Pagination ========== */
 .inv-pagination {
@@ -144,4 +147,8 @@ footer {
   background-color: #ffffff;
   border-color: #0056b3;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+main {
+    flex-grow: 1;
 }

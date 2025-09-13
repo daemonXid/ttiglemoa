@@ -21,26 +21,8 @@
         </li>
 
         {% if user.is_authenticated %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            포트폴리오
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{% url 'tm_assets:allocation' %}">자산비율</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:deposits_list' %}">예적금</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:stocks_list' %}">주식</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:bonds_list' %}">채권</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:create_deposit' %}">예적금 추가</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:create_stock' %}">주식 추가</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:create_bond' %}">채권 추가</a></li>
-            <li><a class="dropdown-item" href="{% url 'tm_assets:portfolio' %}">내 포트폴리오</a></li>
-          </ul>
-        </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'tm_assets:portfolio' %}"
-            >내 포트폴리오</a
-          >
+          <a class="nav-link" href="{% url 'tm_assets:portfolio' %}">포트폴리오</a>
         </li>
 
         {% endif %}

@@ -1,4 +1,8 @@
-{% extends 'common/base.html' %} {% load static %} {% block content %}
+{% extends 'common/base.html' %} {% load static %}
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/about_colors.css' %}">
+{% endblock %}
+{% block content %}
 <div class="container about-page">
   <div class="text-center mb-5">
     <h1 class="about-title">Meet the Team</h1>

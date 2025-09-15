@@ -4,18 +4,23 @@
 {% block content %}
 <div class="main_section flex-column mb-3">
 
+    <div class="tv-wrap">
+        {% include 'tm_begin/main_content/main_about.html' %}
+    </div>
+    
+
     {% if user.is_authenticated %}
-        <div class="main_about">
+        <!-- <div class="tv-wrap">
             <div>로그인후 포트폴리오 종합</div>
-        </div>
+        </div> -->
 
         {% include 'tm_begin/main_content/stock_chart.html' %}
 
     {% else %}
 
-        <div class="main_about">
+        <!-- <div class="main_about">
             <img src="{% static 'images/main_page/ChatGPT.png' %}" alt="" class="main_about_img">
-        </div>
+        </div> -->
 
         {% include 'tm_begin/main_content/stock_chart.html' %}
         {% include 'tm_begin/main_content/stock_news_main.html' %}

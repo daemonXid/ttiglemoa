@@ -147,7 +147,7 @@ Ttiglemoa{% endblock %} {% block content %}
                 </thead>
                 <tbody>
                     {% for s in stocks %}
-                    <tr>
+                    <tr id="stock-{{ s.pk }}">
                     <td>{{ s.get_market_display }}</td>
                     <td>{{ s.ticker }}</td>
                     <td>{{ s.quantity }}</td>

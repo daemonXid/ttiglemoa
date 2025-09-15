@@ -1,35 +1,31 @@
 # apps/tm_begin/views.py
 from django.shortcuts import render
 from django.utils import timezone
-from .utils.rss_fetch import fetch_rss_many
 from django.core.paginator import Paginator
+from django.db.models import Q
+
+from .utils.rss_fetch import fetch_rss_many
+from apps.tm_assets.models import DepositSaving, StockHolding, BondHolding
 
 # ---- RSS 설정 ----
 INVESTING_FEEDS = [
     "https://kr.investing.com/rss/news.rss",
-    # 필요시 카테고리 추가:
-    # "https://www.investing.com/rss/news_14.rss", # 경제 지표 뉴스
-    # "https://www.investing.com/rss/news_301.rss",# 외환 뉴스
+    # "https://www.investing.com/rss/news_14.rss",  # 경제 지표
+    # "https://www.investing.com/rss/news_301.rss", # 외환
 ]
 
 # ---- 초간단 메모리 캐시 ----
 _CACHE = {"items": [], "at": None}
 _CACHE_TTL = 60 * 10  # 10분
 
-
-
-
-
-def _get_investing_news(limit=200):  # 페이지네이션용 여유 있게 가져오기
+def _get_investing_news(limit=200):
+    """Investing.com 뉴스: 캐시 10분. 반환: (items[:limit], updated_at)"""
     now = timezone.now()
-    must_refresh = (
-        _CACHE["at"] is None
-        or (now - _CACHE["at"]).total_seconds() > _CACHE_TTL
-    )
+    must_refresh = (_CACHE["at"] is None) or ((now - _CACHE["at"]).total_seconds() > _CACHE_TTL)
     if must_refresh:
         items = fetch_rss_many(
             INVESTING_FEEDS,
-            limit_per_feed=120,     # 넉넉히
+            limit_per_feed=120,
             try_scrape_og_image=True,
             scrape_limit=8,
         )
@@ -38,7 +34,8 @@ def _get_investing_news(limit=200):  # 페이지네이션용 여유 있게 가�
     return _CACHE["items"][:limit], _CACHE["at"]
 
 def index(request):
-    news_list, updated_at = _get_investing_news(limit=20)  # 인덱스는 1페이지 느낌으로 13개만
+    # 홈: 가볍게 20개만
+    news_list, updated_at = _get_investing_news(limit=20)
     return render(request, "common/index.html", {
         "news_list": news_list,
         "updated_at": updated_at,
@@ -46,13 +43,10 @@ def index(request):
     })
 
 def investing_news(request):
-    # 데이터 로드(여유 있게)
+    # 목록: 페이지당 9개 (히어로 1 + 카드 그리드)
     items, updated_at = _get_investing_news(limit=200)
-    
-    # Paginator를 사용하여 페이지네이션 처리
-    paginator = Paginator(items, 9)  # 한 페이지에 9개씩
-    selected_page_num = request.GET.get("page")
-    page_obj = paginator.get_page(selected_page_num)
+    paginator = Paginator(items, 9)
+    page_obj = paginator.get_page(request.GET.get("page"))
 
     hero_item = page_obj.object_list[0] if page_obj.object_list else None
     grid_items = page_obj.object_list[1:] if len(page_obj.object_list) > 1 else []
@@ -65,8 +59,8 @@ def investing_news(request):
 
     ctx = {
         "updated_at": updated_at,
-        "count": len(page_obj.object_list),       # 이 페이지에서 보여주는 개수(최대 13)
-        "total": paginator.count,                 # 전체 개수
+        "count": len(page_obj.object_list),
+        "total": paginator.count,
         "page": page_obj.number,
         "total_pages": paginator.num_pages,
         "page_numbers": page_numbers,
@@ -79,10 +73,42 @@ def investing_news(request):
     }
     return render(request, "tm_begin/stock_news.html", ctx)
 
+def search(request):
+    query = request.GET.get('q')
+    news_results = []
+    portfolio_results = {
+        'deposit_savings': [],
+        'stock_holdings': [],
+        'bond_holdings': [],
+    }
 
+    if query:
+        # 뉴스 검색(제목/요약)
+        all_news, _ = _get_investing_news(limit=1000)
+        q = query.lower()
+        news_results = [
+            item for item in all_news
+            if q in item.get('title', '').lower()
+            or q in item.get('summary', '').lower()
+        ]
+
+        # 포트폴리오 검색
+        portfolio_results['deposit_savings'] = DepositSaving.objects.filter(
+            Q(bank_name__icontains=query) | Q(product_name__icontains=query)
+        )
+        portfolio_results['stock_holdings'] = StockHolding.objects.filter(
+            Q(ticker__icontains=query) | Q(name__icontains=query)
+        )
+        portfolio_results['bond_holdings'] = BondHolding.objects.filter(
+            Q(name__icontains=query) | Q(issuer__icontains=query)
+        )
+
+    context = {
+        'query': query,
+        'news_results': news_results,
+        'portfolio_results': portfolio_results,
+    }
+    return render(request, 'tm_begin/search_results.html', context)
 
 def about(request):
     return render(request, "tm_begin/about.html")
-
-
-

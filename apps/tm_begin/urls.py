@@ -10,6 +10,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path("news/", views.investing_news, name="stock_news"),
     path('about/', views.about, name='about'),
-
+    path('search/', views.search, name='search'),
 ]
 

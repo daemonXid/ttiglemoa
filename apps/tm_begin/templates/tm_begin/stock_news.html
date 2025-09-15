@@ -4,9 +4,11 @@
 
 {% block content %}
 <div class="stock_news news-page">
-  <h2>📰 Investing.com 최신 뉴스</h2>
+  <h2>📰 {{ headline|default:"최신 뉴스" }}</h2>   {# ← 고정 문구 대신 headline 사용 #}
   {% if updated_at %}
-    <p class="inv-sub">업데이트: {{ updated_at|date:"Y-m-d H:i" }} (이 페이지 {{ count }}건 / 총 {{ total }}건)</p>
+    <p class="inv-sub">
+      업데이트: {{ updated_at|date:"Y-m-d H:i" }} (이 페이지 {{ count }}건 / 총 {{ total }}건)
+    </p>
   {% endif %}
 
   {% if hero_item %}
@@ -36,7 +38,7 @@
     </article>
   {% endif %}
 
-  <!-- 하단 그리드(12개) -->
+  <!-- 하단 그리드 -->
   <div class="inv-row">
     {% for item in grid_items %}
     <article class="inv-card">
@@ -64,7 +66,7 @@
     {% endfor %}
   </div>
 
-  <!-- 페이지네이션 -->
+  <!-- 페이지네이션 (그대로) -->
   {% if total_pages > 1 %}
   <nav class="inv-pagination" aria-label="뉴스 페이지">
     <a class="inv-page {% if not has_prev %}disabled{% endif %}" href="?page=1" aria-label="첫 페이지">«</a>
@@ -81,6 +83,13 @@
     <a class="inv-page {% if not has_next %}disabled{% endif %}" href="?page={{ next_page }}" aria-label="다음 페이지">›</a>
     <a class="inv-page {% if not has_next %}disabled{% endif %}" href="?page={{ total_pages }}" aria-label="마지막 페이지">»</a>
   </nav>
+  {% endif %}
+
+  {# (선택) 위젯 모드: 쿼리스트링 ?widget=1 이면 iframe 표시 #}
+  {% if widget_embed_url %}
+    <div class="mt-4">
+      <iframe src="{{ widget_embed_url }}" width="100%" height="600" frameborder="0" loading="lazy"></iframe>
+    </div>
   {% endif %}
 </div>
 {% endblock %}

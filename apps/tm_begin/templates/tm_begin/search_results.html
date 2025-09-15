@@ -1,0 +1,113 @@
+{% extends "common/base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2> "<span class="text-primary">{{ query }}</span>"에 대한 검색결과 </h2>
+    <hr>
+
+    <h3>뉴스</h3>
+    {% if news_results %}
+        <div class="inv-row">
+            {% for item in news_results %}
+            <article class="inv-card">
+                <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-thumb">
+                    {% if item.img %}
+                    <img src="{{ item.img }}" alt="{{ item.title|striptags }}">
+                    {% else %}
+                    <div class="no-image-small"><span>📰</span></div>
+                    {% endif %}
+                </a>
+
+                <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-title inv-line-2">
+                    {{ item.title|striptags }}
+                </a>
+
+                {% if item.summary %}
+                    <p class="inv-desc inv-line-3">{{ item.summary|striptags }}</p>
+                {% endif %}
+
+                <div class="inv-meta">
+                    <time>{{ item.published }}</time>
+                    <span>{{ item.source }}</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            "{{ query }}"에 대한 검색 결과가 없습니다 .
+        </div>
+    {% endif %}
+
+    <hr>
+
+    {% if user.is_authenticated %}
+        <h3>포트폴리오</h3>
+        {% if portfolio_results.deposit_savings or portfolio_results.stock_holdings or portfolio_results.bond_holdings %}
+            <div class="accordion" id="portfolioAccordion">
+                {% if portfolio_results.deposit_savings %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingDeposits">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDeposits" aria-expanded="true" aria-controls="collapseDeposits">
+                            Deposits and Savings ({{ portfolio_results.deposit_savings.count }})
+                        </button>
+                    </h2>
+                    <div id="collapseDeposits" class="accordion-collapse collapse show" aria-labelledby="headingDeposits" data-bs-parent="#portfolioAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                {% for item in portfolio_results.deposit_savings %}
+                                    <li class="list-group-item"><a href="{% url 'tm_assets:portfolio' %}#deposit-{{ item.pk }}" class="text-decoration-none text-dark">{{ item.bank_name }} - {{ item.product_name }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if portfolio_results.stock_holdings %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingStocks">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseStocks" aria-expanded="false" aria-controls="collapseStocks">
+                            Stocks ({{ portfolio_results.stock_holdings.count }})
+                        </button>
+                    </h2>
+                    <div id="collapseStocks" class="accordion-collapse collapse" aria-labelledby="headingStocks" data-bs-parent="#portfolioAccordion">
+                        <div class="accordion-body">
+                            <div class="list-group">
+                                {% for item in portfolio_results.stock_holdings %}
+                                    <a href="{% url 'tm_assets:portfolio' %}#stock-{{ item.pk }}" class="list-group-item list-group-item-action">{{ item.name }} ({{ item.ticker }})</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if portfolio_results.bond_holdings %}
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="headingBonds">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBonds" aria-expanded="false" aria-controls="collapseBonds">
+                            Bonds ({{ portfolio_results.bond_holdings.count }})
+                        </button>
+                    </h2>
+                    <div id="collapseBonds" class="accordion-collapse collapse" aria-labelledby="headingBonds" data-bs-parent="#portfolioAccordion">
+                        <div class="accordion-body">
+                            <ul class="list-group">
+                                {% for item in portfolio_results.bond_holdings %}
+                                    <li class="list-group-item" href="{% url 'tm_assets:portfolio' %}">{{ item.name }} - {{ item.issuer }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                "{{ query }}에 대한 결과가 없습니다".
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+
+{% endblock %}

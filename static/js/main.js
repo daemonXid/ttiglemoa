@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+
 // phase 2
 // document.addEventListener("DOMContentLoaded", () => {
 //     const searchForm = document.querySelector("form[role='search']");

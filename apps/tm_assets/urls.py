@@ -20,4 +20,5 @@ urlpatterns = [
     path("bonds/<int:pk>/edit/", views.edit_bond, name="edit_bond"),
     path("bonds/<int:pk>/delete/", views.delete_bond, name="delete_bond"),
     path("refresh/", views.refresh_prices, name="refresh_prices"),
+    path("test/", views.test_view, name="test_view"),
 ]

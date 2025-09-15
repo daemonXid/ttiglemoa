@@ -5,14 +5,14 @@
 
 /* --- 공통 스타일 --- */
 .inv-sub { 
-  color:#888; 
+  color:#000; 
   font-size:.9rem; 
   margin:0 0 12px
 }
 
 
 .inv-desc { 
-  color:#c9c9c9 
+  color:#000 
 }
 
 
@@ -68,7 +68,7 @@
 }
 
 .inv-hero-content .inv-desc { 
-  color:#ccc; 
+  color:#fff; 
   line-height:1.6; 
   margin-bottom:16px; 
 }
@@ -76,7 +76,7 @@
 .inv-meta { 
   display:flex; 
   gap:12px; 
-  color:#8a8a8a; 
+  color:#000; 
   font-size:.9rem 
 }
 
@@ -115,7 +115,7 @@
   font-weight:700; 
   line-height:1.25; 
   display:block; 
-  color:#e8e8e8; 
+  color:#000; 
   text-decoration:none;
 }
 .inv-title:hover { 
@@ -126,7 +126,7 @@
 .inv-card .inv-meta { 
   display:flex; 
   gap:10px; 
-  color:#8a8a8a; 
+  color:#000; 
   font-size:.85rem; 
   margin-top:auto 
 }
@@ -138,7 +138,7 @@
   display:flex; 
   align-items:center; 
   justify-content:center;
-  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%); 
+  background:linear-gradient(135deg,#007bff 0%,#ffc107 100%); 
   color:#fff; 
   border-radius:12px;
 }
@@ -210,9 +210,9 @@
 }
 
 .stock_news.news-page .inv-pagination .inv-page.active {
-  background: #c40000; 
+  background: #007bff; 
   color: #fff; 
-  border-color: #d4af37; 
+  border-color: #ffc107; 
   cursor: default;
 }
 

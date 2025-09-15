@@ -1,0 +1,13 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}Test Page{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Test Template</h1>
+    <p>This is a test page to check template rendering.</p>
+    <p>Test Variable: {{ test_variable }}</p>
+    <p>Number Variable: {{ number_variable }}</p>
+</div>
+{% endblock %}

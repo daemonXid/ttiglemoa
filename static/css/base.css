@@ -75,7 +75,10 @@ footer {
   padding: 10px;
   color: #000;
 }
-.main_about_img { width: 75%; height: 15rem; }
+.main_about_img {
+  width: 75%;
+  height: 15rem;
+}
 
 /* ========== Pagination ========== */
 .inv-pagination {
@@ -98,7 +101,7 @@ footer {
   line-height: 1.2;
 }
 .inv-page:hover { filter: brightness(1.1); }
-.inv-page.active { background: #c40000; color: #fff; border-color: #d4af37; cursor: default; }
+.inv-page.active { background: #007bff; color: #fff; border-color: #ffc107; cursor: default; }
 .inv-page.disabled { opacity: .45; pointer-events: none; }
 
 /* ========== TradingView Widget ========== */
@@ -137,11 +140,15 @@ footer {
 
 /* ========== Form Inputs ========== */
 .form-control {
-  background-color: #f0f0f0;
+  background-color: #fff;
   border: 1px solid #007bff;
 }
 .form-control:focus {
   background-color: #ffffff;
   border-color: #0056b3;
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+main {
+    flex-grow: 1;
 }

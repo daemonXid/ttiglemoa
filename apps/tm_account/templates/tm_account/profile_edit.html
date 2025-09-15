@@ -1,40 +1,59 @@
-{% extends 'tm_account/base_account.html' %}
+{% extends 'common/base.html' %}
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %}프로필 수정{% endblock %}
+{% block title %}프로필 수정 - Ttiglemoa{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card mt-5">
-            <div class="card-header">
-                <h3 class="card-title">프로필 수정</h3>
-            </div>
-            <div class="card-body">
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>프로필 수정</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
 
-                    <div class="text-center mb-4">
-                        <h5>현재 프로필 사진</h5>
-                        {% if user.profile_image %}
-                            <img id="image-preview" src="{{ user.profile_image.url }}" alt="User Profile Image" class="rounded-circle" width="150" height="150" style="object-fit: cover;">
-                        {% else %}
-                            <img id="image-preview" src="{% static 'images/avatars/avatar2.svg' %}" alt="Default Avatar" class="rounded-circle" width="150" height="150">
-                        {% endif %}
-                    </div>
+                        <div class="text-center mb-4">
+                            {% if user.profile_image %}
+                                <img id="image-preview" src="{{ user.profile_image.url }}" alt="User Profile Image" class="rounded-circle" width="150" height="150" style="object-fit: cover;">
+                            {% else %}
+                                <img id="image-preview" src="{% static 'tm_account/images/avatars/avatar1.svg' %}" alt="Default Avatar" class="rounded-circle" width="150" height="150">
+                            {% endif %}
+                        </div>
 
-                    {{ form|crispy }}
-                    
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                        <a href="{% url 'tm_account:profile' %}" class="btn btn-secondary">취소</a>
-                        <button type="submit" class="btn btn-primary">변경사항 저장</button>
-                    </div>
-                </form>
+                        {{ form|crispy }}
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a href="{% url 'tm_account:profile' %}" class="btn btn-secondary">취소</a>
+                            <button type="submit" class="btn btn-primary">변경사항 저장</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
-{% block extra_js %}{% endblock %}
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('id_profile_image');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(event) {
+            const preview = document.getElementById('image-preview');
+            if (event.target.files && event.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                }
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

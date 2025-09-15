@@ -1,15 +1,25 @@
 {% extends 'common/base.html' %}
 
 {% block content %}
-
-<h5 class="card-title">{{ inquiry_dbs.user_title }}</h5>
-<p class="card-text text-muted">{{ inquiry_dbs.user_content }}</p>
-<p class="card-text">{{ inquiry_dbs.userinquiry_at }}</p>
-
-<a href="{% url 'tm_mylink:inquiry_list' %}" class="btn btn-primary mt-2">목록</a>
-<a href="{% url 'tm_mylink:inquiry_edit' inquiry_dbs.pk %}" class="btn btn-primary mt-2">수정</a>
-<form action="{% url 'tm_mylink:inquiry_delete' inquiry_dbs.pk %}" method="POST" style="display:inline;">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-danger mt-2">삭제</button>
-</form>
+<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-lg-10 col-md-12 col-sm-12">
+        <div class="card shadow-sm">
+            <div class="card-body p-5">
+                <h1 class="h3 mb-3 fw-normal text-center">문의 상세 보기</h1>
+                <h5 class="card-title">{{ inquiry_dbs.user_title }}</h5>
+                <p class="card-text text-muted">{{ inquiry_dbs.user_content }}</p>
+                <p class="card-text"><small class="text-muted">작성일: {{ inquiry_dbs.userinquiry_at }}</small></p>
+                <hr>
+                <div class="d-flex gap-2 mt-3">
+                    <a href="{% url 'tm_mylink:inquiry_list' %}" class="btn btn-outline-secondary">목록</a>
+                    <a href="{% url 'tm_mylink:inquiry_edit' inquiry_dbs.pk %}" class="btn btn-primary">수정</a>
+                    <form action="{% url 'tm_mylink:inquiry_delete' inquiry_dbs.pk %}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">삭제</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

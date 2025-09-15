@@ -1,5 +1,5 @@
 :root {
-  --bs-primary: #007bff;
+  --bs-primary: var(--link-color);
   --bs-secondary: #6c757d;
   --bs-success: #ffc107; /* yellow */
   --bs-info: #0dcaf0;
@@ -10,35 +10,27 @@
 }
 
 .btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: var(--link-color);
+  border-color: var(--link-color);
 }
 
 .btn-outline-primary {
-  color: #007bff;
-  border-color: #007bff;
+  color: var(--link-color);
+  border-color: var(--link-color);
 }
 
-.btn-outline-primary:hover {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-}
+
 
 
 
 .btn-secondary {
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: var(--link-color);
+    border-color: var(--link-color);
 }
 
 .btn-outline-secondary {
-    color: #007bff;
-    border-color: #007bff;
+    color: var(--link-color);
+    border-color: var(--link-color);
 }
 
-.btn-outline-secondary:hover {
-    color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
-}
+

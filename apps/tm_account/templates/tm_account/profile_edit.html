@@ -18,7 +18,8 @@
 
                         <div class="text-center mb-4">
                             {% if user.profile_image %}
-                                <img id="image-preview" src="{{ user.profile_image.url }}" alt="User Profile Image" class="rounded-circle" width="150" height="150" style="object-fit: cover;">
+                                                                <img id="image-preview" src="{{ user.profile_image.url }}" onerror="this.onerror=null;this.src='{% static 'images/avatars/avatar1.svg' %}'" alt="User Profile Image" class="rounded-circle" width="150" height="150" style="object-fit: cover;">
+
                             {% else %}
                                 <img id="image-preview" src="{% static 'tm_account/images/avatars/avatar1.svg' %}" alt="Default Avatar" class="rounded-circle" width="150" height="150">
                             {% endif %}

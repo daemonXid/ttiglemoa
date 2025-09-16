@@ -2,11 +2,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
-from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import int_to_base36
-from django.utils.encoding import force_bytes
-from allauth.account.forms import ResetPasswordForm
-from django.http import HttpResponseRedirect
+from django.contrib import messages # Import messages
+from ..forms.password_forms import DirectPasswordResetForm # Import the new form
 
 class CustomLoginView(LoginView):
     """
@@ -22,30 +19,30 @@ class CustomLogoutView(LogoutView):
     """
     The built-in LogoutView doesn't require much configuration.
     It logs the user out and redirects.
-    By default, it redirects to LOGOUT_REDIRECT_URL in settings, but we can override it.
+    By default, it's redirects to LOGOUT_REDIRECT_URL in settings, but we can override it.
     """
     next_page = reverse_lazy('tm_begin:index')
 
-def custom_password_reset(request):
+def direct_password_reset(request):
     if request.method == 'POST':
-        form = ResetPasswordForm(request.POST)
+        form = DirectPasswordResetForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
+            new_password = form.cleaned_data['new_password1']
             User = get_user_model()
             try:
                 user = User.objects.get(email=email)
-                
-                # Generate token and uid
-                uid = int_to_base36(user.pk)
-                key = default_token_generator.make_token(user)
-
-                url = f"/accounts/password/reset/key/{uid}-{key}/"
-                return HttpResponseRedirect(url)
-
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, "비밀번호가 성공적으로 변경되었습니다. 새 비밀번호로 로그인해주세요.")
+                return redirect('tm_account:login')
             except User.DoesNotExist:
-                # Silently fail if user does not exist
-                return redirect(reverse_lazy('account_password_reset_done'))
+                # This case should ideally be caught by form.is_valid() clean_email method
+                # but as a fallback
+                messages.error(request, "해당 이메일 주소를 가진 사용자를 찾을 수 없습니다.")
+        else:
+            messages.error(request, "비밀번호 변경에 실패했습니다. 입력값을 확인해주세요.")
     else:
-        form = ResetPasswordForm()
+        form = DirectPasswordResetForm()
     
-    return render(request, 'account/password_reset.html', {'form': form})
+    return render(request, 'tm_account/password_reset.html', {'form': form})

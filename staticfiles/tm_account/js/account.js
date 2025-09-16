@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.checked) {
                 // When a default avatar is selected, update the preview
                 // The value of the radio button is the static path to the avatar
-                imagePreview.src = "/static/" + this.value.replace(/^static\//, ''); // Changed from {% get_static_prefix %}
+                imagePreview.src = "/static/" + this.value; // Changed from {% get_static_prefix %}
                 // Clear the file input so the default selection takes precedence
                 if(fileInput) {
                     fileInput.value = '';

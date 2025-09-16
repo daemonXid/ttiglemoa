@@ -51,24 +51,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Dark Mode / Light Mode Toggle
 document.addEventListener("DOMContentLoaded", () => {
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
+    const themeToggleCheckbox = document.getElementById('theme-toggle-checkbox');
     const body = document.body;
-
-    console.log('Theme Toggle Button:', themeToggleBtn);
-    console.log('Theme Icon:', themeIcon);
 
     // Function to set the theme
     function setTheme(theme) {
         if (theme === 'dark') {
             body.classList.add('dark-mode');
-            themeIcon.classList.remove('bi-sun-fill');
-            themeIcon.classList.add('bi-moon-fill');
+            if(themeToggleCheckbox) themeToggleCheckbox.checked = true;
             localStorage.setItem('theme', 'dark');
         } else {
             body.classList.remove('dark-mode');
-            themeIcon.classList.remove('bi-moon-fill');
-            themeIcon.classList.add('bi-sun-fill');
+            if(themeToggleCheckbox) themeToggleCheckbox.checked = false;
             localStorage.setItem('theme', 'light');
         }
     }
@@ -78,20 +72,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (savedTheme) {
         setTheme(savedTheme);
     } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-        // If no saved theme, check system preference
         setTheme('dark');
     } else {
         setTheme('light'); // Default to light mode
     }
 
-    // Toggle theme on button click
-    if (themeToggleBtn) {
-        themeToggleBtn.addEventListener('click', () => {
-            console.log('Theme toggle button clicked!'); // Log on click
-            if (body.classList.contains('dark-mode')) {
-                setTheme('light');
-            } else {
+    // Toggle theme on checkbox change
+    if (themeToggleCheckbox) {
+        themeToggleCheckbox.addEventListener('change', () => {
+            if (themeToggleCheckbox.checked) {
                 setTheme('dark');
+            } else {
+                setTheme('light');
             }
         });
     }

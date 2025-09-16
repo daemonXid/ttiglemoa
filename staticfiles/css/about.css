@@ -1,26 +1,26 @@
 /* General About Page Styles */
 .about-page {
-    color: var(--text-color);
+    color: #f0f0f0;
 }
 
 .about-title {
     font-size: 2.8rem;
     font-weight: 700;
-    color: var(--text-color);
+    color: #000000;
     margin-bottom: 0.5rem;
 }
 
 .about-subtitle {
     font-size: 1.2rem;
-    color: var(--text-color);
+    color: #a0a0a0;
     max-width: 600px;
     margin: 0 auto;
 }
 
 /* Team Card Styling */
 .team-card {
-    background-color: var(--card-bg-color); /* Darker card background */
-    border: 1px solid var(--border-color);
+    background-color: #1a1a1a; /* Darker card background */
+    border: 1px solid #333;
     border-radius: 15px;
     padding: 30px;
     text-align: center;
@@ -32,7 +32,7 @@
 
 .team-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 25px rgba(255, 193, 7, 0.1); /* Yellow glow effect */
+    box-shadow: 0 15px 25px rgba(255, 0, 0, 0.1); /* Red glow effect */
 }
 
 .team-card-img {
@@ -43,7 +43,7 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    border: 4px solid #FFC107; /* Accent color border */
+    border: 4px solid #c40000; /* Accent color border */
     object-fit: cover;
     margin: 0 auto;
 }
@@ -55,20 +55,20 @@
 .team-member-name {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--text-color);
+    color: #ffffff;
     margin-bottom: 0.5rem;
 }
 
 .team-member-role {
     font-size: 1rem;
-    color: #FFC107; /* Accent color for role */
+    color: #c40000; /* Accent color for role */
     font-weight: 500;
     margin-bottom: 1rem;
 }
 
 .team-member-bio {
     font-size: 0.95rem;
-    color: var(--text-color);
+    color: #b0b0b0;
     line-height: 1.6;
     margin-bottom: 1.5rem;
 }
@@ -82,14 +82,14 @@
 }
 
 .skill-badge {
-    background-color: var(--border-color);
-    color: var(--text-color);
+    background-color: #333;
+    color: #e0e0e0;
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 0.8rem;
     margin: 3px;
     display: inline-block;
-    border: 1px solid var(--border-color);
+    border: 1px solid #444;
 }
 
 .team-card-footer {
@@ -97,12 +97,12 @@
 }
 
 .social-link {
-    color: var(--text-color);
+    color: #888;
     font-size: 1.3rem;
     margin: 0 10px;
     transition: color 0.3s ease;
 }
 
 .social-link:hover {
-    color: #FFC107; /* Accent color on hover */
+    color: #c40000; /* Accent color on hover */
 }

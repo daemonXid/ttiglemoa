@@ -15,7 +15,8 @@
                     <div class="row align-items-center">
                         <div class="col-md-3 text-center">
                             {% if user.profile_image %}
-                                <img src="{{ user.profile_image.url }}" alt="User Profile Image" class="rounded-circle img-fluid mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+                                                                <img src="{{ user.profile_image.url }}" onerror="this.onerror=null;this.src='{% static 'images/avatars/avatar1.svg' %}'" alt="User Profile Image" class="rounded-circle img-fluid mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+
                             {% else %}
                                 <img src="{% static 'tm_account/images/avatars/avatar1.svg' %}" alt="Default Avatar" class="rounded-circle img-fluid mb-3" style="width: 120px; height: 120px;">
                             {% endif %}
@@ -33,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-footer bg-light p-3">
+                <div class="card-footer bg-dark p-3">
                     <div class="d-flex justify-content-end gap-2">
                         <a href="{% url 'tm_account:profile_edit' %}" class="btn btn-primary">
                             <i class="bi bi-pencil-square me-1"></i> 프로필 수정

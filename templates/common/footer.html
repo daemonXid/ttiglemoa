@@ -3,8 +3,17 @@
 
 <footer class="site-footer">
   <div class="d-flex align-items-center mb-2">
-    <img src="{% static 'images/logo_mark.svg' %}" alt="Ttiglemoa" height="28" class="me-2">
+    <img src="{% static 'images/financial-profit.png' %}" alt="logo" height="28" class="me-2">
     <strong class="brand">TTIGLEMOA</strong>
+    <div class="theme-switch-wrapper ms-auto"> {# Added ms-auto for right alignment within flexbox #}
+      <label class="theme-switch" for="theme-toggle-checkbox">
+        <input type="checkbox" id="theme-toggle-checkbox" />
+        <div class="slider round">
+          <i class="bi bi-sun-fill sun-icon"></i>
+          <i class="bi bi-moon-fill moon-icon"></i>
+        </div>
+      </label>
+    </div>
   </div>
   <div class="container py-5">
     <div class="row g-4">

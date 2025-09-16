@@ -144,6 +144,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
+# collectstatic이 수집한 정적 파일을 저장할 경로
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # Media files (User-uploaded files)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

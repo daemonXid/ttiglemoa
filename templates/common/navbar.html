@@ -53,17 +53,13 @@
           <li class="nav-item">
               <a class="nav-link d-flex align-items-center" href="{% url 'tm_account:profile' %}">
                   {% if user.profile_image %}
-                      <img src="{{ user.profile_image.url }}" alt="Profile Image" class="rounded-circle me-2" width="30" height="30" style="object-fit: cover;">
+                                            <img src="{{ user.profile_image.url }}" onerror="this.onerror=null;this.src='{% static 'images/avatars/avatar1.svg' %}'" alt="Profile Image" class="rounded-circle me-2" width="30" height="30" style="object-fit: cover;">
+
                   {% else %}
                       <img src="{% static 'images/avatars/avatar2.svg' %}" alt="Default Avatar" class="rounded-circle me-2" width="30" height="30">
                   {% endif %}
                   프로필({{ user.nickname }})
               </a>
-          </li>
-          <li class="nav-item">
-            <button id="theme-toggle" class="btn btn-link nav-link">
-              <i class="bi bi-sun-fill" id="theme-icon"></i>
-            </button>
           </li>
           <li class="nav-item me-2">
             <form action="{% url 'tm_account:logout' %}" method="post" class="d-inline">

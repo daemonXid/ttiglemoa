@@ -1,9 +1,3 @@
-// test 
-
-const login_button = document.getElementById('login_nav')
-login_button.addEventListener('click', () => console.log('로그인 버튼 '))
-
-
 console.log("✅ main.js loaded!");
 
 
@@ -53,3 +47,51 @@ document.addEventListener("DOMContentLoaded", () => {
 //     });
 //   }
 // });
+
+// Dark Mode / Light Mode Toggle
+document.addEventListener("DOMContentLoaded", () => {
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const body = document.body;
+
+    console.log('Theme Toggle Button:', themeToggleBtn);
+    console.log('Theme Icon:', themeIcon);
+
+    // Function to set the theme
+    function setTheme(theme) {
+        if (theme === 'dark') {
+            body.classList.add('dark-mode');
+            themeIcon.classList.remove('bi-sun-fill');
+            themeIcon.classList.add('bi-moon-fill');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            body.classList.remove('dark-mode');
+            themeIcon.classList.remove('bi-moon-fill');
+            themeIcon.classList.add('bi-sun-fill');
+            localStorage.setItem('theme', 'light');
+        }
+    }
+
+    // Check for saved theme preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        setTheme(savedTheme);
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // If no saved theme, check system preference
+        setTheme('dark');
+    } else {
+        setTheme('light'); // Default to light mode
+    }
+
+    // Toggle theme on button click
+    if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+            console.log('Theme toggle button clicked!'); // Log on click
+            if (body.classList.contains('dark-mode')) {
+                setTheme('light');
+            } else {
+                setTheme('dark');
+            }
+        });
+    }
+});

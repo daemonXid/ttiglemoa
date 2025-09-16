@@ -25,6 +25,6 @@ urlpatterns = [
     # ex: /my-account/delete/
     path('delete/', profile_views.account_delete, name='account_delete'),
 
-    # Custom Password Reset URL
-    path('custom_password_reset/', auth_views.custom_password_reset, name='custom_password_reset'),
+    # Direct Password Reset URL
+    path('custom_password_reset/', auth_views.direct_password_reset, name='custom_password_reset'),
 ]

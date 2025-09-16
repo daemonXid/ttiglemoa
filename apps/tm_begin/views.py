@@ -10,8 +10,8 @@ from apps.tm_assets.models import DepositSaving, StockHolding, BondHolding
 # ---- RSS 설정 ----
 INVESTING_FEEDS = [
     "https://kr.investing.com/rss/news.rss",
-    # "https://www.investing.com/rss/news_14.rss",  # 경제 지표
-    # "https://www.investing.com/rss/news_301.rss", # 외환
+    "https://kr.investing.com/rss/news_14.rss",  # 경제 지표
+    "https://kr.investing.com/rss/news_301.rss", # 외환
 ]
 
 # ---- 초간단 메모리 캐시 ----

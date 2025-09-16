@@ -1,11 +1,11 @@
 {% extends 'tm_account/base_account.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}Delete Account{% endblock %}
+{% block title %}계정 삭제{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Delete Account</h2>
+    <h2>계정 삭제</h2>
     <hr>
     {% if messages %}
         {% for message in messages %}
@@ -15,14 +15,13 @@
         {% endfor %}
     {% endif %}
     <p class="text-danger">
-        <strong>Warning:</strong> Deleting your account is irreversible. All your data will be permanently removed.
-        Please confirm your password to proceed.
+        <strong>주의:</strong> 계정탈퇴는 취소할 수 없습니다. 한번 삭제된 계정과 모든 데이터는 다시 복구할 수 없습니다. 본인 확인을 위해 비밀번호를 다시 한번 입력해주세요.
     </p>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <button type="submit" class="btn btn-danger mt-3">Confirm Delete</button>
-        <a href="{% url 'tm_account:profile' %}" class="btn btn-secondary mt-3">Cancel</a>
+        <button type="submit" class="btn btn-danger mt-3">삭제 확인</button>
+        <a href="{% url 'tm_account:profile' %}" class="btn btn-secondary mt-3">프로필 페이지</a>
     </form>
 </div>
 {% endblock %}

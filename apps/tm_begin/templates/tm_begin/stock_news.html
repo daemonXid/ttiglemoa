@@ -2,88 +2,25 @@
 {% extends 'common/base.html' %}
 {% load static %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/stock_news.css' %}">
+{% endblock %}
+
 {% block content %}
 <div class="stock_news news-page">
-  <h2>📰 {{ headline|default:"최신 뉴스" }}</h2>   {# ← 고정 문구 대신 headline 사용 #}
-  {% if updated_at %}
-    <p class="inv-sub">
-      업데이트: {{ updated_at|date:"Y-m-d H:i" }} (이 페이지 {{ count }}건 / 총 {{ total }}건)
-    </p>
-  {% endif %}
+  <h2>📰 {{ headline|default:"최신 뉴스" }}</h2>
+  <p class="inv-sub" id="news-meta"></p>
 
-  {% if hero_item %}
-    <!-- 히어로 (상단 1개) -->
-    <article class="inv-hero">
-      <div class="inv-hero-img">
-        <a href="{{ hero_item.link }}" target="_blank" rel="noopener">
-          {% if hero_item.img %}
-            <img src="{{ hero_item.img }}" alt="{{ hero_item.title|striptags }}">
-          {% else %}
-            <div class="no-image"><span>📈</span></div>
-          {% endif %}
-        </a>
-      </div>
-      <div class="inv-hero-content">
-        <a href="{{ hero_item.link }}" target="_blank" rel="noopener" class="inv-title-lg">
-          {{ hero_item.title|striptags }}
-        </a>
-        {% if hero_item.summary %}
-          <p class="inv-desc inv-line-5">{{ hero_item.summary|striptags }}</p>
-        {% endif %}
-        <div class="inv-meta">
-          <time>{{ hero_item.published }}</time>
-          <span>{{ hero_item.source }}</span>
-        </div>
-      </div>
-    </article>
-  {% endif %}
-
-  <!-- 하단 그리드 -->
-  <div class="inv-row">
-    {% for item in grid_items %}
-    <article class="inv-card">
-      <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-thumb">
-        {% if item.img %}
-          <img src="{{ item.img }}" alt="{{ item.title|striptags }}">
-        {% else %}
-          <div class="no-image-small"><span>📰</span></div>
-        {% endif %}
-      </a>
-
-      <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-title inv-line-2">
-        {{ item.title|striptags }}
-      </a>
-
-      {% if item.summary %}
-        <p class="inv-desc inv-line-3">{{ item.summary|striptags }}</p>
-      {% endif %}
-
-      <div class="inv-meta">
-        <time>{{ item.published }}</time>
-        <span>{{ item.source }}</span>
-      </div>
-    </article>
-    {% endfor %}
+  <!-- 로딩 스피너 -->
+  <div id="loading-spinner" class="loading-spinner-overlay">
+    <div class="spinner"></div>
   </div>
 
-  <!-- 페이지네이션 (그대로) -->
-  {% if total_pages > 1 %}
-  <nav class="inv-pagination" aria-label="뉴스 페이지">
-    <a class="inv-page {% if not has_prev %}disabled{% endif %}" href="?page=1" aria-label="첫 페이지">«</a>
-    <a class="inv-page {% if not has_prev %}disabled{% endif %}" href="?page={{ prev_page }}" aria-label="이전 페이지">‹</a>
+  <!-- 뉴스 콘텐츠가 동적으로 채워질 컨테이너 -->
+  <div id="news-content"></div>
 
-    {% for n in page_numbers %}
-      {% if n == page %}
-        <span class="inv-page active">{{ n }}</span>
-      {% else %}
-        <a class="inv-page" href="?page={{ n }}">{{ n }}</a>
-      {% endif %}
-    {% endfor %}
-
-    <a class="inv-page {% if not has_next %}disabled{% endif %}" href="?page={{ next_page }}" aria-label="다음 페이지">›</a>
-    <a class="inv-page {% if not has_next %}disabled{% endif %}" href="?page={{ total_pages }}" aria-label="마지막 페이지">»</a>
-  </nav>
-  {% endif %}
+  <!-- 페이지네이션 컨테이너 -->
+  <nav id="pagination-container" class="inv-pagination" aria-label="뉴스 페이지"></nav>
 
   {# (선택) 위젯 모드: 쿼리스트링 ?widget=1 이면 iframe 표시 #}
   {% if widget_embed_url %}
@@ -92,4 +29,147 @@
     </div>
   {% endif %}
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const newsContent = document.getElementById("news-content");
+  const newsMeta = document.getElementById("news-meta");
+  const paginationContainer = document.getElementById("pagination-container");
+  const loadingSpinner = document.getElementById("loading-spinner");
+
+  // 현재 URL에서 페이지 번호를 가져옵니다.
+  const urlParams = new URLSearchParams(window.location.search);
+  let currentPage = parseInt(urlParams.get('page')) || 1;
+
+  // 뉴스 데이터를 가져와서 렌더링하는 함수
+  function fetchAndRenderNews(page) {
+    loadingSpinner.style.display = 'flex'; // 로딩 스피너 표시
+
+    fetch(`{% url 'tm_begin:stock_news_json' %}?page=${page}`)
+      .then(response => response.json())
+      .then(data => {
+        // 기존 콘텐츠 초기화
+        newsContent.innerHTML = '';
+        newsMeta.innerHTML = '';
+        paginationContainer.innerHTML = '';
+
+        // 메타 정보 업데이트
+        if (data.updated_at) {
+          newsMeta.textContent = `업데이트: ${data.updated_at} (이 페이지 ${data.count}건 / 총 ${data.total}건)`;
+        }
+
+        // 히어로 아이템 렌더링
+        if (data.hero_item) {
+          newsContent.innerHTML += renderHeroItem(data.hero_item);
+        }
+
+        // 그리드 아이템 렌더링
+        const gridContainer = document.createElement('div');
+        gridContainer.className = 'inv-row';
+        data.grid_items.forEach(item => {
+          gridContainer.innerHTML += renderGridItem(item);
+        });
+        newsContent.appendChild(gridContainer);
+
+        // 페이지네이션 렌더링
+        renderPagination(data);
+
+        loadingSpinner.style.display = 'none'; // 로딩 스피너 숨김
+      })
+      .catch(error => {
+        console.error('Error fetching news:', error);
+        newsContent.innerHTML = '<p>뉴스를 불러오는 데 실패했습니다.</p>';
+        loadingSpinner.style.display = 'none'; // 오류 발생 시에도 스피너 숨김
+      });
+  }
+
+  // 히어로 아이템 HTML 생성
+  function renderHeroItem(item) {
+    const image = item.img ? `<img src="${item.img}" alt="${item.title}">` : '<div class="no-image"><span>📈</span></div>';
+    const summary = item.summary ? `<p class="inv-desc inv-line-5">${item.summary}</p>` : '';
+    return `
+      <article class="inv-hero">
+        <div class="inv-hero-img">
+          <a href="${item.link}" target="_blank" rel="noopener">
+            ${image}
+          </a>
+        </div>
+        <div class="inv-hero-content">
+          <a href="${item.link}" target="_blank" rel="noopener" class="inv-title-lg">
+            ${item.title}
+          </a>
+          ${summary}
+          <div class="inv-meta">
+            <time>${item.published}</time>
+            <span>${item.source}</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  // 그리드 아이템 HTML 생성
+  function renderGridItem(item) {
+    const image = item.img ? `<img src="${item.img}" alt="${item.title}">` : '<div class="no-image-small"><span>📰</span></div>';
+    const summary = item.summary ? `<p class="inv-desc inv-line-3">${item.summary}</p>` : '';
+    return `
+      <article class="inv-card">
+        <a href="${item.link}" target="_blank" rel="noopener" class="inv-thumb">
+          ${image}
+        </a>
+        <a href="${item.link}" target="_blank" rel="noopener" class="inv-title inv-line-2">
+          ${item.title}
+        </a>
+        ${summary}
+        <div class="inv-meta">
+          <time>${item.published}</time>
+          <span>${item.source}</span>
+        </div>
+      </article>
+    `;
+  }
+
+  // 페이지네이션 HTML 생성
+  function renderPagination(data) {
+    if (data.total_pages > 1) {
+      let paginationHTML = '';
+      // 첫 페이지, 이전 페이지
+      paginationHTML += `<a class="inv-page ${!data.has_prev ? 'disabled' : ''}" href="?page=1" data-page="1">«</a>`;
+      paginationHTML += `<a class="inv-page ${!data.has_prev ? 'disabled' : ''}" href="?page=${data.prev_page}" data-page="${data.prev_page}">‹</a>`;
+
+      // 페이지 번호
+      data.page_numbers.forEach(n => {
+        if (n === data.page) {
+          paginationHTML += `<span class="inv-page active">${n}</span>`;
+        } else {
+          paginationHTML += `<a class="inv-page" href="?page=${n}" data-page="${n}">${n}</a>`;
+        }
+      });
+
+      // 다음 페이지, 마지막 페이지
+      paginationHTML += `<a class="inv-page ${!data.has_next ? 'disabled' : ''}" href="?page=${data.next_page}" data-page="${data.next_page}">›</a>`;
+      paginationHTML += `<a class="inv-page ${!data.has_next ? 'disabled' : ''}" href="?page=${data.total_pages}" data-page="${data.total_pages}">»</a>`;
+
+      paginationContainer.innerHTML = paginationHTML;
+    }
+  }
+
+  // 페이지네이션 링크에 이벤트 리스너 추가
+  paginationContainer.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' && e.target.dataset.page) {
+      e.preventDefault(); // 기본 링크 동작 방지
+      const page = parseInt(e.target.dataset.page);
+      if (page !== currentPage) {
+        currentPage = page;
+        // URL의 page 쿼리 파라미터 업데이트
+        window.history.pushState({path:`?page=${page}`},'',`?page=${page}`);
+        fetchAndRenderNews(page);
+      }
+    }
+  });
+
+  // 초기 로드
+  fetchAndRenderNews(currentPage);
+});
+</script>
 {% endblock %}

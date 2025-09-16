@@ -5,7 +5,7 @@
   --card-bg-color: #f6f8fa;
   --border-color: #e1e4e8;
   --link-color: #0366d6;
-  --accent-color: #007bff; /* Blue for light mode */
+  --accent-color:  #007bff; /* Blue for light mode */
   --accent-color-rgb: 0, 123, 255;
   --navbar-bg-color: #111;
   --navbar-text-color: #fff;
@@ -839,4 +839,9 @@ a:not(.btn):hover {
 /* Fix for text-muted in dark mode */
 body.dark-mode .text-muted {
     color: var(--text-color) !important;
+}
+
+#page-loader.fade-out {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
 }

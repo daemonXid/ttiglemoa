@@ -46,12 +46,9 @@ main {
 }
 
 
-/* ===================== 3) Navbar ===================== */
-/* (옵션) 네브바가 fixed-top일 때만 본문을 더 아래로 밀고 싶다면 body에 클래스 부여 */
- /* body.has-fixed-nav { 
-   margin-top: 6.5rem;
-   transition: margin-top 0.3s ease-in-out;
- } */
+.navbar-logo {
+width: 9rem;
+}
 
 
 footer {
@@ -62,11 +59,6 @@ footer {
   margin-top: 3rem;
 }
 
-/* (옵션) 네브바가 fixed-top일 때만 본문을 아래로 밀기 */
-/* body.has-fixed-nav { 
-  margin-top: 6.5rem;
-  transition: margin-top 0.3s ease-in-out;
-} */
 
 /* 모바일에서는 네브바 고정 해제 + 여백 제거 */
 @media (max-width: 991.98px) {

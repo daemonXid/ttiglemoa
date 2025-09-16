@@ -30,6 +30,7 @@ html {
   background-color: var(--bg-color);
 }
 
+/* ===================== 2) Body (layout) ===================== */
 body {
   min-height: 100%;
   margin: 0;
@@ -39,12 +40,15 @@ body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
-main { flex: 1; }           /*본문이 빈 공간을 채움*/
-
 main {
-  margin-top: 3rem;
+  flex: 1;                  /* 본문이 빈 공간을 채움 */
+  margin-top: 3rem;         /* 상단 여백 (고정 네브바 고려) */
 }
 
+
+.navbar-logo {
+width: 9rem;
+}
 
 
 footer {
@@ -55,11 +59,6 @@ footer {
   margin-top: 3rem;
 }
 
-/* (옵션) 네브바가 fixed-top일 때만 본문을 아래로 밀기 */
-/* body.has-fixed-nav { 
-  margin-top: 6.5rem;
-  transition: margin-top 0.3s ease-in-out;
-} */
 
 /* 모바일에서는 네브바 고정 해제 + 여백 제거 */
 @media (max-width: 991.98px) {
@@ -75,8 +74,11 @@ footer {
   padding-right: 0;
 }
 
+/* 모바일에서는 네브바 고정 해제 + 여백 제거 */
+@media (max-width: 991.98px) {
+  .navbar.fixed-top { position: static; }
+  body.has-fixed-nav { margin-top: 0; }
 
-@media (max-width: 991px) {
   .navbar .nav-login,
   .navbar .nav-signup { margin-top: 10px !important; }
 
@@ -84,10 +86,37 @@ footer {
   .navbar .navbar-nav.align-items-center .nav-item { margin-left: 0 !important; }
 }
 
-/* (옵션) 모바일 메뉴 펼침 시 여백 필요하면 사용 */
+/* (옵션) 모바일 메뉴 펼침 시 본문 밀기 – 필요 시 택1로 사용 */
 .body-menu-open { margin-top: 24rem; }
 
-/* ========== Sections ========== */
+/* ===================== Sections ===================== */
+/* 공통: 메인 상단 소개 이미지/영역 */
+.main_about {
+  border: none;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  color: #ffff !important;
+  background: #000;
+}
+
+.main_about_text{
+  padding: 0 4rem;
+}
+
+.main_about_content_text{
+  font-size: 1rem;
+
+}
+
+.main_about_img { 
+  /* width: 75%; 
+  height: 15rem; */
+  padding: 25px;
+}
+
+
+/* 뉴스 리스트 섹션 */
 .stock_news {
   border: none;
   width: 75%;
@@ -96,14 +125,33 @@ footer {
   padding: 8px 12px 16px;
 }
 
-.main_about {
-  border: none;
-  display: flex;
-  justify-content: center;
+
+
+
+/* ===================== Utilities ===================== */
+/* 뉴스 텍스트 */
+
+.inv-hero-title {
+  color: #000 !important;
+}
+.inv-title {
+
+  color: #000 !important;
+
+}
+
+.inv-meta {
+  color: #202020 !important;
+}
+
+
+/* 트레이딩뷰 래퍼 */
+.tv-wrap {
+  width: 75%;
+  margin-inline: auto;
   padding: 10px;
   color: var(--text-color);
 }
-.main_about_img { width: 75%; height: 15rem; }
 
 /* ========== Pagination ========== */
 .inv-pagination {
@@ -151,19 +199,38 @@ footer {
     height: 320px !important;
   }
 }
-.tv-wrap {
-  width: 75%;
-  margin-inline: auto;
-  padding: 10px;
-}
 
-/* 16:9 비율 유지하면서 최대 높이 제한 (필요시에만) */
+/* 16:9 비율 유지 (필요할 때만 사용) */
 .ratio-16x9 {
   --bs-aspect-ratio: calc(540 / 960 * 100%);
   max-height: 540px;
 }
 
-/* ========== Form Inputs ========== */
+/* ===================== Pagination (Investing 뉴스) ===================== */
+.inv-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.inv-page {
+  background: #000;
+  color: #fff;
+  border: 1px solid #d4af37;  /* gold */
+  border-radius: 25px;
+  padding: 6px 12px;
+  min-width: 36px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.2;
+}
+.inv-page:hover { filter: brightness(1.1); }
+.inv-page.active { background: #c40000; color: #fff; border-color: #d4af37; cursor: default; }
+.inv-page.disabled { opacity: .45; pointer-events: none; }
+
+/* ===================== 6) Forms ===================== */
 .form-control {
   background-color: #f0f0f0;
   border: 1px solid #007bff;
@@ -171,7 +238,7 @@ footer {
 .form-control:focus {
   background-color: #ffffff;
   border-color: #0056b3;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
 }
 
 main {

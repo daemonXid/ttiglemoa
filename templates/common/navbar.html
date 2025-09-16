@@ -61,18 +61,6 @@
                   프로필({{ user.nickname }})
               </a>
           </li>
-          <li class="nav-item">
-            <div class="theme-switch-wrapper">
-              <label class="theme-switch" for="theme-toggle-checkbox">
-                <input type="checkbox" id="theme-toggle-checkbox" />
-                <div class="slider round">
-                  <i class="bi bi-sun-fill sun-icon"></i>
-                  <i class="bi bi-moon-fill moon-icon"></i>
-                  
-                </div>
-              </label>
-            </div>
-          </li>
           <li class="nav-item me-2">
             <form action="{% url 'tm_account:logout' %}" method="post" class="d-inline">
               {% csrf_token %}

@@ -46,21 +46,6 @@ main {
 }
 
 
-/* ===================== 7) Utilities ===================== */
-
-.inv-hero-title {
-  color: #fff !important;
-}
-.inv-title {
-
-  color: #fff !important;
-
-}
-
-.inv-meta {
-  color: #636363 !important;
-}
-
 /* ===================== 3) Navbar ===================== */
 /* (옵션) 네브바가 fixed-top일 때만 본문을 더 아래로 밀고 싶다면 body에 클래스 부여 */
  /* body.has-fixed-nav { 
@@ -112,7 +97,7 @@ footer {
 /* (옵션) 모바일 메뉴 펼침 시 본문 밀기 – 필요 시 택1로 사용 */
 .body-menu-open { margin-top: 24rem; }
 
-/* ===================== 4) Sections ===================== */
+/* ===================== Sections ===================== */
 /* 공통: 메인 상단 소개 이미지/영역 */
 .main_about {
   border: none;
@@ -147,6 +132,26 @@ footer {
   margin-inline: auto;
   padding: 8px 12px 16px;
 }
+
+
+
+
+/* ===================== Utilities ===================== */
+/* 뉴스 텍스트 */
+
+.inv-hero-title {
+  color: #000 !important;
+}
+.inv-title {
+
+  color: #000 !important;
+
+}
+
+.inv-meta {
+  color: #202020 !important;
+}
+
 
 /* 트레이딩뷰 래퍼 */
 .tv-wrap {
@@ -209,7 +214,7 @@ footer {
   max-height: 540px;
 }
 
-/* ===================== 5) Pagination (Investing 뉴스) ===================== */
+/* ===================== Pagination (Investing 뉴스) ===================== */
 .inv-pagination {
   display: flex;
   justify-content: center;

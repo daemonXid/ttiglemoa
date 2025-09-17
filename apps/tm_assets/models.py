@@ -141,6 +141,10 @@ class StockHolding(TimeStampedModel):
         price = self.current_price if self.current_price is not None else self.average_price
         return price * self.quantity
 
+    def purchase_value(self):
+        """매수 총액 (평단가 * 수량)"""
+        return self.average_price * self.quantity
+
     def update_price_via_fdr(self):
         """FinanceDataReader로 최신 종가 조회 후 current_price 업데이트.
         시장 구분은 보조정보로 사용하며, FDR은 KR/US를 모두 지원.

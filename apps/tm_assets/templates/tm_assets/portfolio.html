@@ -17,15 +17,15 @@ Ttiglemoa{% endblock %} {% block content %}
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between">
             <span>예금/적금</span>
-            <strong class="{% if class_totals.CASH > 0 %}text-danger{% elif class_totals.CASH < 0 %}text-primary{% endif %}">{% if class_totals.CASH < 0 %}-{% endif %}{{ class_totals.CASH|floatformat:2 }}</strong>
+            <strong class="{% if class_totals.CASH > 0 %}text-success{% elif class_totals.CASH < 0 %}text-danger{% endif %}">{{ class_totals.CASH|floatformat:2 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>주식</span>
-            <strong class="{% if class_totals.STOCK > 0 %}text-danger{% elif class_totals.STOCK < 0 %}text-primary{% endif %}">{% if class_totals.STOCK < 0 %}-{% endif %}{{ class_totals.STOCK|floatformat:2 }}</strong>
+            <strong class="{% if class_totals.STOCK > 0 %}text-success{% elif class_totals.STOCK < 0 %}text-danger{% endif %}">{{ class_totals.STOCK|floatformat:2 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>채권</span>
-            <strong class="{% if class_totals.BOND > 0 %}text-danger{% elif class_totals.BOND < 0 %}text-primary{% endif %}">{% if class_totals.BOND < 0 %}-{% endif %}{{ class_totals.BOND|floatformat:2 }}</strong>
+            <strong class="{% if class_totals.BOND > 0 %}text-success{% elif class_totals.BOND < 0 %}text-danger{% endif %}">{{ class_totals.BOND|floatformat:2 }}</strong>
           </li>
         </ul>
         <small class="text-muted d-block mt-2"
@@ -251,7 +251,7 @@ Ttiglemoa{% endblock %} {% block content %}
                     <td>{{ s.quantity|floatformat:2 }}</td>
                     <td>{{ s.average_price|floatformat:2 }}</td>
                     <td>{{ s.current_price|floatformat:2|default:"-" }}</td>
-                    <td class="{% if s.estimated_value > s.purchase_price %}text-danger{% elif s.estimated_value < s.purchase_price %}text-primary{% endif %}">{% if s.estimated_value < s.purchase_price %}-{% endif %}{{ s.estimated_value|floatformat:2 }}</td>
+                    <td class="{% if s.estimated_value > s.purchase_value %}text-success{% elif s.estimated_value < s.purchase_value %}text-danger{% endif %}">{{ s.estimated_value|floatformat:2 }}</td>
                     <td>{{ s.currency }}</td>
                     <td>
                         <a

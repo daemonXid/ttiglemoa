@@ -141,6 +141,7 @@ class StockHolding(TimeStampedModel):
         price = self.current_price if self.current_price is not None else self.average_price
         return price * self.quantity
 
+    @property
     def purchase_value(self):
         """매수 총액 (평단가 * 수량)"""
         return self.average_price * self.quantity

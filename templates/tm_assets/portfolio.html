@@ -23,15 +23,15 @@
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between">
             <span>예금/적금</span>
-            <strong>{{ class_totals.CASH|floatformat:0 }}</strong>
+            <strong>{{ class_totals.CASH|floatformat:2 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>주식</span>
-            <strong>{{ class_totals.STOCK|floatformat:0 }}</strong>
+            <strong>{{ class_totals.STOCK|floatformat:2 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>채권</span>
-            <strong>{{ class_totals.BOND|floatformat:0 }}</strong>
+            <strong>{{ class_totals.BOND|floatformat:2 }}</strong>
           </li>
         </ul>
         <small class="text-muted d-block mt-2">통화가 다르면 합계가 왜곡될 수 있습니다.</small>
@@ -48,7 +48,7 @@
             {% for currency, total in totals_by_currency.items %}
               <li class="list-group-item d-flex justify-content-between">
                 <span>{{ currency }}</span>
-                <strong>{{ total|floatformat:0 }}</strong>
+                <strong>{{ total|floatformat:2 }}</strong>
               </li>
             {% endfor %}
           </ul>
@@ -87,9 +87,9 @@
                   <tr>
                     <td>{{ d.bank_name }}</td>
                     <td>{{ d.product_name }} ({{ d.get_product_type_display }})</td>
-                    <td>{{ d.principal_amount }}</td>
-                    <td>{{ d.annual_rate }}</td>
-                    <td>{{ d.estimated_value|floatformat:0 }}</td>
+                    <td>{{ d.principal_amount|floatformat:2 }}</td>
+                    <td>{{ d.annual_rate|floatformat:2 }}</td>
+                    <td>{{ d.estimated_value|floatformat:2 }}</td>
                     <td>{{ d.currency }}</td>
                     <td>
                       <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_deposit' d.pk %}">수정</a>
@@ -137,10 +137,20 @@
                   <tr>
                     <td>{{ s.get_market_display }}</td>
                     <td>{{ s.ticker }}</td>
-                    <td>{{ s.quantity }}</td>
-                    <td>{{ s.average_price }}</td>
-                    <td>{{ s.current_price|default:"-" }}</td>
-                    <td>{{ s.estimated_value|floatformat:0 }}</td>
+                    <td>{{ s.quantity|floatformat:2 }}</td>
+                    <td>{{ s.average_price|floatformat:2 }}</td>
+                    <td>
+                      {% if s.current_price is not None %}
+                        {{ s.current_price|floatformat:2 }}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td>
+                      <span{% if s.valuation_class %} class="{{ s.valuation_class }}"{% endif %}>
+                        {{ s.estimated_total|floatformat:2 }}
+                      </span>
+                    </td>
                     <td>{{ s.currency }}</td>
                     <td>
                       <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_stock' s.pk %}">수정</a>
@@ -189,11 +199,21 @@
                   <tr>
                     <td>{{ b.name }}</td>
                     <td>{{ b.issuer|default:"-" }}</td>
-                    <td>{{ b.face_amount }}</td>
-                    <td>{{ b.purchase_price_pct }}</td>
-                    <td>{{ b.current_price_pct|default:"-" }}</td>
+                    <td>{{ b.face_amount|floatformat:2 }}</td>
+                    <td>{{ b.purchase_price_pct|floatformat:2 }}</td>
+                    <td>
+                      {% if b.current_price_pct is not None %}
+                        {{ b.current_price_pct|floatformat:2 }}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
                     <td>{{ b.maturity_date }}</td>
-                    <td>{{ b.estimated_value|floatformat:0 }}</td>
+                    <td>
+                      <span{% if b.valuation_class %} class="{{ b.valuation_class }}"{% endif %}>
+                        {{ b.estimated_total|floatformat:2 }}
+                      </span>
+                    </td>
                     <td>{{ b.currency }}</td>
                     <td>
                       <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:edit_bond' b.pk %}">수정</a>
@@ -216,3 +236,4 @@
 </div>
 
 {% endblock %}
+

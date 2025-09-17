@@ -13,6 +13,7 @@ import json
 from datetime import timedelta, date
 from collections import defaultdict
 from typing import Dict, List, Any, Tuple
+from decimal import Decimal
 
 from .forms import DepositSavingForm, StockHoldingForm, BondHoldingForm
 from .models import (
@@ -26,6 +27,17 @@ from .models import (
     bond_last_change,
     deposit_last_change,
 )
+
+
+def _valuation_class(current, baseline):
+    """Return bootstrap text class based on valuation result."""
+    if current is None or baseline is None:
+        return ""
+    if current > baseline:
+        return "text-danger"
+    if current < baseline:
+        return "text-primary"
+    return ""
 
 
 def get_portfolio_history(user, days: int = 90) -> List[Dict[str, Any]]:
@@ -167,16 +179,31 @@ def calculate_asset_totals(user) -> Tuple[Dict[str, float], Dict[str, float]]:
 
 @login_required
 def portfolio_index(request):
-    """포트폴리오 메인 페이지"""
-    # 자산 데이터 조회 (성능 최적화를 위해 order_by 적용)
-    deposits = DepositSaving.objects.filter(user=request.user).order_by("-created_at")
-    stocks = StockHolding.objects.filter(user=request.user).order_by("-created_at")
-    bonds = BondHolding.objects.filter(user=request.user).order_by("-created_at")
+    """포트폴리오 메인 화면"""
+    deposits = list(
+        DepositSaving.objects.filter(user=request.user).order_by("-created_at")
+    )
+    stocks = list(
+        StockHolding.objects.filter(user=request.user).order_by("-created_at")
+    )
+    for stock in stocks:
+        estimated_total = stock.estimated_value()
+        purchase_total = stock.purchase_value
+        stock.estimated_total = estimated_total
+        stock.purchase_total = purchase_total
+        stock.valuation_class = _valuation_class(estimated_total, purchase_total)
 
-    # 통화별 및 자산 클래스별 합계 계산
+    bonds = list(
+        BondHolding.objects.filter(user=request.user).order_by("-created_at")
+    )
+    for bond in bonds:
+        estimated_total = bond.estimated_value()
+        purchase_total = bond.face_amount * (bond.purchase_price_pct / Decimal("100"))
+        bond.estimated_total = estimated_total
+        bond.purchase_total = purchase_total
+        bond.valuation_class = _valuation_class(estimated_total, purchase_total)
+
     totals_by_currency, class_totals = calculate_asset_totals(request.user)
-
-    # 포트폴리오 히스토리 데이터 생성
     portfolio_history = get_portfolio_history(request.user, days=90)
 
     context = {

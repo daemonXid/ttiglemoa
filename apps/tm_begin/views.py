@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import JsonResponse
 
 from .utils.rss_fetch import fetch_rss_many
 from apps.tm_assets.models import DepositSaving, StockHolding, BondHolding
@@ -34,16 +35,29 @@ def _get_investing_news(limit=200):
     return _CACHE["items"][:limit], _CACHE["at"]
 
 def index(request):
-    # 홈: 가볍게 20개만
+    return render(request, "common/index.html")
+
+def index_json(request):
     news_list, updated_at = _get_investing_news(limit=20)
-    return render(request, "common/index.html", {
+    if updated_at:
+        updated_at_str = updated_at.strftime("%Y-%m-%d %H:%M")
+    else:
+        updated_at_str = None
+    ctx = {
         "news_list": news_list,
-        "updated_at": updated_at,
+        "updated_at": updated_at_str,
         "count": len(news_list),
-    })
+    }
+    return JsonResponse(ctx)
 
 def investing_news(request):
-    # 목록: 페이지당 9개 (히어로 1 + 카드 그리드)
+    # 이 뷰는 이제 껍데기만 렌더링합니다.
+    return render(request, "tm_begin/stock_news.html", {
+        "headline": "최신 뉴스",
+    })
+
+def investing_news_json(request):
+    # JSON API: 페이지당 9개 (히어로 1 + 카드 그리드)
     items, updated_at = _get_investing_news(limit=200)
     paginator = Paginator(items, 9)
     page_obj = paginator.get_page(request.GET.get("page"))
@@ -57,8 +71,14 @@ def investing_news(request):
     end_num   = min(paginator.num_pages, page_obj.number + page_group)
     page_numbers = list(range(start_num, end_num + 1))
 
+    # 날짜/시간 객체를 문자열로 변환 (JSON 직렬화)
+    if updated_at:
+        updated_at_str = updated_at.strftime("%Y-%m-%d %H:%M")
+    else:
+        updated_at_str = None
+
     ctx = {
-        "updated_at": updated_at,
+        "updated_at": updated_at_str,
         "count": len(page_obj.object_list),
         "total": paginator.count,
         "page": page_obj.number,
@@ -71,7 +91,7 @@ def investing_news(request):
         "hero_item": hero_item,
         "grid_items": grid_items,
     }
-    return render(request, "tm_begin/stock_news.html", ctx)
+    return JsonResponse(ctx)
 
 def search(request):
     query = request.GET.get('q')

@@ -181,7 +181,7 @@ Ttiglemoa{% endblock %} {% block content %}
                     <td>{{ b.purchase_price_pct }}</td>
                     <td>{{ b.current_price_pct|default:"-" }}</td>
                     <td>{{ b.maturity_date }}</td>
-                    <td class="{% if b.current_price_pct and b.current_price_pct > b.purchase_price_pct %}text-success{% elif b.current_price_pct and b.current_price_pct < b.purchase_price_pct %}text-danger{% endif %}">{{ b.estimated_value|floatformat:2 }}</td>
+                    <td class="text-danger">{{ b.estimated_value|floatformat:2 }}</td>
                     <td>{{ b.currency }}</td>
                     <td>
                         <a
@@ -251,7 +251,7 @@ Ttiglemoa{% endblock %} {% block content %}
                     <td>{{ s.quantity|floatformat:2 }}</td>
                     <td>{{ s.average_price|floatformat:2 }}</td>
                     <td>{{ s.current_price|floatformat:2|default:"-" }}</td>
-                    <td class="{% if s.current_price and s.current_price > s.average_price %}text-success{% elif s.current_price and s.current_price < s.average_price %}text-danger{% endif %}">{{ s.estimated_value|floatformat:2 }}</td>
+                    <td class="text-success">{{ s.estimated_value|floatformat:2 }}</td>
                     <td>{{ s.currency }}</td>
                     <td>
                         <a

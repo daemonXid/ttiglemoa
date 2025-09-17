@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__render__list_logs",
+      "Bash(find:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

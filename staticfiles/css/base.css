@@ -1,0 +1,154 @@
+/* ========== Base Reset & Layout ========== */
+html, body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;   /* footer를 아래로 밀기 */
+  height: 100vh;
+
+}
+main { flex: 1; }           /*본문이 빈 공간을 채움*/
+
+main {
+  margin-top: 3rem;
+}
+
+
+
+footer {
+  background: #111;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+
+/* (옵션) 네브바가 fixed-top일 때만 본문을 아래로 밀기 */
+/* body.has-fixed-nav { 
+  margin-top: 6.5rem;
+  transition: margin-top 0.3s ease-in-out;
+} */
+
+/* 모바일에서는 네브바 고정 해제 + 여백 제거 */
+@media (max-width: 991.98px) {
+  .navbar.fixed-top { position: static; }
+  body.has-fixed-nav { margin-top: 0; }
+}
+
+/* ========== Navbar / Auth Buttons ========== */
+.navbar .btn-search {
+  min-width: 70px;
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+@media (max-width: 991px) {
+  .navbar .nav-login,
+  .navbar .nav-signup { margin-top: 10px !important; }
+
+  /* 모바일에서 좌우 여백 꼬임 방지 */
+  .navbar .navbar-nav.align-items-center .nav-item { margin-left: 0 !important; }
+}
+
+/* (옵션) 모바일 메뉴 펼침 시 여백 필요하면 사용 */
+.body-menu-open { margin-top: 24rem; }
+
+/* ========== Sections ========== */
+.stock_news {
+  border: none;
+  width: 75%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: 8px 12px 16px;
+}
+
+.main_about {
+  border: none;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  color: #000;
+}
+.main_about_img {
+  width: 75%;
+  height: 15rem;
+}
+
+/* ========== Pagination ========== */
+.inv-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+.inv-page {
+  background: #000;
+  color: #fff;
+  border: 1px solid #d4af37;   /* gold */
+  border-radius: 25px;
+  padding: 6px 12px;
+  min-width: 36px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  line-height: 1.2;
+}
+.inv-page:hover { filter: brightness(1.1); }
+.inv-page.active { background: #007bff; color: #fff; border-color: #ffc107; cursor: default; }
+.inv-page.disabled { opacity: .45; pointer-events: none; }
+
+/* ========== TradingView Widget ========== */
+.tradingview-widget-container,
+.tradingview-widget-container__widget,
+.tradingview-widget-container iframe {
+  width: 100% !important;
+  height: 540px !important;
+  min-height: 360px;
+}
+@media (max-width: 768px) {
+  .tradingview-widget-container,
+  .tradingview-widget-container__widget,
+  .tradingview-widget-container iframe {
+    height: 400px !important;
+  }
+}
+@media (max-width: 576px) {
+  .tradingview-widget-container,
+  .tradingview-widget-container__widget,
+  .tradingview-widget-container iframe {
+    height: 320px !important;
+  }
+}
+.tv-wrap {
+  width: 75%;
+  margin-inline: auto;
+  padding: 10px;
+}
+
+/* 16:9 비율 유지하면서 최대 높이 제한 (필요시에만) */
+.ratio-16x9 {
+  --bs-aspect-ratio: calc(540 / 960 * 100%);
+  max-height: 540px;
+}
+
+/* ========== Form Inputs ========== */
+.form-control {
+  background-color: #fff;
+  border: 1px solid #007bff;
+}
+.form-control:focus {
+  background-color: #ffffff;
+  border-color: #0056b3;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+main {
+    flex-grow: 1;
+}

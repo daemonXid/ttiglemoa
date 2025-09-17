@@ -1,0 +1,26 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="main_section flex-column mb-3">
+
+    <div class="tv-wrap">
+        {% include 'tm_begin/main_content/main_about.html' %}
+    </div>
+    
+
+    {% if user.is_authenticated %}
+
+
+        {% include 'tm_begin/main_content/stock_chart.html' %}
+
+    {% else %}
+
+
+        {% include 'tm_begin/main_content/stock_chart.html' %}
+        {% include 'tm_begin/main_content/stock_news_main.html' %}
+    
+    {% endif %}
+
+</div>
+{% endblock %}

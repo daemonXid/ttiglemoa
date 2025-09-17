@@ -1,0 +1,28 @@
+
+{% load static %}
+
+{% block content %}
+<div class="container my-5">
+  <div class="row align-items-center main_about">
+    
+    <!-- 왼쪽 텍스트 영역 -->
+    <div class="col-md-6 main_about_text">
+      <h1 class="fw-bold">Our Portfolio</h1>
+      
+      <p class="lead main_about_content_text">
+        Ttiglemoa는 당신의 금융 투자 포트폴리오를 보다 쉽게 관리하고 분석할 수 있도록 도와드립니다.
+        직관적이고 강력한 기능으로 당신의 자산을 지켜보세요.
+      </p>
+      <a href="{% url 'tm_begin:about' %}" class="btn btn-primary me-2">팀 소개</a>
+      <!-- <a href="{ url 'tm_begin:index' %}" class="btn btn-outline-secondary">홈으로</a> -->
+    </div>
+
+    <!-- 오른쪽 이미지 영역 -->
+    <div class="col-md-6 text-center main_about_img">
+      <img src="{% static 'images/main_page/human_computer.jpg' %}" 
+           alt="Portfolio illustration" class="img-fluid" style="max-height: 400px;">
+    </div>
+
+  </div>
+</div>
+{% endblock %}

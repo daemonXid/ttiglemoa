@@ -1,0 +1,27 @@
+{% extends 'common/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_tit %}티끌모아 온라인문의 페이지입니다.{% endblock page_tit %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-lg-10 col-md-12 col-sm-12">
+        <div class="card shadow-sm">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h1 class="h3 mb-3 fw-normal">온라인 문의</h1>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <div class="d-grid gap-2 mt-3">
+                        <button class="btn btn-primary" type="submit">저장</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'tm_mylink:inquiry_list' %}">취소</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

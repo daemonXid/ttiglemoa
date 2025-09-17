@@ -1,0 +1,36 @@
+{% extends 'common/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}회원가입 - Ttiglemoa{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+    <div class="col-lg-5 col-md-7 col-sm-10">
+        <div class="card shadow-sm">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus-fill" style="font-size: 3rem;"></i>
+                    <h1 class="h3 mb-3 fw-normal">회원가입</h1>
+                </div>
+                
+                <form method="post" action="{% url 'tm_account:signup' %}">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary w-100 mt-3">가입하기</button>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-dark w-100 disabled">
+                        <i class="bi bi-github me-2"></i> GitHub으로 가입 (준비중)
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer text-center py-3">
+                <small>이미 계정이 있으신가요? <a href="{% url 'tm_account:login' %}">로그인</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

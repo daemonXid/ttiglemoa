@@ -1,0 +1,66 @@
+    <div class="stock_news">
+        <h2>📰 주식 관련 뉴스</h2>
+        {% if updated_at %}<p class="inv-sub">업데이트: {{ updated_at|date:"Y-m-d H:i" }} ({{ count }}건)</p>{% endif %}
+
+        {% if news_list %}
+            <!-- 메인 히어로 뉴스 (상단 큰 카드) -->
+            {% with item=news_list.0 %}
+            <div class="inv-hero">
+                <div class="inv-hero-img">
+                    <a href="{{ item.link }}" target="_blank" rel="noopener">
+                        {% if item.img %}
+                            <img src="{{ item.img }}" alt="{{ item.title|striptags }}" />
+                        {% else %}
+                            <div class="no-image">
+                                <span>📈</span>
+                            </div>
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="inv-hero-content">
+                    <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-title-lg inv-hero-title">
+                        {{ item.title|striptags }}
+                    </a>
+                    {% if item.summary %}
+                    <p class="inv-desc inv-line-5">{{ item.summary|striptags }}</p>
+                    {% endif %}
+                    <div class="inv-meta">
+                        <time>{{ item.published }}</time>
+                        <span>{{ item.source }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endwith %}
+
+            <!-- 하단 4개 뉴스 그리드 -->
+            <div class="inv-row">
+                {% for item in news_list|slice:"1:5" %}
+                <div class="inv-card">
+                    <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-thumb">
+                        {% if item.img %}
+                            <img src="{{ item.img }}" alt="{{ item.title|striptags }}" />
+                        {% else %}
+                            <div class="no-image-small">
+                                <span>📰</span>
+                            </div>
+                        {% endif %}
+                    </a>
+                    <a href="{{ item.link }}" target="_blank" rel="noopener" class="inv-title inv-line-2">
+                        {{ item.title|striptags }}
+                    </a>
+                    <div class="inv-meta">
+                        <time>{{ item.published }}</time>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>표시할 뉴스가 없어요. 잠시 후 다시 시도해 주세요.</p>
+        {% endif %}
+
+        <div class="mt-2 text-end">
+            <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_begin:stock_news' %}">
+            더보기 →
+            </a>
+        </div>
+    </div>

@@ -1,0 +1,124 @@
+{# templates/common/footer.html #}
+{% load static %}
+
+<footer class="site-footer">
+  <div class="d-flex align-items-center mb-2">
+    <img src="{% static 'images/financial-profit.png' %}" alt="logo" height="28" class="me-2">
+    <strong class="brand">TTIGLEMOA</strong>
+    <div class="theme-switch-wrapper ms-auto"> {# Added ms-auto for right alignment within flexbox #}
+      <label class="theme-switch" for="theme-toggle-checkbox">
+        <input type="checkbox" id="theme-toggle-checkbox" />
+        <div class="slider round">
+          <i class="bi bi-sun-fill sun-icon"></i>
+          <i class="bi bi-moon-fill moon-icon"></i>
+        </div>
+      </label>
+    </div>
+  </div>
+  <div class="container py-5">
+    <div class="row g-4">
+      <div class="col-12 col-lg-3">
+        
+        
+        
+        <h6 class="footer-title">팀 멤버</h6>
+        <ul class="footer-links">
+
+            <li>
+                <a href="#">송원섭</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin-in"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-x-twitter"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-github"></i></a>
+                
+            </li>
+
+
+            <li>
+                <a href="#">우승백</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin-in"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-x-twitter"></i></i></a>
+                <a href="https://github.com/Dev-Nut00" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-github"></i></a>
+            </li>
+
+
+            <li>
+                <a href="#">임규현</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-x-twitter"></i></a>
+                <a href="https://github.com/thlim008" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-github"></i></i></a>
+            </li>
+
+            <li>
+                <a href="#">김기섭</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-instagram"></i></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-x-twitter"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-github"></i></i></a>
+            </li>
+
+
+            <li>
+                <a href="#">이기진</a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-square-x-twitter"></i></a>
+                <a href="#" class="link-light opacity-75 hover-opacity"><i class="fa-brands fa-github"></i></a>
+            </li>
+
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="footer-title">인기 마켓</h6>
+        <ul class="footer-links">
+          <li><a href="#">미국: 나스닥</a></li>
+          <li><a href="#">대한민국: 코스피</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="footer-title">투자 관점</h6>
+        <ul class="footer-links">
+          <li><a href="#">저평가주</a></li>
+          <li><a href="#">배당주</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-2">
+        <h6 class="footer-title">특징 & 기능</h6>
+        <ul class="footer-links">
+          <li><a href="#">차트분석</a></li>
+          <li><a href="#">인기분석</a></li>
+        </ul>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <h6 class="footer-title">Team : Ttiglemoa</h6>
+        <ul class="footer-links">
+          <li><a href="#">구독 & 가격</a></li>
+          <li><a href="{% url 'tm_begin:about' %}">팀 소개</a></li>
+          <li><a href="{% url 'tm_mylink:inquiry_write' %}">문의사항</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr class="footer-divider my-4">
+
+    <div class="row gy-3 small">
+      <div class="col-12 col-lg-8">
+        <div class="text-secondary">
+          본사이트는 학업을 위한 사이트입니다. © 2025 Ttiglemoa Pty Ltd. All rights reserved.
+          <a href="https://github.com/daemonXid/ttiglemoa" class="link-underline">깃허브 소스 </a>
+        </div>
+      </div>
+      <div class="col-12 col-lg-4 text-lg-end">
+        <a href="#" class="me-3">Financial Services Guide</a>
+        <a href="#" class="me-3">Terms & Conditions</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>

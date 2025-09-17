@@ -1,0 +1,54 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}내 프로필 - Ttiglemoa{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">내 프로필</h4>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            {% if user.profile_image %}
+                                                                <img src="{{ user.profile_image.url }}" onerror="this.onerror=null;this.src='{% static 'images/avatars/avatar1.svg' %}'" alt="User Profile Image" class="rounded-circle img-fluid mb-3" style="width: 120px; height: 120px; object-fit: cover;">
+
+                            {% else %}
+                                <img src="{% static 'tm_account/images/avatars/avatar1.svg' %}" alt="Default Avatar" class="rounded-circle img-fluid mb-3" style="width: 120px; height: 120px;">
+                            {% endif %}
+                        </div>
+                        <div class="col-md-9">
+                            <h3>{{ user.nickname }}</h3>
+                            <hr>
+                            <dl class="row">
+                                <dt class="col-sm-3">아이디</dt>
+                                <dd class="col-sm-9">{{ user.username }}</dd>
+
+                                <dt class="col-sm-3">이메일</dt>
+                                <dd class="col-sm-9">{{ user.email|default:"이메일 미등록" }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-dark p-3">
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'tm_account:profile_edit' %}" class="btn btn-primary">
+                            <i class="bi bi-pencil-square me-1"></i> 프로필 수정
+                        </a>
+                        <a href="{% url 'tm_account:password_change' %}" class="btn btn-secondary">
+                            <i class="bi bi-key-fill me-1"></i> 비밀번호 변경
+                        </a>
+                        <a href="{% url 'tm_account:account_delete' %}" class="btn btn-danger">
+                            <i class="bi bi-trash-fill me-1"></i> 회원 탈퇴
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

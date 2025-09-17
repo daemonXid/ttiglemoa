@@ -1,3 +1,71 @@
-from django.shortcuts import render
-
+from django.shortcuts import render,redirect,get_object_or_404
+from apps.tm_mylink.models import inquiry_db
+from .forms import MemoModelForm
+from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+def inquiry_list(request):
+    if request.user.is_authenticated:
+        # Logged-in user sees only their own inquiries
+        inquiry_dbs = inquiry_db.objects.filter(author=request.user)
+    else:
+        # Non-logged-in user sees all inquiries
+        inquiry_dbs = inquiry_db.objects.all()
+    
+    context = {
+        'inquiry_dbs': inquiry_dbs
+    }
+    return render(request, 'tm_mylink/inquiry_list.html', context)
+
+
+@login_required
+def inquiry_write(request) :
+    if request.method=='POST' :
+        form = MemoModelForm(request.POST)
+        if form.is_valid() :
+            inquiry=form.save(commit=False)
+            inquiry.author = request.user
+            inquiry.save()            
+            return redirect('tm_mylink:inquiry_list')
+            
+    else :
+        form = MemoModelForm()
+
+    context ={
+        'form':form
+    }
+    return render(request, 'tm_mylink/inquiry.html', context)
+    
+
+@login_required
+def inquiry_detail(request, pk) :
+    inquiry_dbs = get_object_or_404(inquiry_db, pk=pk)
+    context ={
+        'inquiry_dbs':inquiry_dbs
+    }
+    return render(request, 'tm_mylink/inquiry_detail.html', context)
+
+@login_required
+def inquiry_edit(request, pk) :    
+    inquiry_dbs = get_object_or_404(inquiry_db, pk=pk)
+    
+    if request.method =='POST' :        
+        form = MemoModelForm(request.POST, instance=inquiry_dbs)                
+        if form.is_valid() :
+            form.save()
+            return redirect('tm_mylink:inquiry_detail',pk=pk)
+    else :
+        form = MemoModelForm(instance=inquiry_dbs)
+        context ={
+            'form':form
+        }
+        return render(request, 'tm_mylink/inquiry_edit.html', context)
+
+@login_required
+def inquiry_delete(request, pk) :
+    inquiry_dbs = get_object_or_404(inquiry_db, pk=pk)
+    if request.method=='POST' :
+        inquiry_dbs.delete()
+        return redirect('tm_mylink:inquiry_list')
+    else : 
+        return redirect('tm_mylink:inquiry_detail',pk=pk)

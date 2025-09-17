@@ -1,0 +1,39 @@
+{% extends 'common/base.html' %}
+
+{% block page_tit %}티끌모아 온라인문의 리스트 페이지입니다.{% endblock page_tit %}
+
+{% block content %}
+<div class="inquiry-list-page">
+  <h2 class="text-center mb-4">온라인문의</h2>
+  <div class="d-flex justify-content-end mb-3">
+    <a href="{% url 'tm_mylink:inquiry_write' %}" class="btn btn-primary">글쓰기</a>
+  </div>
+
+  <div class="row">
+    {% if inquiry_dbs %}
+      {% for inquiry_db in inquiry_dbs %}
+      <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card h-100 list-item-card">
+              <div class="card-body">
+                  <h5 class="card-title">{{ inquiry_db.user_title }}</h5>
+                  <p class="card-text text-muted">{{ inquiry_db.user_content }}</p>
+                  <p class="card-text"><small class="text-muted">작성일: {{ inquiry_db.userinquiry_at }}</small></p>
+
+                  {% if user.is_authenticated %}
+                  <a href="{% url 'tm_mylink:inquiry_detail' inquiry_db.pk %}" class="btn btn-outline-primary mt-2">상세 보기</a>
+                  {% endif %}
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+      
+      {% else %}
+      <div class="col-12">
+          <p class="text-muted text-center">등록된 문의가 없습니다.</p>
+      </div>
+      {% endif %}
+  </div>
+</div>
+        
+
+{% endblock content %}

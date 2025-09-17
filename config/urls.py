@@ -16,8 +16,20 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # develop 기준: allauth는 /accounts/, tm_account는 /my-account/
+    path('accounts/', include('allauth.urls')),
+    path('my-account/', include('apps.tm_account.urls')),
+    path('', include('apps.tm_begin.urls')),
+    path('inquiry/', include('apps.tm_mylink.urls')),
+    # tm_assets는 별도 네임스페이스로 포함해 템플릿 역참조 안정성 확보
+    path('assets/', include(('apps.tm_assets.urls', 'tm_assets'), namespace='tm_assets')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

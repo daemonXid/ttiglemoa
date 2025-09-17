@@ -1,0 +1,36 @@
+:root {
+  --bs-primary: var(--link-color);
+  --bs-secondary: #6c757d;
+  --bs-success: #ffc107; /* yellow */
+  --bs-info: #0dcaf0;
+  --bs-warning: #ffc107; /* yellow */
+  --bs-danger: #ffc107; /* yellow */
+  --bs-light: #f8f9fa;
+  --bs-dark: #212529;
+}
+
+.btn-primary {
+  background-color: var(--link-color);
+  border-color: var(--link-color);
+}
+
+.btn-outline-primary {
+  color: var(--link-color);
+  border-color: var(--link-color);
+}
+
+
+
+
+
+.btn-secondary {
+    background-color: var(--link-color);
+    border-color: var(--link-color);
+}
+
+.btn-outline-secondary {
+    color: var(--link-color);
+    border-color: var(--link-color);
+}
+
+

@@ -1,0 +1,67 @@
+{% extends 'common/base.html' %}
+
+{% block title %}예적금 상세 | Ttiglemoa{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">예적금 상세</h2>
+  <div class="btn-group">
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'tm_assets:create_deposit' %}">예적금 추가</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div><strong>총합:</strong> {{ total|floatformat:0 }}</div>
+      <div><strong>변동합계:</strong> {{ change_sum|floatformat:0 }}</div>
+    </div>
+    {% if deposits %}
+      <div class="table-responsive">
+        <table class="table table-sm align-middle">
+          <thead>
+            <tr>
+              <th>유형</th>
+              <th>은행</th>
+              <th>상품명</th>
+              <th>원금</th>
+              <th>연이율(%)</th>
+              <th>복리</th>
+              <th>시작일</th>
+              <th>만기</th>
+              <th>평가액</th>
+              <th>변동</th>
+              <th>통화</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for d in deposits %}
+              <tr>
+                <td>{{ d.get_product_type_display }}</td>
+                <td>{{ d.bank_name }}</td>
+                <td>{{ d.product_name }}</td>
+                <td>{{ d.principal_amount }}</td>
+                <td>{{ d.annual_rate }}</td>
+                <td>{{ d.get_compounding_display }}</td>
+                <td>{{ d.start_date }}</td>
+                <td>{{ d.maturity_date|default:'-' }}</td>
+                <td>{{ d.estimated_value|floatformat:0 }}</td>
+                <td>
+                  {% with lc=d.get_last_change %}
+                    {% if lc.0 is not None %}
+                      <span class="{% if lc.0 > 0 %}text-danger{% elif lc.0 < 0 %}text-primary{% else %}text-muted{% endif %}">{{ lc.0|floatformat:0 }}</span>
+                    {% else %}-{% endif %}
+                  {% endwith %}
+                </td>
+                <td>{{ d.currency }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    {% else %}
+      <p class="text-muted mb-0">등록된 예적금이 없습니다.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

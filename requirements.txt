@@ -15,11 +15,13 @@ click-default-group==1.2.4
 colorama==0.4.6
 coloredlogs==15.0.1
 ConfigArgParse==1.7
+crispy-bootstrap5==2025.6
 cryptography==44.0.2
 deepl==1.21.1
 Deprecated==1.2.18
 distro==1.9.0
 Django==5.2.6
+django-crispy-forms==2.4
 docformatter==1.7.5
 fastapi==0.115.11
 ffmpy==0.5.0
@@ -115,3 +117,16 @@ wheel==0.45.1
 wrapt==1.17.2
 xinference-client==1.3.1.post1
 xsdata==24.12
+feedparser==6.0.11 # 네이버나 구글 뉴스 rss 방식을로 파서 하는 라이브러리 
+beautifulsoup4==4.13.5 # html이나 xml에서 데이터 추출하는 라이브러리
+finance-datareader>=0.9.90
+pykrx>=1.0.47
+
+# Production dependencies
+gunicorn
+psycopg2-binary
+dj-database-url
+whitenoise
+python-dotenv
+boto3
+django-storages

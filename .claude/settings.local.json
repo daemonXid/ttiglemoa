@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "mcp__render__list_logs",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "mcp__render__get_service",
+      "mcp__render__update_web_service"
     ],
     "deny": [],
     "ask": []

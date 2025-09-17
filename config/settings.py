@@ -183,6 +183,7 @@ MEDIA_ROOT = BASE_DIR / 'media' # Keep for local development if needed
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'tm_account.User'  # 커스텀 유저 모델 사용
+LOGIN_URL = '/my-account/login/'  # 로그인 페이지 URL
 LOGIN_REDIRECT_URL = '/' # 로그인 성공 후 리디렉션될 URL
 
 # Crispy Forms Settings

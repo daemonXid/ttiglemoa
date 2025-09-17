@@ -10,17 +10,12 @@
     
 
     {% if user.is_authenticated %}
-        <!-- <div class="tv-wrap">
-            <div>로그인후 포트폴리오 종합</div>
-        </div> -->
+
 
         {% include 'tm_begin/main_content/stock_chart.html' %}
 
     {% else %}
 
-        <!-- <div class="main_about">
-            <img src="{% static 'images/main_page/ChatGPT.png' %}" alt="" class="main_about_img">
-        </div> -->
 
         {% include 'tm_begin/main_content/stock_chart.html' %}
         {% include 'tm_begin/main_content/stock_news_main.html' %}

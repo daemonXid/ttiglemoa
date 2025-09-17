@@ -7,6 +7,7 @@ tzdata==2025.1
 # Django extensions
 django-crispy-forms==2.4
 crispy-bootstrap5==2025.6
+django-allauth==0.67.1
 
 # Finance data libraries
 feedparser==6.0.11

@@ -3,8 +3,12 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
+from django.utils import timezone
+from django.db.models import Q
 
 import json
+from datetime import timedelta, date
+from collections import defaultdict
 
 from .forms import DepositSavingForm, StockHoldingForm, BondHoldingForm
 from .models import (
@@ -12,10 +16,79 @@ from .models import (
     StockHolding,
     BondHolding,
     DepositValueHistory,
+    StockPriceHistory,
+    BondPriceHistory,
     stock_last_change,
     bond_last_change,
     deposit_last_change,
 )
+
+
+def get_portfolio_history(user, days=90):
+    """사용자의 포트폴리오 히스토리 데이터를 생성합니다."""
+    end_date = timezone.localdate()
+    start_date = end_date - timedelta(days=days)
+
+    # 사용자의 모든 자산 조회
+    deposits = DepositSaving.objects.filter(user=user)
+    stocks = StockHolding.objects.filter(user=user)
+    bonds = BondHolding.objects.filter(user=user)
+
+    # 히스토리 데이터 조회
+    deposit_histories = DepositValueHistory.objects.filter(
+        deposit__user=user,
+        recorded_at__date__gte=start_date
+    ).order_by('recorded_at')
+
+    stock_histories = StockPriceHistory.objects.filter(
+        stock__user=user,
+        recorded_at__date__gte=start_date
+    ).order_by('recorded_at')
+
+    bond_histories = BondPriceHistory.objects.filter(
+        bond__user=user,
+        recorded_at__date__gte=start_date
+    ).order_by('recorded_at')
+
+    # 날짜별 데이터 집계
+    daily_data = defaultdict(lambda: {
+        'deposit_value': 0,
+        'stock_value': 0,
+        'bond_value': 0,
+        'total_value': 0
+    })
+
+    # 예적금 히스토리 처리
+    for history in deposit_histories:
+        day = history.recorded_at.date()
+        daily_data[day]['deposit_value'] += float(history.value)
+
+    # 주식 히스토리 처리
+    for history in stock_histories:
+        day = history.recorded_at.date()
+        stock_value = float(history.price) * float(history.stock.quantity)
+        daily_data[day]['stock_value'] += stock_value
+
+    # 채권 히스토리 처리
+    for history in bond_histories:
+        day = history.recorded_at.date()
+        bond_value = float(history.bond.face_amount) * (float(history.price_pct) / 100)
+        daily_data[day]['bond_value'] += bond_value
+
+    # 총합 계산 및 정렬
+    portfolio_history = []
+    for day in sorted(daily_data.keys()):
+        data = daily_data[day]
+        data['total_value'] = data['deposit_value'] + data['stock_value'] + data['bond_value']
+        portfolio_history.append({
+            'date': day.isoformat(),
+            'deposit_value': round(data['deposit_value'], 2),
+            'stock_value': round(data['stock_value'], 2),
+            'bond_value': round(data['bond_value'], 2),
+            'total_value': round(data['total_value'], 2)
+        })
+
+    return portfolio_history
 
 
 @login_required
@@ -46,12 +119,16 @@ def portfolio_index(request):
         add_c(totals_by_currency, b.currency, val)
         class_totals["BOND"] += float(val)
 
+    # 포트폴리오 히스토리 데이터 생성
+    portfolio_history = get_portfolio_history(request.user, days=90)
+
     context = {
         "deposits": deposits,
         "stocks": stocks,
         "bonds": bonds,
         "totals_by_currency": totals_by_currency,
         "class_totals": class_totals,
+        "portfolio_history": portfolio_history,
     }
     return render(request, "tm_assets/portfolio.html", context)
 

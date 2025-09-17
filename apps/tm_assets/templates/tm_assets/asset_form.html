@@ -1,0 +1,106 @@
+{% extends 'common/base.html' %}
+{% load static %}
+
+{% block title %}
+  {% if action == 'create' %}
+    {{ asset_name }} 추가 | Ttiglemoa
+  {% else %}
+    {{ asset_name }} 수정 | Ttiglemoa
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            {% if action == 'create' %}
+              {{ asset_name }} 추가
+            {% else %}
+              {{ asset_name }} 수정
+            {% endif %}
+          </h4>
+          <a href="{% url 'tm_assets:portfolio' %}" class="btn btn-outline-secondary btn-sm">
+            목록으로
+          </a>
+        </div>
+
+        <div class="card-body">
+          <form method="post" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+              <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+              </div>
+            {% endif %}
+
+            <div class="row">
+              {% for field in form %}
+                <div class="col-md-6 mb-3">
+                  <label for="{{ field.id_for_label }}" class="form-label">
+                    {{ field.label }}
+                    {% if field.field.required %}
+                      <span class="text-danger">*</span>
+                    {% endif %}
+                  </label>
+
+                  {% if field.field.widget.input_type == 'select' %}
+                    <select name="{{ field.name }}" id="{{ field.id_for_label }}"
+                            class="form-select{% if field.errors %} is-invalid{% endif %}"
+                            {{ field.field.widget.attrs|default:"" }}>
+                      {% for value, label in field.field.choices %}
+                        <option value="{{ value }}" {% if field.value == value %}selected{% endif %}>
+                          {{ label }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                  {% elif field.field.widget.input_type == 'textarea' %}
+                    <textarea name="{{ field.name }}" id="{{ field.id_for_label }}"
+                              class="form-control{% if field.errors %} is-invalid{% endif %}"
+                              rows="3" {{ field.field.widget.attrs|default:"" }}>{{ field.value|default:"" }}</textarea>
+                  {% else %}
+                    <input type="{{ field.field.widget.input_type|default:'text' }}"
+                           name="{{ field.name }}"
+                           id="{{ field.id_for_label }}"
+                           class="form-control{% if field.errors %} is-invalid{% endif %}"
+                           value="{{ field.value|default:"" }}"
+                           {% for attr, value in field.field.widget.attrs.items %}
+                             {{ attr }}="{{ value }}"
+                           {% endfor %}>
+                  {% endif %}
+
+                  {% if field.help_text %}
+                    <div class="form-text">{{ field.help_text }}</div>
+                  {% endif %}
+
+                  {% if field.errors %}
+                    <div class="invalid-feedback">
+                      {{ field.errors.0 }}
+                    </div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+
+            <div class="d-flex justify-content-between">
+              <a href="{% url 'tm_assets:portfolio' %}" class="btn btn-secondary">
+                취소
+              </a>
+              <button type="submit" class="btn btn-primary">
+                {% if action == 'create' %}
+                  추가하기
+                {% else %}
+                  수정하기
+                {% endif %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

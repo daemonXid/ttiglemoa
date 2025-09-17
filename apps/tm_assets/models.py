@@ -107,7 +107,7 @@ class DepositSaving(TimeStampedModel):
         return round(value, 2)
 
     def get_last_change(self):
-        from .models import deposit_last_change  # local import to avoid cyc.
+        """최근 변동값과 변동률을 반환합니다."""
         delta, pct = deposit_last_change(self)
         return delta, pct
 
@@ -145,6 +145,11 @@ class StockHolding(TimeStampedModel):
         """매수 총액 (평단가 * 수량)"""
         return self.average_price * self.quantity
 
+    def get_last_change(self):
+        """최근 변동값과 변동률을 반환합니다."""
+        delta, pct = stock_last_change(self)
+        return delta, pct
+
     def update_price_via_fdr(self):
         """FinanceDataReader로 최신 종가 조회 후 current_price 업데이트.
         시장 구분은 보조정보로 사용하며, FDR은 KR/US를 모두 지원.
@@ -152,24 +157,21 @@ class StockHolding(TimeStampedModel):
         """
         try:
             import FinanceDataReader as fdr
-        except Exception:
+        except ImportError:
             return False
-
-    def get_last_change(self):
-        from .models import stock_last_change
-        delta, pct = stock_last_change(self)
-        return delta, pct
 
         try:
             df = fdr.DataReader(self.ticker)
             if df is None or df.empty:
                 return False
+
             # 종가 컬럼 우선
             close = df["Close"].iloc[-1]
-            prev_price = self.current_price
             self.current_price = close
             self.last_price_updated_at = timezone.now()
             self.save(update_fields=["current_price", "last_price_updated_at", "updated_at"])
+
+            # 히스토리 저장
             try:
                 StockPriceHistory.objects.create(
                     stock=self,
@@ -221,6 +223,11 @@ class BondHolding(TimeStampedModel):
         )
         return self.face_amount * (price_pct / 100)
 
+    def get_last_change(self):
+        """최근 변동값과 변동률을 반환합니다."""
+        delta_pct, pct = bond_last_change(self)
+        return delta_pct, pct
+
     def update_price_via_pykrx(self):
         """pykrx로 채권 현재가(%)를 업데이트. KRX 코드가 필요할 수 있음.
         구현은 가용 엔드포인트에 따라 단순화.
@@ -228,22 +235,15 @@ class BondHolding(TimeStampedModel):
         """
         try:
             from pykrx import bond
-        except Exception:
+        except ImportError:
             return False
-
-    def get_last_change(self):
-        from .models import bond_last_change
-        delta_pct, pct = bond_last_change(self)
-        return delta_pct, pct
 
         code = self.bond_code or None
         if not code:
             return False
 
         try:
-            # 예시: 일별 시세 DataFrame을 받아 마지막 값 사용 (엔드포인트는 환경에 맞게 조정)
-            # 실제 사용 가능한 API는 pykrx 버전에 따라 다를 수 있습니다.
-            # 존재하지 않으면 False 반환
+            # 일별 시세 DataFrame을 받아 마지막 값 사용
             today = timezone.localdate().strftime("%Y%m%d")
             try:
                 df = bond.get_bond_ohlcv_by_date(today, today, code)
@@ -261,6 +261,8 @@ class BondHolding(TimeStampedModel):
                     self.current_price_pct = val
                     self.last_price_updated_at = timezone.now()
                     self.save(update_fields=["current_price_pct", "last_price_updated_at", "updated_at"])
+
+                    # 히스토리 저장
                     try:
                         BondPriceHistory.objects.create(
                             bond=self,

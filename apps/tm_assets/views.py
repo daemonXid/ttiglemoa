@@ -1,14 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseForbidden, HttpResponseNotAllowed
 from django.utils import timezone
 from django.db.models import Q
+from django.views.generic import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 import json
 from datetime import timedelta, date
 from collections import defaultdict
+from typing import Dict, List, Any, Tuple
 
 from .forms import DepositSavingForm, StockHoldingForm, BondHoldingForm
 from .models import (
@@ -24,8 +28,16 @@ from .models import (
 )
 
 
-def get_portfolio_history(user, days=90):
-    """사용자의 포트폴리오 히스토리 데이터를 생성합니다."""
+def get_portfolio_history(user, days: int = 90) -> List[Dict[str, Any]]:
+    """사용자의 포트폴리오 히스토리 데이터를 생성합니다.
+
+    Args:
+        user: Django User 인스턴스
+        days: 히스토리를 조회할 일수 (기본 90일)
+
+    Returns:
+        날짜별 자산 가치 히스토리 리스트
+    """
     end_date = timezone.localdate()
     start_date = end_date - timedelta(days=days)
 
@@ -111,33 +123,58 @@ def get_portfolio_history(user, days=90):
     return portfolio_history
 
 
+def calculate_asset_totals(user) -> Tuple[Dict[str, float], Dict[str, float]]:
+    """사용자의 자산 합계를 계산합니다.
+
+    Returns:
+        (통화별 합계, 자산 클래스별 합계) 튜플
+    """
+    # 한 번의 쿼리로 모든 데이터 가져오기 (select_related 없이도 외래키 참조 없음)
+    deposits = DepositSaving.objects.filter(user=user).only(
+        'currency', 'principal_amount', 'annual_rate', 'compounding',
+        'start_date', 'maturity_date', 'current_value_manual'
+    )
+    stocks = StockHolding.objects.filter(user=user).only(
+        'currency', 'quantity', 'average_price', 'current_price'
+    )
+    bonds = BondHolding.objects.filter(user=user).only(
+        'currency', 'face_amount', 'purchase_price_pct', 'current_price_pct'
+    )
+
+    totals_by_currency = defaultdict(float)
+    class_totals = {"CASH": 0.0, "STOCK": 0.0, "BOND": 0.0}
+
+    # 예적금 집계
+    for deposit in deposits:
+        val = float(deposit.estimated_value())
+        totals_by_currency[deposit.currency] += val
+        class_totals["CASH"] += val
+
+    # 주식 집계
+    for stock in stocks:
+        val = float(stock.estimated_value())
+        totals_by_currency[stock.currency] += val
+        class_totals["STOCK"] += val
+
+    # 채권 집계
+    for bond in bonds:
+        val = float(bond.estimated_value())
+        totals_by_currency[bond.currency] += val
+        class_totals["BOND"] += val
+
+    return dict(totals_by_currency), class_totals
+
+
 @login_required
 def portfolio_index(request):
+    """포트폴리오 메인 페이지"""
+    # 자산 데이터 조회 (성능 최적화를 위해 order_by 적용)
     deposits = DepositSaving.objects.filter(user=request.user).order_by("-created_at")
     stocks = StockHolding.objects.filter(user=request.user).order_by("-created_at")
     bonds = BondHolding.objects.filter(user=request.user).order_by("-created_at")
 
-    # 통화별 합계 계산 (간단 집계)
-    def add_c(map_, currency, amount):
-        map_[currency] = map_.get(currency, 0) + float(amount)
-
-    totals_by_currency = {}
-    class_totals = {"CASH": 0.0, "STOCK": 0.0, "BOND": 0.0}
-
-    for d in deposits:
-        val = d.estimated_value()
-        add_c(totals_by_currency, d.currency, val)
-        class_totals["CASH"] += float(val)
-
-    for s in stocks:
-        val = s.estimated_value()
-        add_c(totals_by_currency, s.currency, val)
-        class_totals["STOCK"] += float(val)
-
-    for b in bonds:
-        val = b.estimated_value()
-        add_c(totals_by_currency, b.currency, val)
-        class_totals["BOND"] += float(val)
+    # 통화별 및 자산 클래스별 합계 계산
+    totals_by_currency, class_totals = calculate_asset_totals(request.user)
 
     # 포트폴리오 히스토리 데이터 생성
     portfolio_history = get_portfolio_history(request.user, days=90)
@@ -153,142 +190,158 @@ def portfolio_index(request):
     return render(request, "tm_assets/portfolio.html", context)
 
 
-@login_required
-def create_deposit(request):
+# =============================================================================
+# 공통 CRUD 헬퍼 함수들
+# =============================================================================
+
+def _get_asset_config(asset_type: str) -> Dict[str, Any]:
+    """자산 타입별 설정을 반환합니다."""
+    configs = {
+        'deposit': {
+            'model': DepositSaving,
+            'form': DepositSavingForm,
+            'template': 'tm_assets/asset_form.html',
+            'name': '예적금',
+        },
+        'stock': {
+            'model': StockHolding,
+            'form': StockHoldingForm,
+            'template': 'tm_assets/asset_form.html',
+            'name': '주식',
+        },
+        'bond': {
+            'model': BondHolding,
+            'form': BondHoldingForm,
+            'template': 'tm_assets/asset_form.html',
+            'name': '채권',
+        }
+    }
+    return configs.get(asset_type, {})
+
+
+def _create_asset(request, asset_type: str):
+    """공통 자산 생성 뷰"""
+    config = _get_asset_config(asset_type)
+    if not config:
+        return HttpResponseForbidden()
+
     if request.method == "POST":
-        form = DepositSavingForm(request.POST)
+        form = config['form'](request.POST)
         if form.is_valid():
             obj = form.save(commit=False)
             obj.user = request.user
             obj.save()
-            messages.success(request, "예적금 항목이 추가되었습니다.")
+            messages.success(request, f"{config['name']} 항목이 추가되었습니다.")
             return redirect(reverse("tm_assets:portfolio"))
     else:
-        form = DepositSavingForm()
-    return render(request, "tm_assets/deposit_form.html", {"form": form})
+        form = config['form']()
+
+    context = {
+        'form': form,
+        'asset_type': asset_type,
+        'asset_name': config['name'],
+        'action': 'create'
+    }
+    return render(request, config['template'], context)
+
+
+def _edit_asset(request, asset_type: str, pk: int):
+    """공통 자산 수정 뷰"""
+    config = _get_asset_config(asset_type)
+    if not config:
+        return HttpResponseForbidden()
+
+    obj = get_object_or_404(config['model'], pk=pk, user=request.user)
+
+    if request.method == "POST":
+        form = config['form'](request.POST, instance=obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"{config['name']} 항목이 수정되었습니다.")
+            return redirect(reverse("tm_assets:portfolio"))
+    else:
+        form = config['form'](instance=obj)
+
+    context = {
+        'form': form,
+        'asset_type': asset_type,
+        'asset_name': config['name'],
+        'action': 'edit',
+        'object': obj
+    }
+    return render(request, config['template'], context)
+
+
+def _delete_asset(request, asset_type: str, pk: int):
+    """공통 자산 삭제 뷰"""
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    config = _get_asset_config(asset_type)
+    if not config:
+        return HttpResponseForbidden()
+
+    obj = get_object_or_404(config['model'], pk=pk, user=request.user)
+    obj.delete()
+    messages.success(request, f"{config['name']} 항목이 삭제되었습니다.")
+    return redirect(reverse("tm_assets:portfolio"))
+
+
+# =============================================================================
+# 예적금 뷰들
+# =============================================================================
+
+@login_required
+def create_deposit(request):
+    return _create_asset(request, 'deposit')
 
 
 @login_required
 def edit_deposit(request, pk):
-    try:
-        obj = DepositSaving.objects.get(pk=pk, user=request.user)
-    except DepositSaving.DoesNotExist:
-        return HttpResponseForbidden()
-
-    if request.method == "POST":
-        form = DepositSavingForm(request.POST, instance=obj)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "예적금 항목이 수정되었습니다.")
-            return redirect(reverse("tm_assets:portfolio"))
-    else:
-        form = DepositSavingForm(instance=obj)
-    return render(request, "tm_assets/deposit_form.html", {"form": form})
+    return _edit_asset(request, 'deposit', pk)
 
 
 @login_required
 def delete_deposit(request, pk):
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"]) 
-    try:
-        obj = DepositSaving.objects.get(pk=pk, user=request.user)
-    except DepositSaving.DoesNotExist:
-        return HttpResponseForbidden()
-    obj.delete()
-    messages.success(request, "예적금 항목이 삭제되었습니다.")
-    return redirect(reverse("tm_assets:portfolio"))
+    return _delete_asset(request, 'deposit', pk)
 
+
+# =============================================================================
+# 주식 뷰들
+# =============================================================================
 
 @login_required
 def create_stock(request):
-    if request.method == "POST":
-        form = StockHoldingForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.save()
-            messages.success(request, "주식 보유내역이 추가되었습니다.")
-            return redirect(reverse("tm_assets:portfolio"))
-    else:
-        form = StockHoldingForm()
-    return render(request, "tm_assets/stock_form.html", {"form": form})
+    return _create_asset(request, 'stock')
 
 
 @login_required
 def edit_stock(request, pk):
-    try:
-        obj = StockHolding.objects.get(pk=pk, user=request.user)
-    except StockHolding.DoesNotExist:
-        return HttpResponseForbidden()
-
-    if request.method == "POST":
-        form = StockHoldingForm(request.POST, instance=obj)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "주식 보유내역이 수정되었습니다.")
-            return redirect(reverse("tm_assets:portfolio"))
-    else:
-        form = StockHoldingForm(instance=obj)
-    return render(request, "tm_assets/stock_form.html", {"form": form})
+    return _edit_asset(request, 'stock', pk)
 
 
 @login_required
 def delete_stock(request, pk):
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"]) 
-    try:
-        obj = StockHolding.objects.get(pk=pk, user=request.user)
-    except StockHolding.DoesNotExist:
-        return HttpResponseForbidden()
-    obj.delete()
-    messages.success(request, "주식 보유내역이 삭제되었습니다.")
-    return redirect(reverse("tm_assets:portfolio"))
+    return _delete_asset(request, 'stock', pk)
 
+
+# =============================================================================
+# 채권 뷰들
+# =============================================================================
 
 @login_required
 def create_bond(request):
-    if request.method == "POST":
-        form = BondHoldingForm(request.POST)
-        if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user = request.user
-            obj.save()
-            messages.success(request, "채권 보유내역이 추가되었습니다.")
-            return redirect(reverse("tm_assets:portfolio"))
-    else:
-        form = BondHoldingForm()
-    return render(request, "tm_assets/bond_form.html", {"form": form})
+    return _create_asset(request, 'bond')
 
 
 @login_required
 def edit_bond(request, pk):
-    try:
-        obj = BondHolding.objects.get(pk=pk, user=request.user)
-    except BondHolding.DoesNotExist:
-        return HttpResponseForbidden()
-
-    if request.method == "POST":
-        form = BondHoldingForm(request.POST, instance=obj)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "채권 보유내역이 수정되었습니다.")
-            return redirect(reverse("tm_assets:portfolio"))
-    else:
-        form = BondHoldingForm(instance=obj)
-    return render(request, "tm_assets/bond_form.html", {"form": form})
+    return _edit_asset(request, 'bond', pk)
 
 
 @login_required
 def delete_bond(request, pk):
-    if request.method != "POST":
-        return HttpResponseNotAllowed(["POST"]) 
-    try:
-        obj = BondHolding.objects.get(pk=pk, user=request.user)
-    except BondHolding.DoesNotExist:
-        return HttpResponseForbidden()
-    obj.delete()
-    messages.success(request, "채권 보유내역이 삭제되었습니다.")
-    return redirect(reverse("tm_assets:portfolio"))
+    return _delete_asset(request, 'bond', pk)
 
 
 @login_required

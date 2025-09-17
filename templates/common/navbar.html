@@ -32,16 +32,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'tm_begin:stock_news' %}">뉴스</a>
         </li>
-        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'tm_mylink:inquiry_list' %}">문의하기</a>
         </li>
-        
-        {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'tm_mylink:inquiry_list_all' %}">문의하기</a>
-        </li>
-        {% endif %}
       </ul>
 
       <form class="d-flex" action="{% url 'tm_begin:search' %}" method="get">

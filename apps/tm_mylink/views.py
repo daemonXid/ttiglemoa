@@ -4,18 +4,16 @@ from .forms import MemoModelForm
 from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-def inquiry_list_all(request) :
-    inquiry_dbs = inquiry_db.objects.all()
+def inquiry_list(request):
+    if request.user.is_authenticated:
+        # Logged-in user sees only their own inquiries
+        inquiry_dbs = inquiry_db.objects.filter(author=request.user)
+    else:
+        # Non-logged-in user sees all inquiries
+        inquiry_dbs = inquiry_db.objects.all()
+    
     context = {
-        'inquiry_dbs':inquiry_dbs
-    }
-    return render (request,'tm_mylink/inquiry_list_all.html',context )
-
-@login_required
-def inquiry_list(request) :
-    inquiry_dbs = inquiry_db.objects.filter(author=request.user)
-    context = {
-        'inquiry_dbs':inquiry_dbs
+        'inquiry_dbs': inquiry_dbs
     }
     return render(request, 'tm_mylink/inquiry_list.html', context)
 
@@ -25,16 +23,17 @@ def inquiry_write(request) :
     if request.method=='POST' :
         form = MemoModelForm(request.POST)
         if form.is_valid() :
-            inquiry_db=form.save(commit=False)
-            inquiry_db.author = request.user
-            inquiry_db.save()            
+            inquiry=form.save(commit=False)
+            inquiry.author = request.user
+            inquiry.save()            
             return redirect('tm_mylink:inquiry_list')
             
     else :
         form = MemoModelForm()
-        context ={
-            'form':form
-        }
+
+    context ={
+        'form':form
+    }
     return render(request, 'tm_mylink/inquiry.html', context)
     
 

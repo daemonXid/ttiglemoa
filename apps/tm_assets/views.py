@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 import json
 from datetime import timedelta, date
 from collections import defaultdict
-from typing import Dict, List, Any, Tuple
+from typing import Dict, List, Any, Tuple, Optional
 from decimal import Decimal
 
 from .forms import DepositSavingForm, StockHoldingForm, BondHoldingForm
@@ -40,7 +40,7 @@ def _valuation_class(current, baseline):
     return ""
 
 
-def get_portfolio_history(user, days: int = 90) -> List[Dict[str, Any]]:
+def get_portfolio_history(user, days: Optional[int] = None) -> List[Dict[str, Any]]:
     """사용자의 포트폴리오 히스토리 데이터를 생성합니다.
 
     Args:
@@ -51,28 +51,24 @@ def get_portfolio_history(user, days: int = 90) -> List[Dict[str, Any]]:
         날짜별 자산 가치 히스토리 리스트
     """
     end_date = timezone.localdate()
-    start_date = end_date - timedelta(days=days)
+    start_date = end_date - timedelta(days=days) if days is not None else None
 
-    # 사용자의 모든 자산 조회
     deposits = DepositSaving.objects.filter(user=user)
     stocks = StockHolding.objects.filter(user=user)
     bonds = BondHolding.objects.filter(user=user)
 
-    # 히스토리 데이터 조회
-    deposit_histories = DepositValueHistory.objects.filter(
-        deposit__user=user,
-        recorded_at__date__gte=start_date
-    ).order_by('recorded_at')
+    deposit_histories = DepositValueHistory.objects.filter(deposit__user=user)
+    stock_histories = StockPriceHistory.objects.filter(stock__user=user)
+    bond_histories = BondPriceHistory.objects.filter(bond__user=user)
 
-    stock_histories = StockPriceHistory.objects.filter(
-        stock__user=user,
-        recorded_at__date__gte=start_date
-    ).order_by('recorded_at')
+    if start_date is not None:
+        deposit_histories = deposit_histories.filter(recorded_at__date__gte=start_date)
+        stock_histories = stock_histories.filter(recorded_at__date__gte=start_date)
+        bond_histories = bond_histories.filter(recorded_at__date__gte=start_date)
 
-    bond_histories = BondPriceHistory.objects.filter(
-        bond__user=user,
-        recorded_at__date__gte=start_date
-    ).order_by('recorded_at')
+    deposit_histories = deposit_histories.order_by('recorded_at')
+    stock_histories = stock_histories.order_by('recorded_at')
+    bond_histories = bond_histories.order_by('recorded_at')
 
     # 날짜별 데이터 집계
     daily_data = defaultdict(lambda: {
@@ -107,9 +103,9 @@ def get_portfolio_history(user, days: int = 90) -> List[Dict[str, Any]]:
 
         # 지난 30일간 샘플 데이터 생성 (약간의 변동 추가)
         import random
-        for i in range(min(days, 30)):
+        sample_days = min(days, 30) if days is not None else 30
+        for i in range(sample_days):
             sample_date = end_date - timedelta(days=i)
-            # 약간의 랜덤 변동 (±5%) 추가
             variation = 1 + (random.random() - 0.5) * 0.1  # -5% ~ +5%
 
             daily_data[sample_date] = {
@@ -204,7 +200,7 @@ def portfolio_index(request):
         bond.valuation_class = _valuation_class(estimated_total, purchase_total)
 
     totals_by_currency, class_totals = calculate_asset_totals(request.user)
-    portfolio_history = get_portfolio_history(request.user, days=90)
+    portfolio_history = get_portfolio_history(request.user, days=None)
 
     context = {
         "deposits": deposits,
@@ -213,6 +209,7 @@ def portfolio_index(request):
         "totals_by_currency": totals_by_currency,
         "class_totals": class_totals,
         "portfolio_history": portfolio_history,
+        "history_has_data": bool(portfolio_history),
     }
     return render(request, "tm_assets/portfolio.html", context)
 

@@ -233,7 +233,116 @@
       </div>
     </div>
   </div>
+{% if history_has_data %}
+  {{ portfolio_history|json_script:"portfolio-history-data" }}
+  <div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span>자산 추이</span>
+      <small class="text-muted">처음 자산 기록부터 현재까지</small>
+    </div>
+    <div class="card-body" style="height: 400px;">
+      <canvas id="portfolioHistoryChart" style="height: 100%;"></canvas>
+    </div>
+  </div>
+{% endif %}
+
 </div>
 
 {% endblock %}
 
+{% block extra_js %}
+  {{ block.super }}
+  {% if history_has_data %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script>
+      (function () {
+        const dataElement = document.getElementById('portfolio-history-data');
+        if (!dataElement) {
+          return;
+        }
+        const historyData = JSON.parse(dataElement.textContent);
+        if (!historyData.length) {
+          return;
+        }
+        const labels = historyData.map(item => item.date);
+        const totals = historyData.map(item => Number(item.total_value) || 0);
+        const deposits = historyData.map(item => Number(item.deposit_value) || 0);
+        const stocks = historyData.map(item => Number(item.stock_value) || 0);
+        const bonds = historyData.map(item => Number(item.bond_value) || 0);
+        const ctx = document.getElementById('portfolioHistoryChart');
+        if (!ctx) {
+          return;
+        }
+        const numberFormatter = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 });
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: '총 자산',
+                data: totals,
+                borderColor: '#d63384',
+                backgroundColor: 'rgba(214, 51, 132, 0.15)',
+                borderWidth: 2,
+                tension: 0.25,
+                fill: true,
+              },
+              {
+                label: '예적금',
+                data: deposits,
+                borderColor: '#0d6efd',
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                borderWidth: 1.5,
+                tension: 0.25,
+                fill: false,
+              },
+              {
+                label: '주식',
+                data: stocks,
+                borderColor: '#198754',
+                backgroundColor: 'rgba(25, 135, 84, 0.1)',
+                borderWidth: 1.5,
+                tension: 0.25,
+                fill: false,
+              },
+              {
+                label: '채권',
+                data: bonds,
+                borderColor: '#6f42c1',
+                backgroundColor: 'rgba(111, 66, 193, 0.1)',
+                borderWidth: 1.5,
+                tension: 0.25,
+                fill: false,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  callback: value => numberFormatter.format(value),
+                },
+              },
+            },
+            plugins: {
+              legend: { position: 'top' },
+              tooltip: {
+                callbacks: {
+                  label: context => {
+                    const value = context.parsed.y ?? 0;
+                    return `${context.dataset.label}: ${numberFormatter.format(value)}`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      })();
+    </script>
+  {% endif %}
+{% endblock %}

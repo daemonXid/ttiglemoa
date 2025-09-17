@@ -32,10 +32,10 @@ pytz==2025.1
 python-decouple==3.8
 
 # Production dependencies
-gunicorn
-psycopg2-binary
-dj-database-url
-whitenoise
-python-dotenv
-boto3
-django-storages
+gunicorn==23.0.0
+psycopg2-binary==2.9.10
+dj-database-url==3.0.1
+whitenoise==6.10.0
+python-dotenv==1.1.1
+boto3==1.40.32
+django-storages==1.14.6

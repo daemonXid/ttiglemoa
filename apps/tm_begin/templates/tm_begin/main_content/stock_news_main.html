@@ -1,103 +1,18 @@
-    <div class="stock_news">
-    <h2>📰 주식 관련 뉴스</h2>
-    <p class="inv-sub" id="news-meta-main"></p>
+<!-- stock_news_main.html -->
+<div class="stock_news" id="stock-news-root"
+     data-news-endpoint="{% url 'tm_begin:index_json' %}">
+  <h2>📰 주식 관련 뉴스</h2>
+  <p class="inv-sub" id="news-meta-main"></p>
 
-    <!-- 로딩 스피너 -->
-    <div id="loading-spinner-main" class="loading-spinner-overlay">
-        <div class="spinner"></div>
-    </div>
+  <div id="loading-spinner-main" class="loading-spinner-overlay">
+    <div class="spinner"></div>
+  </div>
 
-    <!-- 뉴스 콘텐츠가 동적으로 채워질 컨테이너 -->
-    <div id="news-content-main"></div>
+  <div id="news-content-main"></div>
 
-    <div class="mt-2 text-end">
-        <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_begin:stock_news' %}">
-        더보기 →
-        </a>
-    </div>
+  <div class="mt-2 text-end">
+    <a class="btn btn-sm btn-outline-secondary" href="{% url 'tm_begin:stock_news' %}">
+      더보기 →
+    </a>
+  </div>
 </div>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const newsContent = document.getElementById("news-content-main");
-  const newsMeta = document.getElementById("news-meta-main");
-  const loadingSpinner = document.getElementById("loading-spinner-main");
-
-  function fetchAndRenderNews() {
-    loadingSpinner.style.display = 'flex';
-
-    fetch(`{% url 'tm_begin:index_json' %}`)
-      .then(response => response.json())
-      .then(data => {
-        newsContent.innerHTML = '';
-        newsMeta.innerHTML = '';
-
-        if (data.updated_at) {
-          newsMeta.textContent = `업데이트: ${data.updated_at} (${data.count}건)`;
-        }
-
-        if (data.news_list && data.news_list.length > 0) {
-          newsContent.innerHTML += renderHeroItem(data.news_list[0]);
-          const gridContainer = document.createElement('div');
-          gridContainer.className = 'inv-row';
-          data.news_list.slice(1, 5).forEach(item => {
-            gridContainer.innerHTML += renderGridItem(item);
-          });
-          newsContent.appendChild(gridContainer);
-        } else {
-          newsContent.innerHTML = '<p>표시할 뉴스가 없어요. 잠시 후 다시 시도해 주세요.</p>';
-        }
-
-        loadingSpinner.style.display = 'none';
-      })
-      .catch(error => {
-        console.error('Error fetching news:', error);
-        newsContent.innerHTML = '<p>뉴스를 불러오는 데 실패했습니다.</p>';
-        loadingSpinner.style.display = 'none';
-      });
-  }
-
-  function renderHeroItem(item) {
-    const image = item.img ? `<img src="${item.img}" alt="${item.title}">` : '<div class="no-image"><span>📈</span></div>';
-    const summary = item.summary ? `<p class="inv-desc inv-line-5">${item.summary}</p>` : '';
-    return `
-      <div class="inv-hero">
-        <div class="inv-hero-img">
-          <a href="${item.link}" target="_blank" rel="noopener">
-            ${image}
-          </a>
-        </div>
-        <div class="inv-hero-content">
-          <a href="${item.link}" target="_blank" rel="noopener" class="inv-title-lg inv-hero-title">
-            ${item.title}
-          </a>
-          ${summary}
-          <div class="inv-meta">
-            <time>${item.published}</time>
-            <span>${item.source}</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderGridItem(item) {
-    const image = item.img ? `<img src="${item.img}" alt="${item.title}">` : '<div class="no-image-small"><span>📰</span></div>';
-    return `
-      <div class="inv-card">
-        <a href="${item.link}" target="_blank" rel="noopener" class="inv-thumb">
-          ${image}
-        </a>
-        <a href="${item.link}" target="_blank" rel="noopener" class="inv-title inv-line-2">
-          ${item.title}
-        </a>
-        <div class="inv-meta">
-          <time>${item.published}</time>
-        </div>
-      </div>
-    `;
-  }
-
-  fetchAndRenderNews();
-});
-</script>

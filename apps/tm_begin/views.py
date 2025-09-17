@@ -93,15 +93,15 @@ def search(request):
         ]
 
         # 포트폴리오 검색
-        portfolio_results['deposit_savings'] = DepositSaving.objects.filter(
+        portfolio_results['deposit_savings'] = list(DepositSaving.objects.filter(
             Q(bank_name__icontains=query) | Q(product_name__icontains=query)
-        )
-        portfolio_results['stock_holdings'] = StockHolding.objects.filter(
+        ))
+        portfolio_results['stock_holdings'] = list(StockHolding.objects.filter(
             Q(ticker__icontains=query) | Q(name__icontains=query)
-        )
-        portfolio_results['bond_holdings'] = BondHolding.objects.filter(
+        ))
+        portfolio_results['bond_holdings'] = list(BondHolding.objects.filter(
             Q(name__icontains=query) | Q(issuer__icontains=query)
-        )
+        ))
 
     context = {
         'query': query,

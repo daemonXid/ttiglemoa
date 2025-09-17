@@ -4,7 +4,8 @@
       "mcp__render__list_logs",
       "Bash(find:*)",
       "mcp__render__get_service",
-      "mcp__render__update_web_service"
+      "mcp__render__update_web_service",
+      "Bash(pip index versions:*)"
     ],
     "deny": [],
     "ask": []

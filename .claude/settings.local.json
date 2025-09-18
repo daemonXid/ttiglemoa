@@ -5,7 +5,10 @@
       "Bash(find:*)",
       "mcp__render__get_service",
       "mcp__render__update_web_service",
-      "Bash(pip index versions:*)"
+      "Bash(pip index versions:*)",
+      "Bash(pip check)",
+      "Bash(python:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": []

@@ -9,6 +9,25 @@ Ttiglemoa{% endblock %} {% block content %}
   >
 </div>
 
+<!-- 탭 네비게이션 -->
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item">
+    <a class="nav-link active" href="{% url 'tm_assets:portfolio' %}">대시보드</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:allocation' %}">자산 배분</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:deposits_list' %}">예적금</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:stocks_list' %}">주식</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:bonds_list' %}">채권</a>
+  </li>
+</ul>
+
 <div class="row g-3 mb-4">
   <div class="col-12 col-lg-6">
     <div class="card h-100">
@@ -17,15 +36,15 @@ Ttiglemoa{% endblock %} {% block content %}
         <ul class="list-group">
           <li class="list-group-item d-flex justify-content-between">
             <span>예금/적금</span>
-            <strong>{{ class_totals.CASH|floatformat:0 }}</strong>
+            <strong class="{% if class_totals.CASH > 0 %}text-success{% elif class_totals.CASH < 0 %}text-danger{% endif %}">{{ class_totals.CASH|floatformat:2 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>주식</span>
-            <strong>{{ class_totals.STOCK|floatformat:0 }}</strong>
+            <strong class="{% if class_totals.STOCK > 0 %}text-success{% elif class_totals.STOCK < 0 %}text-danger{% endif %}">{{ class_totals.STOCK|floatformat:2 }}</strong>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>채권</span>
-            <strong>{{ class_totals.BOND|floatformat:0 }}</strong>
+            <strong class="{% if class_totals.BOND > 0 %}text-success{% elif class_totals.BOND < 0 %}text-danger{% endif %}">{{ class_totals.BOND|floatformat:2 }}</strong>
           </li>
         </ul>
         <small class="text-muted d-block mt-2"
@@ -49,272 +68,205 @@ Ttiglemoa{% endblock %} {% block content %}
   </div>
 </div>
 
-<div class="row g-3">
-    <div class="row g-3">
-    <div class="col-12">
-        <div class="card">
-            <div
-            class="card-header d-flex justify-content-between align-items-center"
-            >
-            <span>예적금</span>
-            <a class="btn btn-sm" href="{% url 'tm_assets:create_deposit' %}"
-                ><span class="theme-aware-icon">
-                    <img class="icon-light" src="{% static 'images/square-plus (black).svg' %}" alt="Add" width="20" height="20">
-                    <img class="icon-dark" src="{% static 'images/square-plus (white).png' %}" alt="Add" width="20" height="20">
-                </span></a
-            >
-            </div>
-            <div class="card-body">
-            {% if deposits %}
-            <div class="table-responsive">
-                <table class="table table-sm align-middle">
-                <thead>
-                    <tr>
-                    <th>은행</th>
-                    <th>상품</th>
-                    <th>원금</th>
-                    <th>연이율(%)</th>
-                    <th>평가액</th>
-                    <th>통화</th>
-                    <th>만기일</th>
-                    <th>동작</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for d in deposits %}
-                    <tr>
-                    <td>{{ d.bank_name }}</td>
-                    <td>
-                        {{ d.product_name }} ({{ d.get_product_type_display }})
-                    </td>
-                    <td>{{ d.principal_amount }}</td>
-                    <td>{{ d.annual_rate }}</td>
-                    <td>{{ d.estimated_value|floatformat:0 }}</td>
-                    <td>{{ d.currency }}</td>
-                    <td>{{ d.maturity_date|default:"-" }}</td>
-                    <td>
-                        <a
-                        class="btn btn-sm btn-outline-primary"
-                        href="{% url 'tm_assets:edit_deposit' d.pk %}"
-                        >수정</a
-                        >
-                        <form
-                        method="post"
-                        action="{% url 'tm_assets:delete_deposit' d.pk %}"
-                        class="d-inline"
-                        >
-                        {% csrf_token %}
-                        <button
-                            class="btn btn-sm btn-outline-danger"
-                            type="submit"
-                            onclick="return confirm('삭제하시겠습니까?');"
-                        >
-                            삭제
-                        </button>
-                        </form>
-                    </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
-            </div>
-            {% else %}
-            <p class="text-muted mb-0">등록된 예적금이 없습니다.</p>
-            {% endif %}
-            </div>
+<!-- 자산 흐름 그래프 섹션 -->
+<div class="row g-3 mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>자산 흐름</span>
+        <div>
+          <button class="btn btn-sm btn-outline-secondary" id="timeRange7d">7일</button>
+          <button class="btn btn-sm btn-outline-secondary" id="timeRange30d">30일</button>
+          <button class="btn btn-sm btn-outline-secondary active" id="timeRange90d">90일</button>
         </div>
+      </div>
+      <div class="card-body">
+        {% if portfolio_history %}
+          <canvas id="portfolioChart" style="height: 300px;"></canvas>
+        {% else %}
+          <p class="text-muted mb-0">히스토리 데이터가 충분하지 않습니다. 가격 새로고침을 통해 데이터를 수집해주세요.</p>
+        {% endif %}
+      </div>
     </div>
-
-    
-
-    <div class="col-12">
-        <div class="card">
-            <div
-            class="card-header d-flex justify-content-between align-items-center"
-            >
-            <span>채권</span>
-            <a class="btn btn-sm" href="{% url 'tm_assets:create_bond' %}"
-                ><span class="theme-aware-icon">
-                    <img class="icon-light" src="{% static 'images/square-plus (black).svg' %}" alt="Add" width="20" height="20">
-                    <img class="icon-dark" src="{% static 'images/square-plus (white).png' %}" alt="Add" width="20" height="20">
-                </span></a
-            >
-            </div>
-            <div class="card-body">
-            {% if bonds %}
-            <div class="table-responsive">
-                <table class="table table-sm align-middle">
-                <thead>
-                    <tr>
-                    <th>명칭</th>
-                    <th>발행사</th>
-                    <th>매수가(%)</th>
-                    <th>현재가(%)</th>
-                    <th>만기</th>
-                    <th>평가액</th>
-                    <th>통화</th>
-                    <th>동작</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for b in bonds %}
-                    <tr>
-                    <td>{{ b.name }}</td>
-                    <td>{{ b.issuer|default:"-" }}</td>
-                    <td>{{ b.purchase_price_pct }}</td>
-                    <td>{{ b.current_price_pct|default:"-" }}</td>
-                    <td>{{ b.maturity_date }}</td>
-                    <td>{{ b.estimated_value|floatformat:0 }}</td>
-                    <td>{{ b.currency }}</td>
-                    <td>
-                        <a
-                        class="btn btn-sm btn-outline-primary"
-                        href="{% url 'tm_assets:edit_bond' b.pk %}"
-                        >수정</a
-                        >
-                        <form
-                        method="post"
-                        action="{% url 'tm_assets:delete_bond' b.pk %}"
-                        class="d-inline"
-                        >
-                        {% csrf_token %}
-                        <button
-                            class="btn btn-sm btn-outline-danger"
-                            type="submit"
-                            onclick="return confirm('삭제하시겠습니까?');"
-                        >
-                            삭제
-                        </button>
-                        </form>
-                    </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
-            </div>
-            {% else %}
-            <p class="text-muted mb-0">등록된 채권이 없습니다.</p>
-            {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
-
-    <div class="col-12">
-        <div class="card">
-            <div
-            class="card-header d-flex justify-content-between align-items-center"
-            >
-            <span>주식</span>
-            <a class="btn btn-sm" href="{% url 'tm_assets:create_stock' %}"
-                ><span class="theme-aware-icon">
-                    <img class="icon-light" src="{% static 'images/square-plus (black).svg' %}" alt="Add" width="20" height="20">
-                    <img class="icon-dark" src="{% static 'images/square-plus (white).png' %}" alt="Add" width="20" height="20">
-                </span></a
-            >
-            </div>
-            <div class="card-body">
-            {% if stocks %}
-            <div class="table-responsive">
-                <table class="table table-sm align-middle">
-                <thead>
-                    <tr>
-                    <th>시장</th>
-                    <th>티커</th>
-                    <th>수량</th>
-                    <th>평단가</th>
-                    <th>현재가</th>
-                    <th>평가액</th>
-                    <th>통화</th>
-                    <th>동작</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for s in stocks %}
-                    <tr id="stock-{{ s.pk }}">
-                    <td>{{ s.get_market_display }}</td>
-                    <td>{{ s.ticker }}</td>
-                    <td>{{ s.quantity }}</td>
-                    <td>{{ s.average_price }}</td>
-                    <td>{{ s.current_price|default:"-" }}</td>
-                    <td>{{ s.estimated_value|floatformat:0 }}</td>
-                    <td>{{ s.currency }}</td>
-                    <td>
-                        <a
-                        class="btn btn-sm btn-outline-primary"
-                        href="{% url 'tm_assets:edit_stock' s.pk %}"
-                        >수정</a
-                        >
-                        <form
-                        method="post"
-                        action="{% url 'tm_assets:delete_stock' s.pk %}"
-                        class="d-inline"
-                        >
-                        {% csrf_token %}
-                        <button
-                            class="btn btn-sm btn-outline-danger"
-                            type="submit"
-                            onclick="return confirm('삭제하시겠습니까?');"
-                        >
-                            삭제
-                        </button>
-                        </form>
-                    </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-                </table>
-            </div>
-            {% else %}
-            <p class="text-muted mb-0">등록된 주식이 없습니다.</p>
-            {% endif %}
-            </div>
-        </div>
-    </div>
-
-    
+  </div>
 </div>
 
 {{ totals_by_currency|json_script:"currency-data" }}
+{{ portfolio_history|json_script:"portfolio-history" }}
 {% endblock %}
 
 {% block extra_js %}
 <script>
   const currencyData = JSON.parse(document.getElementById('currency-data').textContent);
-  const labels = Object.keys(currencyData);
-  const data = Object.values(currencyData);
+  const portfolioHistory = JSON.parse(document.getElementById('portfolio-history').textContent || '[]');
 
-  const ctx = document.getElementById('currencyChart').getContext('2d');
-  new Chart(ctx, {
-    type: 'pie',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: '통화별 자산',
-        data: data,
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-        ],
-        borderWidth: 1
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
+  // 통화별 파이 차트
+  if (currencyData && Object.keys(currencyData).length > 0) {
+    const labels = Object.keys(currencyData);
+    const data = Object.values(currencyData);
+
+    const ctx = document.getElementById('currencyChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: '통화별 자산',
+          data: data,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+      }
+    });
+  }
+
+  // 포트폴리오 흐름 라인 차트
+  let portfolioChart = null;
+
+  function renderPortfolioChart(days = 90) {
+    if (!portfolioHistory || portfolioHistory.length === 0) return;
+
+    // 필터링: 지정된 일수만큼만 표시
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - days);
+
+    const filteredData = portfolioHistory.filter(item =>
+      new Date(item.date) >= cutoffDate
+    ).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (filteredData.length === 0) return;
+
+    const labels = filteredData.map(item => {
+      const date = new Date(item.date);
+      return date.toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' });
+    });
+
+    const totalValues = filteredData.map(item => item.total_value);
+    const depositValues = filteredData.map(item => item.deposit_value);
+    const stockValues = filteredData.map(item => item.stock_value);
+    const bondValues = filteredData.map(item => item.bond_value);
+
+    if (portfolioChart) {
+      portfolioChart.destroy();
     }
+
+    const ctx = document.getElementById('portfolioChart');
+    if (!ctx) return;
+
+    portfolioChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: '총 자산',
+            data: totalValues,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+            tension: 0.1,
+            borderWidth: 3
+          },
+          {
+            label: '예적금',
+            data: depositValues,
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+            tension: 0.1,
+            borderWidth: 2
+          },
+          {
+            label: '주식',
+            data: stockValues,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+            tension: 0.1,
+            borderWidth: 2
+          },
+          {
+            label: '채권',
+            data: bondValues,
+            borderColor: 'rgba(255, 206, 86, 1)',
+            backgroundColor: 'rgba(255, 206, 86, 0.1)',
+            tension: 0.1,
+            borderWidth: 2
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+          intersect: false,
+          mode: 'index'
+        },
+        scales: {
+          y: {
+            beginAtZero: false,
+            ticks: {
+              callback: function(value) {
+                return new Intl.NumberFormat('ko-KR').format(value);
+              }
+            }
+          }
+        },
+        plugins: {
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return context.dataset.label + ': ' +
+                       new Intl.NumberFormat('ko-KR').format(context.parsed.y);
+              }
+            }
+          },
+          legend: {
+            position: 'top'
+          }
+        }
+      }
+    });
+  }
+
+  // 시간 범위 버튼 이벤트
+  document.getElementById('timeRange7d')?.addEventListener('click', function() {
+    document.querySelectorAll('[id^="timeRange"]').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    renderPortfolioChart(7);
   });
+
+  document.getElementById('timeRange30d')?.addEventListener('click', function() {
+    document.querySelectorAll('[id^="timeRange"]').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    renderPortfolioChart(30);
+  });
+
+  document.getElementById('timeRange90d')?.addEventListener('click', function() {
+    document.querySelectorAll('[id^="timeRange"]').forEach(btn => btn.classList.remove('active'));
+    this.classList.add('active');
+    renderPortfolioChart(90);
+  });
+
+  // 초기 차트 렌더링 (90일)
+  if (portfolioHistory && portfolioHistory.length > 0) {
+    renderPortfolioChart(90);
+  }
 </script>
 {% endblock %}

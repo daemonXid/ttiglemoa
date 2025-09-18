@@ -1,10 +1,9 @@
 
 
-/* === 푸터 === */
 .site-footer {
-  background: #0a0d12;         /* 아주 진한 남색/검정톤 */
-  color: #bfc6d1;              /* 중간 회색 */
-  border-top: 1px solid rgba(255,255,255,.06);
+  background: var(--navbar-bg-color);         /* 아주 진한 남색/검정톤 */
+  color: var(--navbar-text-color);              /* 중간 회색 */
+  border-top: 1px solid var(--border-color);
   margin-top: auto;            /* 핵심: 푸터를 아래로 밀기 */
   font-size: 0.95rem;
 }
@@ -12,7 +11,7 @@
 .site-footer .brand { letter-spacing: .5px; }
 
 .site-footer .footer-title {
-  color: #e8edf6;
+  color: var(--navbar-text-color);
   font-weight: 700;
   font-size: .95rem;
   margin-bottom: .75rem;
@@ -24,13 +23,13 @@
 }
 .site-footer .footer-links li { margin: .35rem 0; }
 .site-footer .footer-links a {
-  color: #bfc6d1;
+  color: var(--navbar-text-color);
   text-decoration: none;
 }
-.site-footer .footer-links a:hover { color: #ffffff; }
+.site-footer .footer-links a:hover { color: var(--link-color); }
 
 .site-footer .footer-divider {
-  border-color: rgba(255,255,255,.08);
+  border-color: var(--border-color);
 }
 
 /* 소셜/스토어 배지 */

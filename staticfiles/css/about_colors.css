@@ -1,21 +1,21 @@
 .team-card:hover {
-    box-shadow: 0 15px 25px rgba(255, 193, 7, 0.1); /* Yellow glow effect */
+    box-shadow: 0 15px 25px rgba(var(--accent-color-rgb), 0.1); /* Dynamic glow effect */
 }
 
 .team-card-img img {
-    border: 4px solid #ffc107; /* Yellow accent color border */
+    border: 4px solid var(--accent-color); /* Yellow accent color border */
 }
 
 .team-member-role {
-    color: #ffc107; /* Yellow accent color for role */
+    color: var(--accent-color); /* Yellow accent color for role */
 }
 
 .skill-badge {
-    background-color: #ffc107;
+    background-color: var(--accent-color);
     color: #000;
-    border: 1px solid #ffc107;
+    border: 1px solid var(--accent-color);
 }
 
 .social-link:hover {
-    color: #ffc107; /* Yellow accent color on hover */
+    color: var(--accent-color); /* Yellow accent color on hover */
 }

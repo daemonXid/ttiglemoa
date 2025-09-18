@@ -167,7 +167,8 @@ STATICFILES_DIRS = [
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # This setting tells Django to use WhiteNoise's storage backend
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# Temporarily using simpler storage for debugging
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 
 # Media files (User-uploaded files)

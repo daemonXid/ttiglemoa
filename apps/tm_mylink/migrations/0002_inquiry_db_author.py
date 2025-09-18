@@ -19,9 +19,4 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='inq_user', to=settings.AUTH_USER_MODEL, verbose_name='작성자'),
             preserve_default=False,
         ),
-        migrations.AlterField(
-            model_name='inquiry_db',
-            name='userinquiry_at',
-            field=models.DateTimeField(auto_now_add=True, verbose_name='작성일'),
-        ),
     ]

@@ -201,6 +201,27 @@ a:not(.btn):hover {
     color: var(--text-color) !important;
 }
 
+/* Override Bootstrap's bg-dark and bg-light in card headers/footers for theme awareness */
+.card-header.bg-dark,
+.card-footer.bg-dark {
+    background-color: var(--card-bg-color) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+.card-header.bg-light,
+.card-footer.bg-light {
+    background-color: var(--card-bg-color) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Ensure text-white is also overridden */
+.card-header.text-white,
+.card-footer.text-white {
+    color: var(--text-color) !important;
+}
+
 /* Fix for text-muted in dark mode */
 body.dark-mode .text-muted {
     color: rgba(255, 255, 255, 0.75) !important; /* White with some transparency */

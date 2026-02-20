@@ -1,5 +1,5 @@
 # Core Django packages
-Django==5.2.6
+Django==5.2.7
 asgiref==3.9.1
 sqlparse==0.5.3
 tzdata==2025.1

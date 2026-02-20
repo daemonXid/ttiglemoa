@@ -10,6 +10,25 @@
   </div>
 </div>
 
+<!-- 탭 네비게이션 -->
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:portfolio' %}">대시보드</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" href="{% url 'tm_assets:allocation' %}">자산 배분</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:deposits_list' %}">예적금</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:stocks_list' %}">주식</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'tm_assets:bonds_list' %}">채권</a>
+  </li>
+</ul>
+
 {% if total_sum > 0 %}
 <div class="row g-4">
   <div class="col-12 col-lg-6">
